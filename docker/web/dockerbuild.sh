@@ -3,7 +3,7 @@
 git submodule update && \
     cd src && \
     npm install && \
-    ng build --prod --aot false && \
+    ng build --prod && \
     cd .. && \
     docker build $@
 
