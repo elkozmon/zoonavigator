@@ -3,6 +3,8 @@ ZooNavigator
 
 ZooNavigator is web-based GUI for ZooKeeper with cool features.
 
+Compatible with ZooKeeper 3.4.x and ZooKeeper 3.5.x.
+
 Table of Contents
 -----------------
 
