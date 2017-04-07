@@ -1,0 +1,4 @@
+{
+  "apiUrlPath": "/api",
+  "apiRequestTimeoutMillis": $API_REQUEST_TIMEOUT_MILLIS
+}

@@ -1,0 +1,50 @@
+error_log /dev/error_log error;
+
+worker_processes 4;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include             mime.types;
+    default_type        application/octet-stream;
+    sendfile            on;
+    keepalive_timeout   65;
+    charset             utf-8;
+
+    server {
+        listen $SERVER_HTTP_PORT default_server;
+        listen [::]:$SERVER_HTTP_PORT default_server;
+
+        server_name _;
+
+        root /app;
+        index index.html;
+
+        location ~ ^/(assets|bower_components|scripts|styles|views) {
+            expires     31d;
+            add_header  Cache-Control "public";
+        }
+
+        location ~ \.(css|js)$ {
+            expires     31d;
+            add_header  Cache-Control "public";
+        }
+
+        location / {
+            expires -1;
+            add_header Pragma "no-cache";
+            add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0 pre-check=0";
+            try_files $uri $uri/ /index.html =404;
+        }
+
+        location /api {
+            proxy_pass http://$API_HOST:$API_PORT;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_set_header Authorization $http_authorization;
+        }
+    }
+}
