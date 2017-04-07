@@ -7,8 +7,10 @@ ENV SERVER_HTTP_PORT=9000 \
     ZK_CLIENT_TTL_MILLIS=5000 \
     ZK_CONNECT_TIMEOUT_MILLIS=5000
 
-# Copy files
-COPY ./src/play/target/universal/stage /app
+# Server HTTP port
+EXPOSE 9000
+
+# Copy setup files
 COPY ./copy /
 
 RUN chmod +x \
@@ -19,6 +21,7 @@ RUN chmod +x \
 HEALTHCHECK --interval=5m --timeout=3s \
     CMD /app/healthcheck.sh
 
-EXPOSE 9000
+# Copy stage files
+COPY ./src/play/target/universal/stage /app
 
 CMD ["/app/run.sh"]

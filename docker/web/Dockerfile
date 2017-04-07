@@ -7,8 +7,10 @@ ENV SERVER_HTTP_PORT=8000 \
     API_PORT=9000 \
     API_REQUEST_TIMEOUT_MILLIS=10000
 
-# Copy files
-COPY ./src/dist /app
+# Server HTTP port
+EXPOSE 8000
+
+# Copy setup files
 COPY ./copy /
 
 RUN chmod +x \
@@ -23,6 +25,7 @@ RUN apt-get update && \
 HEALTHCHECK --interval=5m --timeout=3s \
     CMD /app/healthcheck.sh
 
-EXPOSE 8000
+# Copy dist files
+COPY ./src/dist /app
 
 CMD ["/app/run.sh"]
