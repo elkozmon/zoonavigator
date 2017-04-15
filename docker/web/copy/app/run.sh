@@ -11,5 +11,11 @@ envsubst \
     < /etc/nginx/nginx.conf.template \
     > /etc/nginx/nginx.conf
 
-# Start server
-nginx -g 'daemon off;'
+# Start nginx
+nginx -g 'daemon off;' &
+
+# Trap terminate signals
+trap 'nginx -s stop' TERM QUIT
+
+# Wait for nginx to terminate
+wait
