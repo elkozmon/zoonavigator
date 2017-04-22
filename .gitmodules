@@ -1,6 +1,0 @@
-[submodule "docker/api/src"]
-	path = docker/api/src
-	url = git@github.com:elkozmon/zoonavigator-api.git
-[submodule "docker/web/src"]
-	path = docker/web/src
-	url = git@github.com:elkozmon/zoonavigator-web.git
