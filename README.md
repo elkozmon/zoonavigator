@@ -37,7 +37,7 @@ Usage
 
 ### Via Docker Compose (recommended)
 
-1. create `docker-compose.yml` file like the one below somewhere on your file system.
+1. Create `docker-compose.yml` file like the one below somewhere on your file system.
 ```yaml
 version: '3.1'
 
@@ -60,8 +60,8 @@ services:
       SERVER_HTTP_PORT: 9000
     restart: always
 ```
-2. run `docker-compose -f /path/to/docker-compose.yml up -d`. 
-3. navigate to `http://localhost:8000` in your browser and enjoy.
+2. Run `docker-compose -f /path/to/docker-compose.yml up -d`. 
+3. Navigate to `http://localhost:8000` in your browser and enjoy.
 
 To change the default configuration, edit the environment variables in Docker Compose file. 
 
@@ -72,14 +72,14 @@ See DockerHub repositories for configuration options.
 
 ### Via Docker
 
-1. run [ZooNavigator API](https://hub.docker.com/r/elkozmon/zoonavigator-api/) server.
+1. Run [ZooNavigator API](https://hub.docker.com/r/elkozmon/zoonavigator-api/) server.
 ```docker
 docker run -d \
     --env SERVER_HTTP_PORT=9000 \
     --name zoonavigator-api \
     elkozmon/zoonavigator-api:latest
 ```
-2. run [ZooNavigator Web](https://hub.docker.com/r/elkozmon/zoonavigator-web/) client.
+2. Run [ZooNavigator Web](https://hub.docker.com/r/elkozmon/zoonavigator-web/) client. Here you need provide information on how to connect to ZooNavigator API. The easiest way to achieve this is by linking the containers.
 ```docker
 docker run -d \
     -p 8000:8000 \
@@ -89,7 +89,7 @@ docker run -d \
     --name zoonavigator-web \
     elkozmon/zoonavigator-web:latest
 ```
-3. navigate to `http://localhost:8000` in your browser.
+3. Navigate to `http://localhost:8000` in your browser.
 
 See DockerHub repositories for configuration options.
 
@@ -102,18 +102,18 @@ This setup requires NPM and SBT to be installed on your machine.
 
 First run ZooNavigator API server.
 
-1. clone API project repository `git clone https://github.com/elkozmon/zoonavigator-api.git`
-2. go to API project root `cd zoonavigator-api`
-3. run `sbt play/run`
+1. Clone API project repository `git clone https://github.com/elkozmon/zoonavigator-api.git`
+2. Go to API project root `cd zoonavigator-api`
+3. Run `sbt play/run`
 
 This starts Play server on your localhost on port 9000.
 
 Then run ZooNavigator Web client.
 
-1. clone Web project repository `git clone https://github.com/elkozmon/zoonavigator-web.git`
-2. go to Web project root `cd zoonavigator-web`
-3. run `npm install`
-4. run `npm run start`
+1. Clone Web project repository `git clone https://github.com/elkozmon/zoonavigator-web.git`
+2. Go to Web project root `cd zoonavigator-web`
+3. Run `npm install`
+4. Run `npm run start`
 
 Now open `http://localhost:4200` in your browser.
 
