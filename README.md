@@ -52,6 +52,8 @@ services:
       API_PORT: 9000
     links:
      - api
+    depends_on:
+     - api
     restart: always
   api:
     image: elkozmon/zoonavigator-api:latest
