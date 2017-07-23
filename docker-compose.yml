@@ -1,0 +1,22 @@
+version: '2.1'
+
+services:
+  web:
+    image: elkozmon/zoonavigator-web:latest
+    container_name: zoonavigator-web
+    ports:
+     - "8000:8000"
+    environment:
+      API_HOST: "api"
+      API_PORT: 9000
+    links:
+     - api
+    depends_on:
+     - api
+    restart: always
+  api:
+    image: elkozmon/zoonavigator-api:latest
+    container_name: zoonavigator-api
+    environment:
+      SERVER_HTTP_PORT: 9000
+    restart: always
