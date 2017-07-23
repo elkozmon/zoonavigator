@@ -39,7 +39,7 @@ Usage
 
 1. Create `docker-compose.yml` file like the one below somewhere on your file system.
 ```yaml
-version: '3.1'
+version: '2.1'
 
 services:
   web:
