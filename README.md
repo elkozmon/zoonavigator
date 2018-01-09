@@ -22,8 +22,9 @@ Features
 --------
 
 - Auth scheme authentication
-- Recursive update of ZNode ACLs
-- Recursive mass delete of ZNodes
+- Recursive ACL update
+- Recursive ZNode mass delete
+- ZNode move & duplicate
 - ZNode regex search tool
 - ZNode ACL management
 - ZNode data validation and syntax highlighting (json, yaml, xml)
