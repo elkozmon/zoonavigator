@@ -127,6 +127,10 @@ Screenshots
 
 ![ZNode data editor](/images/znode-data-editor.png)
 
+![ZNode ACL editor](/images/znode-acl-editor.png)
+
+![Create ZNode dialog](/images/create-znode.png)
+
 Troubleshooting
 ---------------
 
