@@ -29,6 +29,11 @@ Features
 - ZNode ACL management
 - ZNode data validation and syntax highlighting (json, yaml, xml)
 
+### Auto connect
+
+Use preconfigured connection string and auth info in order to skip connect form and go directly to editor interface. 
+For more info on how to enable this feature in Docker see [configuration section](https://hub.docker.com/r/elkozmon/zoonavigator-web/).
+
 ### Temporary connections
 
 All connections to ZooKeeper are short lived. By default every connection is closed after 5 seconds of inactivity. This keeps number of simultaneous connections low, even when used by more users at once.
@@ -143,7 +148,7 @@ Credits
 
 This project is written in [Play Framework](https://github.com/playframework/playframework) and [Angular Framework](https://github.com/angular/angular).
 
-Web client UI is powered by [Teradata Covalent Platform](https://github.com/Teradata/covalent).
+Web client UI is powered by [Teradata Covalent Platform](https://github.com/Teradata/covalent) and [Font Awesome](https://fontawesome.com/license).
 
 License
 -------
