@@ -3,11 +3,7 @@ layout: null
 sitemap: false
 ---
 
-{% if site.baseurl and site.baseurl != "" %}
-	$baseurl: "{{ site.baseurl }}";
-{% else %}
-	$baseurl: "";
-{% endif %}
+$baseurl: "{{ site.baseurl }}";
 $body-background-color: #2B2E31;
 
 $content-max-width: 800px;
