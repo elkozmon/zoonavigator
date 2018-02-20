@@ -22,6 +22,8 @@ social:
 # -----
 # Build
 
+timezone: Etc/UTC
+
 permalink: pretty
 
 plugins:
