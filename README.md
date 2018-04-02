@@ -27,7 +27,7 @@ Features
 - ZNode move & duplicate
 - ZNode regex search tool
 - ZNode ACL management
-- ZNode data validation and syntax highlighting (json, yaml, xml)
+- ZNode data validation, syntax highlighting and auto-formatting
 
 ### Auto connect
 
