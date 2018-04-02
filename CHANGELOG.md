@@ -14,6 +14,7 @@ Changelog
 
 ### Fixed
 - Switching editor tabs between changes (to data or acl) causes 'Bad version' error
+- When session expires two 'Session lost' dialogs spawn at once
 
 ## 0.3.0 - 2018-01-11
 
