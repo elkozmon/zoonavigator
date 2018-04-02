@@ -134,6 +134,8 @@ Screenshots
 
 ![ZNode ACL editor](/images/znode-acl-editor.png)
 
+![ZNode meta editor](/images/znode-meta-editor.png)
+
 ![Create ZNode dialog](/images/create-znode.png)
 
 Troubleshooting
