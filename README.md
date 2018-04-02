@@ -1,6 +1,8 @@
 ZooNavigator
 ============
 
+![Current version - 0.4.0](https://img.shields.io/badge/version-0.4.0-blue.svg)
+
 ZooNavigator is web-based GUI for ZooKeeper with cool features.
 
 Compatible with ZooKeeper 3.4.x and ZooKeeper 3.5.x.
