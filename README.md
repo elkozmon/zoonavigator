@@ -1,5 +1,11 @@
 # Edition
 
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
 Product documentation template for Jekyll. Browse through a [live demo](https://long-pig.cloudvent.net/).
 Start documenting your product, application, service or website with this configurable theme.
 

@@ -1,7 +1,11 @@
 # ----
 # Site
 
+<<<<<<< HEAD
 title: Edition Template
+=======
+title: ZooNavigator Docs
+>>>>>>> WIP
 url: "https://long-pig.cloudvent.net"
 baseurl:
 google_analytics_key:
@@ -9,6 +13,7 @@ show_full_navigation: true
 
 # Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
 logo: /siteicon.png
+<<<<<<< HEAD
 description: Product documentation template for Jekyll.
 author:
   name:
@@ -18,6 +23,17 @@ social:
   name: Edition Template
   links:
     - https://github.com/CloudCannon/edition-jekyll-template
+=======
+description: Web-based browser/editor for ZooKeeper.
+author:
+  name: Lubos Kozmon
+  email: lubosh91@gmail.com
+  twitter: # twitter username without the @ symbol
+social:
+  name: GitHub
+  links:
+    - https://github.com/elkozmon/zoonavigator
+>>>>>>> WIP
 
 # -----
 # Build
@@ -75,5 +91,9 @@ defaults:
 # CloudCannon
 
 types:
+<<<<<<< HEAD
+=======
+  - patch
+>>>>>>> WIP
   - minor
   - major
