@@ -1,0 +1,10 @@
+- name: overview
+  title: Overview
+- name: get-started
+  title: Get started
+- name: administration
+  title: Administration
+- name: development
+  title: Development
+- name: help
+  title: Help

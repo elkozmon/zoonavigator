@@ -1,84 +1,45 @@
 ---
-<<<<<<< HEAD
 title: Welcome
 ---
 
-This is the **Edition** template from [CloudCannon](http://cloudcannon.com/).
-**Edition** is perfect for documenting your product, application or service.
-It's populated with example content to give you some ideas.
+ZooNavigator is a **web-based browser & editor for ZooKeeper** with many features.
 
-ChatApp is a fictional chat application for sending messages and media to others.
-Teams and friend groups would use ChatApp to stay up to date if it existed.
 
-> [Sign up](http://example.com/signup) or learn more about ChatApp at [example.com](http://example.com/).
+It is an open source project and the source code is available on [GitHub](https://github.com/elkozmon).
 
-### Getting Started
 
-Getting a message sent is quick and easy with ChatApp:
+<div class="zoo screenshots">
+  <a href="images/screenshots/connect-form.png">
+    <img src="images/screenshots/connect-form.png" alt="Connect form"/>
+  </a>
 
-1. Sign up for an account
-2. Add your friends from their email addresses
-3. Type a message or send a photo
+  <a href="images/screenshots/znode-data-editor.png">
+    <img src="images/screenshots/znode-data-editor.png" alt="ZNode data editor"/>
+  </a>
 
-> Feel free to send us a message at [feedback@example.com](mailto:feedback@example.com) with your feedback.
+  <a href="images/screenshots/znode-acl-editor.png">
+    <img src="images/screenshots/znode-acl-editor.png" alt="ZNode ACL editor"/>
+  </a>
 
-### Features
+  <a href="images/screenshots/znode-meta-editor.png">
+    <img src="images/screenshots/znode-meta-editor.png" alt="ZNode meta editor"/>
+  </a>
 
-Explore more of ChatApp by reading about our features:
+  <a href="images/screenshots/create-znode.png">
+    <img src="images/screenshots/create-znode.png" alt="Create ZNode dialog"/>
+  </a>
 
-#### Media
+  <a href="images/screenshots/znode-regex-search.png">
+    <img src="images/screenshots/znode-regex-search.png" alt="Regex ZNode search"/>
+  </a>
+</div>
 
-Send images, videos and other media to people. Sources include your computer, phone and Facebook.
+### Credits
 
-#### Contact Syncing
+This project is written in [Play Framework](https://github.com/playframework/playframework) and [Angular Framework](https://github.com/angular/angular).
 
-Sync your contact list with your phone and/or Facebook contacts. Never lose your contacts between devices again!
+Web client UI is powered by [Teradata Covalent Platform](https://github.com/Teradata/covalent) and [Font Awesome](https://fontawesome.com/license).
 
-#### Devices
+### License
 
-ChatApp is available everywhere. Find out how to set it up on your all your devices.
-=======
-title: Overview
----
-
-ZooNavigator is web-based user interface for ZooKeeper with some cool features.
-
-### Table of Contents
-1. [Compatibility](#compatibility)
-2. [Features](#features)
-3. [Screenshots](#screenshots)
-
-### Compatibility
-
-ZooKeeper versions 3.4.x and 3.5.x are currently supported.
-
-> However, future releases will most likely drop support for 3.4.x versions in
-order to allow for secure communication with ZooKeeper.
-
-### Features
-
-The main goal of this project is to provide users with a way to efficiently manage
-ZNodes with an awesome user experience. This is a brief summary of what you get:
-
-* ZNode ACL management with support for recursive changes
-* Ability to copy & paste or move ZNode
-* Mass delete of ZNodes
-* ZNode data validation, syntax highlighting and auto-formatting
-* Search for ZNodes via regular expression (currently limited just to children ZNodes)
-* SASL and Auth scheme authentication
-
-#### Auto connect
-
-Single instance of ZooNavigator is capable of connecting to any ZooKeeper server
-by giving it the corresponding address. However, if you want it to only connect
-to single ZooKeeper server you can preconfigure an address and ZooNavigator will skip the
-connect form and take the user directly to editor interface.
-
-For more info on how to enable this feature in Docker see configuration section.
-
-#### Temporary connections
-
-All connections to ZooKeeper are short lived. By default every connection is closed after 5 seconds of inactivity. This keeps number of active connections low, even when used by more users at once.
-
-### Screenshots
->>>>>>> WIP
+The project is licensed under Affero General Public License version 3.0 (AGPLv3).

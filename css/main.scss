@@ -30,3 +30,19 @@ $full-width-break: $nav-width + ($space * 4) + $content-max-width;
 @import "code";
 @import "tables";
 @import "layout";
+
+.zoo.screenshots {
+  a {
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 30%;
+    border: 1px solid #cbcbcb;
+    margin: 1% 1% 0 1%;
+
+    &:hover {
+      border: 1px solid mix($brand-colour, $content-background-color, 80%);
+    }
+  }
+}

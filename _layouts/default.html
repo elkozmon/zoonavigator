@@ -27,11 +27,7 @@
 	<body>
 		<header>
 			<h1>
-<<<<<<< HEAD
-				<a href="{{ site.baseurl }}/"><img src="{{ site.baseurl }}/images/emblem.svg" width="40" height="40" alt="{{ site.title }} logo"></a>
-=======
 				<a href="{{ site.baseurl }}/"><img src="{{ site.baseurl }}/images/paw.svg" width="40" height="40" alt="{{ site.title }} logo"></a>
->>>>>>> WIP
 				{{ site.title }}
 				<button type="button" class="open-nav" id="open-nav"></button>
 			</h1>
@@ -51,15 +47,16 @@
 
 				<ul>
 					{% assign grouped = site.docs | group_by: 'category' %}
-					{% for group in grouped %}
+					{% for category in site.data.categories %}
+						{% assign group = grouped | where: 'name', category.name | first %}
 						<li class="nav-item top-level {% if group.name == page.category %}current{% endif %}">
-							{% assign items = group.items | sort: 'order' %}
-							<a href="{{ site.baseurl }}{{ items.first.url }}">{{ group.name }}</a>
-							<ul>
-								{% for item in items %}
-									<li class="nav-item {% if item.url == page.url %}current{% endif %}"><a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a></li>
-								{% endfor %}
-							</ul>
+						  {% assign items = group.items | sort: 'order' %}
+						  <a href="{{ site.baseurl }}{{ items.first.url }}">{{ category.title }}</a>
+						  <ul>
+						    {% for item in items %}
+						      <li class="nav-item {% if item.url == page.url %}current{% endif %}"><a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a></li>
+						    {% endfor %}
+						  </ul>
 						</li>
 					{% endfor %}
 				</ul>
@@ -75,7 +72,7 @@
 
 		<section class="main">
 			<div class="page-header">
-				<h2>{% if page.category %}{{ page.category }}{% else %}{{ site.title }}{% endif %}</h2>
+				<h2>{% if page.category %}{% assign category = site.data.categories | where: 'name', page.category | first %}{{ category.title }}{% else %}{{ site.title }}{% endif %}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
 			<article class="content">
@@ -88,5 +85,8 @@
 				document.body.classList.toggle("nav-open");
 			});
 		</script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		{% include lightbox.html %}
 	</body>
 </html>
