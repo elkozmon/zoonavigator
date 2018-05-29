@@ -15,8 +15,8 @@ ZooKeeper versions 3.4.x and 3.5.x are currently supported.
 
 Module | Status
 --- | --- 
-Web | [![Build Status](https://travis-ci.org/elkozmon/zoonavigator-web.svg)](https://travis-ci.org/elkozmon/zoonavigator-web) [![Docker image size](https://images.microbadger.com/badges/image/elkozmon/zoonavigator-web.svg)](https://hub.docker.com/r/elkozmon/zoonavigator-web)
-API | [![Build Status](https://travis-ci.org/elkozmon/zoonavigator-api.svg)](https://travis-ci.org/elkozmon/zoonavigator-api) [![Docker image size](https://images.microbadger.com/badges/image/elkozmon/zoonavigator-api.svg)](https://hub.docker.com/r/elkozmon/zoonavigator-api)
+Web | [![Build Status](https://travis-ci.org/elkozmon/zoonavigator-web.svg?branch=master)](https://travis-ci.org/elkozmon/zoonavigator-web) [![Docker image size](https://images.microbadger.com/badges/image/elkozmon/zoonavigator-web.svg)](https://hub.docker.com/r/elkozmon/zoonavigator-web)
+API | [![Build Status](https://travis-ci.org/elkozmon/zoonavigator-api.svg?branch=master)](https://travis-ci.org/elkozmon/zoonavigator-api) [![Docker image size](https://images.microbadger.com/badges/image/elkozmon/zoonavigator-api.svg)](https://hub.docker.com/r/elkozmon/zoonavigator-api)
 
 
 License
