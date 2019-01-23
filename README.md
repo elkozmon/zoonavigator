@@ -7,7 +7,7 @@ ZooNavigator is a **web-based browser & editor for ZooKeeper** with many feature
 ZooKeeper versions 3.4.x and 3.5.x are currently supported.
 
 
-[**Read official docs for more info and instructions how to use ZooNavigator.**](https://www.elkozmon.com/zoonavigator)
+[**📘 Read official docs for more info and instructions how to use ZooNavigator.**](https://www.elkozmon.com/zoonavigator)
 
 
 <br/>
