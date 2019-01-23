@@ -44,6 +44,6 @@ the connect form, automatically connecting to listed ZooKeeper servers.
 ##### AUTO_CONNECT_AUTH_INFO
 *available since:* ``0.3.0``  
 In addition to presetting connection string as explained above, you can also
-set [Auth info](#) which ZooNavigator will use to authenticate with ZooKeeper
+set [Auth info]({{site.baseurl}}/help/faqs/#what-should-i-fill-in-for-auth-username-and-auth-password) which ZooNavigator will use to authenticate with ZooKeeper
 during the auto-connect.  
 **Use semicolon (;) to separate multiple entries.**
