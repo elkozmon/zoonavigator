@@ -1,11 +1,7 @@
-- name: overview
-  title: Overview
-- name: get-started
-  title: Get started
-- name: how-tos
-  title: How to's
-- name: administration
-  title: Administration
+- name: basics
+  title: Basics
+- name: advanced
+  title: Advanced
 - name: development
   title: Development
 - name: help

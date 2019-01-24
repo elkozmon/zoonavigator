@@ -1,7 +1,7 @@
 ---
 title: Features
-category: overview
-order: 1
+category: basics
+order: 2
 ---
 
 The main goal of this project is to provide a way to efficiently manage ZNodes.  

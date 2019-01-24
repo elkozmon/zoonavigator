@@ -1,6 +1,6 @@
 ---
 title: Custom URL
-category: how-tos
+category: advanced
 order: 2
 ---
 

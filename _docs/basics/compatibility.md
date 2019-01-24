@@ -1,7 +1,7 @@
 ---
 title: Compatibility
-category: overview
-order: 2
+category: basics
+order: 3
 ---
 
 ZooKeeper versions 3.4.x and 3.5.x are currently supported.

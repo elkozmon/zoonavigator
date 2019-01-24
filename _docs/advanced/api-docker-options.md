@@ -1,7 +1,7 @@
 ---
 title: "API Docker options"
-category: administration
-order: 3
+category: advanced
+order: 4
 ---
 
 ZooNavigator's Docker images are configured using **environment variables**.  

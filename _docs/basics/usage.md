@@ -1,6 +1,6 @@
 ---
 title: Usage
-category: get-started
+category: basics
 order: 1
 ---
 

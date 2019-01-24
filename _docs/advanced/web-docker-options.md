@@ -1,7 +1,7 @@
 ---
 title: "Web Docker options"
-category: administration
-order: 2
+category: advanced
+order: 3
 ---
 
 ZooNavigator's Docker images are configured using **environment variables**.  

@@ -1,6 +1,6 @@
 ---
 title: Auto connect
-category: how-tos
+category: advanced
 order: 1
 ---
 
@@ -11,4 +11,4 @@ To enable this feature simply add these environment variables to ZooNavigator's 
 - `AUTO_CONNECT_CONNECTION_STRING`
 - `AUTO_CONNECT_AUTH_INFO` (this is optional)
 
-See [Administration section]({{site.baseurl}}/administration/web-docker-options) for description on these environment variables.
+See [Web Docker options]({{site.baseurl}}/advanced/web-docker-options) for description on these environment variables.
