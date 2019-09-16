@@ -7,7 +7,7 @@ order: 1
 Development setup requires [NPM](https://www.npmjs.com/) and [SBT](https://www.scala-sbt.org/) to be installed on your machine.
 
 ZooNavigator API handles communication with ZooKeeper while
-ZooNavigator Web serves the front-end which in turn talks to the ZooNavigator API.
+ZooNavigator Web is the front-end which in turn talks to the ZooNavigator API.
 
 
 First, let's get ZooNavigator API running:
