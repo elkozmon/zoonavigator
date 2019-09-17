@@ -10,7 +10,7 @@ If you need to deploy ZooNavigator with custom URL using a suffix like `/zoonavi
 
 There is a Docker build argument for that called `BASE_HREF` in ZooNavigator's Dockerfile. You will need to clone its [Git repository](https://github.com/elkozmon/zoonavigator) and from within that directory build your own Docker image like so:
 
-```shell script
+```
 git submodule init
 
 docker build \

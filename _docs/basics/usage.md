@@ -8,7 +8,7 @@ ZooNavigator is **available as a Docker image**.
 
 Start it using this command:
 
-```shell script
+```
 docker run \
   -d --network host \
   --name zoonavigator \
