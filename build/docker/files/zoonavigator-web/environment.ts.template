@@ -22,7 +22,7 @@
 
 export const environment = {
   production: true,
-  appVersion: "{{ $.Env.DOCKER_TAG }}",
+  appVersion: "{{ $.Env.APP_VERSION }}",
   baseHref: "{{ $.Env.BASE_HREF }}",
   apiHref: "/api"
 };
