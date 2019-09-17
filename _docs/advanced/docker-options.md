@@ -8,12 +8,12 @@ ZooNavigator's Docker image can be configured using **environment variables**.
 
 ---
 
-* [App](#app)
+* [Server](#server)
 * [Java](#java)
 * [ZooKeeper client](#zookeeper-client)
 
 
-### ZooNavigator
+### Server
 
 ---
 
