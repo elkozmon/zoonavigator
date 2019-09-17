@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ../..
 docker build \
   --build-arg APP_VERSION=$DOCKER_TAG \
   -t $IMAGE_NAME \
