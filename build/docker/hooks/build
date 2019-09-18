@@ -1,7 +1,15 @@
 #!/bin/bash
 cd ../..
+
+if [ "$DOCKER_TAG" == "latest" ]
+then
+    APP_VERSION=${DOCKER_TAG}-${SOURCE_COMMIT::12}
+else
+    APP_VERSION=${DOCKER_TAG}
+fi
+
 docker build \
-  --build-arg APP_VERSION=$DOCKER_TAG \
+  --build-arg APP_VERSION=$APP_VERSION \
   -t $IMAGE_NAME \
   -f $DOCKERFILE_PATH \
   .
