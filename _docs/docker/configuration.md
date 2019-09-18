@@ -18,7 +18,7 @@ ZooNavigator's Docker image can be configured using **environment variables**.
 ---
 
 ##### HTTP_PORT
-*default:* ``8000``
+*default:* ``8000``  
 Tells the HTTP server which port to bind to.  
 To disable HTTP set this variable to ``disabled``.
 
@@ -36,12 +36,12 @@ The password to the keystore, **defaults to a blank password**.
 
 
 ##### SSL_KEYSTORE_TYPE
-*default:* ``JKS``
+*default:* ``JKS``  
 The key store type.
 
 
 ##### SESSION_TIMEOUT_MILLIS
-*default:* ``900000``
+*default:* ``900000``  
 Sets session inactivity timeout for users.  
 This value is in milliseconds.
 
@@ -103,7 +103,7 @@ Sets the default Kerberos KDC.
 
 
 ##### ZK_CLIENT_TIMEOUT_MILLIS
-*default:* ``5000``
+*default:* ``5000``  
 Sets inactivity timeout for ZooKeeper client. If user doesn't make any request during this period ZooKeeper connection will be closed and recreated for the future request if any.  
 **Note that user does not get logged out unlike in event of session timeout.**  
 This value is in milliseconds.
@@ -116,17 +116,17 @@ This value is in milliseconds.
 
 
 ##### ZK_SASL_CLIENT
-*default:* ``true``
+*default:* ``true``  
 Set the value to ``false`` to disable SASL authentication.
 
 
 ##### ZK_SASL_CLIENT_CONFIG
-*default:* ``Client``
+*default:* ``Client``  
 Specifies the context key in the JAAS login file.
 
 
 ##### ZK_SASL_CLIENT_USERNAME
-*default:* ``zookeeper``
+*default:* ``zookeeper``  
 Specifies the primary part of the server principal. [Learn more here](https://zookeeper.apache.org/doc/r3.5.2-alpha/zookeeperProgrammers.html#sc_java_client_configuration).
 
 
@@ -142,7 +142,7 @@ This will connect to server using SSL with specified credentials.
 
 
 ##### ZK_CLIENT_CNXN_SOCKET
-*default:* ``org.apache.zookeeper.ClientCnxnSocketNIO``
+*default:* ``org.apache.zookeeper.ClientCnxnSocketNIO``  
 Specifies which ClientCnxnSocket to be used. If you want to connect to server's secure client port, you need to set this property to :``org.apache.zookeeper.ClientCnxnSocketNetty``.
 
 
