@@ -1,7 +1,7 @@
 ---
 title: Custom URL
 category: docker
-order: 2
+order: 3
 ---
 
 By default ZooNavigator will be available on root of your domain, e.g. `https://www.example.com/`

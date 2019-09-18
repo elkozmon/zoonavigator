@@ -1,7 +1,7 @@
 ---
 title: Configuration
 category: docker
-order: 3
+order: 1
 ---
 
 ZooNavigator's Docker image can be configured using **environment variables**.  

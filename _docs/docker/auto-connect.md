@@ -1,7 +1,7 @@
 ---
 title: Auto connect
 category: docker
-order: 1
+order: 2
 ---
 
 Auto connect lets you skip the <a href="{{site.baseurl}}/images/screenshots/connect-form.png">Connect form</a> where you enter ZooKeeper server address and throws you directly into the <a href="{{site.baseurl}}/images/screenshots/znode-data-editor.png">Editor UI</a>. This is useful when you only have a single ZooKeeper cluster.
