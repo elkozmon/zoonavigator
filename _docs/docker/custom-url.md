@@ -1,6 +1,6 @@
 ---
 title: Custom URL
-category: advanced
+category: docker
 order: 2
 ---
 

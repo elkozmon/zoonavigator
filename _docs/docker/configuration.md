@@ -1,6 +1,6 @@
 ---
-title: "Docker options"
-category: advanced
+title: Configuration
+category: docker
 order: 3
 ---
 
