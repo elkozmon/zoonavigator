@@ -15,7 +15,7 @@ ZooKeeper versions 3.4.x and 3.5.x are currently supported.
 
 [**📘 Read official docs for more info and instructions how to use ZooNavigator.**](https://www.elkozmon.com/zoonavigator)
 
-Qucik start
+Quick start
 -----------
 
 Start Docker container:
