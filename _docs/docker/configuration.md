@@ -18,7 +18,7 @@ ZooNavigator's Docker image can be configured using **environment variables**.
 ---
 
 ##### HTTP_PORT
-*default:* ``8000``  
+*default:* ``9000``  
 Tells the HTTP server which port to bind to.  
 To disable HTTP set this variable to ``disabled``.
 
