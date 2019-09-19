@@ -1,8 +1,8 @@
-[![Docker Automated](https://img.shields.io/docker/cloud/automated/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![Docker Pulls](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![Docker Stars](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![Docker Layers](https://img.shields.io/microbadger/layers/elkozmon/zoonavigator?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![Docker Image Size](https://img.shields.io/microbadger/image-size/elkozmon/zoonavigator?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/docker/cloud/automated/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/microbadger/layers/elkozmon/zoonavigator?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/microbadger/image-size/elkozmon/zoonavigator?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
 
 ZooNavigator
 ============
@@ -14,6 +14,23 @@ ZooKeeper versions 3.4.x and 3.5.x are currently supported.
 
 
 [**📘 Read official docs for more info and instructions how to use ZooNavigator.**](https://www.elkozmon.com/zoonavigator)
+
+Qucik start
+-----------
+
+Start Docker container:
+
+```
+docker run \
+  -d --network host \
+  --name zoonavigator \
+  --restart unless-stopped \
+  elkozmon/zoonavigator:latest
+```
+
+Go to [http://localhost:9000](http://localhost:9000).
+
+Optionally, change the port by adding `-e HTTP_PORT=1234` as an option to the command above.
 
 License
 -------
