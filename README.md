@@ -31,6 +31,7 @@ docker run \
 
 Go to [http://localhost:9000](http://localhost:9000).
 
+**Windows and Mac users:**  
 If wanting to access ZooKeeper running locally on host machine (not in Docker container), [follow this advice](https://github.com/elkozmon/zoonavigator/issues/40#issue-495910852).
 
 License
