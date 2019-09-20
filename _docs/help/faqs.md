@@ -32,4 +32,6 @@ As a side note, you might also consider using ACLs to secure your ZooKeeper clus
 
 ##### I'm getting error that says "Unable to establish connection with ZooKeeper."
 
-Make sure that ZooNavigator can access the ZooKeeper host(s) in the connection string you entered in the connect form. Especially in case when running ZooNavigator in Docker, since by default it runs on bridged networking mode.
+ZooNavigator cannot find ZooKeeper host(s) using the connection string you entered in the connect form. 
+
+If you're trying to access ZooKeeper running locally on host machine (not in Docker container), [follow this advice](https://github.com/elkozmon/zoonavigator/issues/40#issue-495910852).

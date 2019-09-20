@@ -4,18 +4,17 @@ category: basics
 order: 1
 ---
 
-**ZooNavigator is available as a Docker image**. 
-
-Start it using this command:
+Start Docker container with [ZooNavigator Docker image](https://hub.docker.com/r/elkozmon/zoonavigator):
 
 ```
 docker run \
   -d --network host \
+  -e HTTP_PORT=9000 \
   --name zoonavigator \
   --restart unless-stopped \
   elkozmon/zoonavigator:latest
 ```
 
-Once you get that running, simply open up [http://localhost:9000](http://localhost:9000).
+Go to [http://localhost:9000](http://localhost:9000).
 
-You can change the port by adding `-e HTTP_PORT=1234` as an option to the command above.
+If wanting to access ZooKeeper running locally on host machine (not in Docker container), [follow this advice](https://github.com/elkozmon/zoonavigator/issues/40#issue-495910852).
