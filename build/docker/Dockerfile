@@ -78,15 +78,24 @@ ENV HTTP_PORT=9000 \
 # Install dependencies
 RUN apk --no-cache add curl krb5 bash
 
+# Change working directory
 WORKDIR /app
 
+# Create and switch to a non-root user
+RUN addgroup -g 1000 zoonavigator \
+  && adduser -D -u 1000 zoonavigator -G zoonavigator \
+  && chown -R zoonavigator:zoonavigator .
+
+USER zoonavigator:zoonavigator
+
 # Copy app files
-COPY --from=sbt /app .
-COPY --from=npm /usr/local/bin/dockerize /usr/local/bin/dockerize
-COPY /build/docker/files/zoonavigator-api .
-COPY /build/docker/files/zoonavigator-web .
+COPY --chown=zoonavigator:zoonavigator --from=sbt /app .
+COPY --chown=zoonavigator:zoonavigator --from=npm /usr/local/bin/dockerize /usr/local/bin/dockerize
+COPY --chown=zoonavigator:zoonavigator /build/docker/files/zoonavigator-api .
+COPY --chown=zoonavigator:zoonavigator /build/docker/files/zoonavigator-web .
 
 # Create scripts and make them executable
+RUN ls -la && id
 RUN dockerize \
     -template ./run.sh.template:./run.sh \
     -template ./healthcheck.sh.template:./healthcheck.sh \
@@ -94,18 +103,11 @@ RUN dockerize \
     ./run.sh \
     ./healthcheck.sh
 
-# Create non-root user and chown '/app' folder
-RUN addgroup -g 1000 zoonavigator \
-  && adduser -D -u 1000 zoonavigator -G zoonavigator \
-  && chown -R zoonavigator:zoonavigator .
-
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s \
     CMD ./healthcheck.sh
 
 # Expose default HTTP port
 EXPOSE 9000
-
-USER zoonavigator:zoonavigator
 
 CMD ["./run.sh"]
