@@ -95,7 +95,6 @@ COPY --chown=zoonavigator:zoonavigator /build/docker/files/zoonavigator-api .
 COPY --chown=zoonavigator:zoonavigator /build/docker/files/zoonavigator-web .
 
 # Create scripts and make them executable
-RUN ls -la && id
 RUN dockerize \
     -template ./run.sh.template:./run.sh \
     -template ./healthcheck.sh.template:./healthcheck.sh \
