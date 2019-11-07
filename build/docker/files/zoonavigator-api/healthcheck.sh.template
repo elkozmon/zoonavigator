@@ -1,3 +1,12 @@
 #!/bin/sh
 
-curl -f http://localhost:${HTTP_PORT}{{ $.Env.BASE_HREF }} || exit 1
+if [ -n "$HTTPS_PORT" ]
+then
+  SCHEME="https"
+  PORT="$HTTPS_PORT"
+else
+  SCHEME="http"
+  PORT="$HTTP_PORT"
+fi
+
+curl -f ${SCHEME}://localhost:${PORT}{{ $.Env.BASE_HREF }} || exit 1
