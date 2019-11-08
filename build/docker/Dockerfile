@@ -77,7 +77,7 @@ ENV HTTP_PORT=9000 \
 
 # Install dependencies
 RUN apt-get update \
-  && apt-get install -y krb5-user \
+  && apt-get install -y curl krb5-user \
   && apt-get clean
 
 # Change working directory
