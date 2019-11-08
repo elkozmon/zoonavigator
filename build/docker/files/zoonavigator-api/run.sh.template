@@ -20,8 +20,7 @@ jar uf \
 
 # Config
 JAVA_OPTS="$JAVA_OPTS \
-  -J-XX:+UnlockExperimentalVMOptions \
-  -J-XX:+UseCGroupMemoryLimitForHeap \
+  -J-XX:+UseContainerSupport \
   -J-server \
   -J-Dzookeeper.kinit=/usr/bin/kinit \
   -J-Dplay.http.context={{ $.Env.BASE_HREF }} \
@@ -59,11 +58,4 @@ JAVA_OPTS="$JAVA_OPTS \
 [ -n "$ZK_SSL_TRUSTSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.password=$ZK_SSL_TRUSTSTORE_PASSWORD"
 
 # Start application
-./bin/zoonavigator-play ${JAVA_OPTS} &
-APP_PID=$!
-
-# Trap terminate signals
-trap 'kill "$APP_PID"' TERM QUIT
-
-# Wait for application to terminate
-wait "$APP_PID"
+exec ./bin/zoonavigator-play ${JAVA_OPTS}

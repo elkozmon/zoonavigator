@@ -1,5 +1,5 @@
 ARG APP_VERSION
-ARG SBT_VERSION=1.1.5
+ARG SBT_VERSION=1.2.8
 ARG SBT_GPG_KEY=99E82A75642AC823
 ARG DOCKERIZE_VERSION=0.6.1
 ARG BASE_HREF="/"
@@ -64,7 +64,7 @@ RUN sbt play/dist \
   && unzip play/target/universal/zoonavigator-play-$VERSION.zip \
   && mv zoonavigator-play-$VERSION /app
 
-FROM openjdk:8u151-jdk-alpine3.7
+FROM openjdk:14-jdk-slim
 
 ARG BASE_HREF
 
@@ -76,14 +76,16 @@ ENV HTTP_PORT=9000 \
     ZK_CONNECT_TIMEOUT_MILLIS=5000
 
 # Install dependencies
-RUN apk --no-cache add curl krb5 bash
+RUN apt-get update \
+  && apt-get install -y krb5-user \
+  && apt-get clean
 
 # Change working directory
 WORKDIR /app
 
 # Create and switch to a non-root user
-RUN addgroup -g 1000 zoonavigator \
-  && adduser -D -u 1000 zoonavigator -G zoonavigator \
+RUN groupadd -g 1000 zoonavigator \
+  && useradd -r -u 1000 -g zoonavigator zoonavigator\
   && chown -R zoonavigator:zoonavigator .
 
 USER zoonavigator:zoonavigator
@@ -110,4 +112,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
 # Expose default HTTP port
 EXPOSE 9000
 
-CMD ["./run.sh"]
+ENTRYPOINT ["./run.sh"]
