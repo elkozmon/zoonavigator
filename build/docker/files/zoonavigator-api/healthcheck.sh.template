@@ -9,4 +9,4 @@ else
   PORT="$HTTP_PORT"
 fi
 
-curl -k -f ${SCHEME}://localhost:${PORT}{{ $.Env.BASE_HREF }} || exit 1
+curl -k -f ${SCHEME}://localhost:${PORT}{{ .Env.BASE_HREF }} || exit 1

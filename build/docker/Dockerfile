@@ -3,6 +3,7 @@ ARG SBT_VERSION=1.2.8
 ARG SBT_GPG_KEY=99E82A75642AC823
 ARG DOCKERIZE_VERSION=0.6.1
 ARG BASE_HREF="/"
+ARG DEBUG=0
 
 FROM node:11.15.0-alpine as npm
 MAINTAINER Lubos Kozmon <contact@elkozmon.com>
@@ -10,6 +11,7 @@ MAINTAINER Lubos Kozmon <contact@elkozmon.com>
 ARG DOCKERIZE_VERSION
 ARG APP_VERSION
 ARG BASE_HREF
+ARG DEBUG
 
 # Validate base href
 RUN echo ${BASE_HREF} | grep -Eq '^\/(.*\/)?$' || (>&2 echo "BASE_HREF must start and end with a forward slash" && exit 1)

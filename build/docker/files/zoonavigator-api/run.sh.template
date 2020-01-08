@@ -23,7 +23,7 @@ JAVA_OPTS="$JAVA_OPTS \
   -J-XX:+UseContainerSupport \
   -J-server \
   -J-Dzookeeper.kinit=/usr/bin/kinit \
-  -J-Dplay.http.context={{ $.Env.BASE_HREF }} \
+  -J-Dplay.http.context={{ .Env.BASE_HREF }} \
   -J-Dplay.assets.path=/public \
   -J-Dplay.assets.urlPrefix=/"
 

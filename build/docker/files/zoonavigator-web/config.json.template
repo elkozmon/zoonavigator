@@ -1,11 +1,11 @@
 {
-  "apiRequestTimeoutMillis": {{ $.Env.REQUEST_TIMEOUT_MILLIS }}
-  {{ if $.Env.AUTO_CONNECT_CONNECTION_STRING }}
-    , "autoConnectConnectionString": "{{ $.Env.AUTO_CONNECT_CONNECTION_STRING }}"
+  "apiRequestTimeoutMillis": {{ .Env.REQUEST_TIMEOUT_MILLIS }}
+  {{ if .Env.AUTO_CONNECT_CONNECTION_STRING }}
+    , "autoConnectConnectionString": "{{ .Env.AUTO_CONNECT_CONNECTION_STRING }}"
   {{ end }}
   , "autoConnectAuthInfo": [
-    {{ if $.Env.AUTO_CONNECT_AUTH_INFO }}
-      {{ $authInfoArray := split $.Env.AUTO_CONNECT_AUTH_INFO ";" }}
+    {{ if .Env.AUTO_CONNECT_AUTH_INFO }}
+      {{ $authInfoArray := split .Env.AUTO_CONNECT_AUTH_INFO ";" }}
       {{ $authInfoSize := len $authInfoArray }}
       {{ range $index, $authInfo := $authInfoArray }}
         "{{ . }}"
