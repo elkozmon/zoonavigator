@@ -28,7 +28,5 @@ I suggest placing a proxy which supports Basic Auth in front of ZooNavigator. Fo
 
 ZooNavigator cannot find ZooKeeper host(s) using the connection string you entered in the connect form. 
 
----
-
 **Windows and Mac users:**  
 If you're trying to access ZooKeeper running locally on host machine (not in Docker container), [follow this advice](https://github.com/elkozmon/zoonavigator/issues/40#issue-495910852).
