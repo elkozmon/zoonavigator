@@ -80,23 +80,16 @@ ENV HTTP_PORT=9000 \
 # Install dependencies
 RUN apt-get update \
   && apt-get install -y curl krb5-user \
-  && apt-get clean
+  && rm -rf /var/lib/apt/lists/*
 
 # Change working directory
 WORKDIR /app
 
-# Create and switch to a non-root user
-RUN groupadd -g 1000 zoonavigator \
-  && useradd -r -u 1000 -g zoonavigator zoonavigator\
-  && chown -R zoonavigator:zoonavigator .
-
-USER zoonavigator:zoonavigator
-
 # Copy app files
-COPY --chown=zoonavigator:zoonavigator --from=sbt /app .
-COPY --chown=zoonavigator:zoonavigator --from=npm /usr/local/bin/dockerize /usr/local/bin/dockerize
-COPY --chown=zoonavigator:zoonavigator /build/docker/files/zoonavigator-api .
-COPY --chown=zoonavigator:zoonavigator /build/docker/files/zoonavigator-web .
+COPY --from=sbt /app .
+COPY --from=npm /usr/local/bin/dockerize /usr/local/bin/dockerize
+COPY /build/docker/files/zoonavigator-api .
+COPY /build/docker/files/zoonavigator-web .
 
 # Create scripts and make them executable
 RUN dockerize \
@@ -106,6 +99,10 @@ RUN dockerize \
     ./run.sh \
     ./healthcheck.sh
 
+# Change permissions
+RUN chgrp -R 0 . \
+  && chmod -R g=u .
+
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s \
     CMD ./healthcheck.sh
@@ -114,3 +111,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
 EXPOSE 9000
 
 ENTRYPOINT ["./run.sh"]
+USER 1000
