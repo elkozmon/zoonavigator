@@ -19,6 +19,11 @@ jar uf \
   public/config.json
 
 # Config
+ZOOKEEPER_34="true"
+ZOOKEEPER_34_JAR="zookeeper-3.4.11.jar"
+ZOOKEEPER_35_JAR="zookeeper-3.5.6.jar"
+ZOOKEEPER_JAR="zookeeper.jar"
+
 JAVA_OPTS="$JAVA_OPTS \
   -J-XX:+UseContainerSupport \
   -J-server \
@@ -56,6 +61,21 @@ JAVA_OPTS="$JAVA_OPTS \
 [ -n "$ZK_SSL_KEYSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.keyStore.password=$ZK_SSL_KEYSTORE_PASSWORD"
 [ -n "$ZK_SSL_TRUSTSTORE_PATH" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.location=$ZK_SSL_TRUSTSTORE_PATH"
 [ -n "$ZK_SSL_TRUSTSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.password=$ZK_SSL_TRUSTSTORE_PASSWORD"
+
+# Infer ZooKeeper version
+if [ -n "$ZK_CLIENT_SECURE" ] || [ "$ZK_CLIENT_CNXN_SOCKET" = "org.apache.zookeeper.ClientCnxnSocketNetty" ]
+then
+  ZOOKEEPER_34="false"
+fi
+
+[ -f lib/$ZOOKEEPER_JAR ] && rm lib/$ZOOKEEPER_JAR
+
+if [ "$ZOOKEEPER_34" = "true" ]
+then
+  cp lib/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
+else
+  cp lib/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR
+fi
 
 # Start application
 exec ./bin/zoonavigator-play ${JAVA_OPTS}
