@@ -8,7 +8,7 @@ ZooNavigator is a **web-based ZooKeeper UI and editor/browser** with many featur
 It is an open source project and the source code is available on [GitHub](https://github.com/elkozmon/zoonavigator).
 
 
-If you like this project, please, consider supporting me on [Patreon](https://www.patreon.com/elkozmon), thanks! ❤️
+If you like this project, please, consider supporting me [by buying me a beer](https://www.paypal.me/elkozmon), thanks! 🍺❤️
 
 
 <div class="zoo screenshots">
