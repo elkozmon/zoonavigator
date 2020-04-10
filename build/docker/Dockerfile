@@ -3,6 +3,7 @@ ARG SBT_VERSION=1.3.6
 ARG SBT_GPG_KEY=99E82A75642AC823
 ARG DOCKERIZE_VERSION=0.6.1
 ARG BASE_HREF="/"
+ARG DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
 ARG DEBUG=0
 
 FROM ubuntu:18.04 as dockerize
@@ -25,6 +26,7 @@ FROM node:13.6.0-stretch-slim as npm
 
 ARG APP_VERSION
 ARG BASE_HREF
+ARG DOCS_URL
 ARG DEBUG
 
 # Validate base href

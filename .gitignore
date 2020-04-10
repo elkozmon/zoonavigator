@@ -1,5 +1,6 @@
 .sass-cache/
 _site/
+docs/_build/
 
 ### JetBrains template
 *.iws

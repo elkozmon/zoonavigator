@@ -1,0 +1,17 @@
+table.zoo-screenshots {
+    box-shadow: none !important;
+}
+
+table.zoo-screenshots td {
+    background: none !important;
+    background-color: transparent !important;
+}
+
+table.zoo-screenshots, table.zoo-screenshots td, table.zoo-screenshots a  {
+    border: none !important;
+}
+
+/* Hide "On GitHub" section from versions menu */
+div.rst-versions > div.rst-other-versions > div.injected > dl:nth-child(4) {
+    display: none;
+}
