@@ -46,14 +46,6 @@ SSL_KEYSTORE_TYPE
 The key store type.
 
 
-SESSION_TIMEOUT_MILLIS
-----------------------
-*default*: :code:`900000`
-  
-Sets session inactivity timeout for users.  
-This value is in milliseconds.
-
-
 SECRET_KEY
 ----------
 Secret key for Play Framework - used for signing session cookies and CSRF tokens.  

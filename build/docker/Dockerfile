@@ -4,8 +4,6 @@ ARG SBT_GPG_KEY=99E82A75642AC823
 ARG DOCKERIZE_VERSION=0.6.1
 ARG BASE_HREF="/"
 ARG DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
-ARG CONFIG_PREDEF_CONNECTIONS_LIMIT=99
-ARG CONFIG_PREDEF_CONNECTIONS_AUTH_LIMIT=10
 ARG DEBUG=0
 
 FROM ubuntu:18.04 as dockerize
@@ -96,8 +94,9 @@ COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
 # Copy app files
 WORKDIR /app
 COPY --from=sbt /app .
-COPY /build/docker/files/zoonavigator-api .
 COPY /build/docker/files/zoonavigator-web .
+COPY /build/docker/files/zoonavigator-api .
+COPY /zoonavigator-api/play/conf/application.conf ./conf/application.conf
 
 # Create scripts and make them executable
 RUN dockerize \
@@ -105,7 +104,8 @@ RUN dockerize \
     -template ./healthcheck.sh.template:./healthcheck.sh \
   && chmod +x \
     ./run.sh \
-    ./healthcheck.sh
+    ./healthcheck.sh \
+    ./conf/zoonavigator.conf.sh
 
 # Change permissions
 RUN chgrp -R 0 . \
@@ -115,7 +115,6 @@ FROM openjdk:11-jdk-slim
 
 # Default config
 ENV HTTP_PORT=9000 \
-    SESSION_TIMEOUT_MILLIS=3600000 \
     REQUEST_TIMEOUT_MILLIS=10000 \
     ZK_CLIENT_TIMEOUT_MILLIS=5000 \
     ZK_CONNECT_TIMEOUT_MILLIS=5000
