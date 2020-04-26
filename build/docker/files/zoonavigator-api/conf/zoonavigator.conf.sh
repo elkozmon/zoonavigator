@@ -35,12 +35,6 @@ EOF
 
 fi
 
-cat <<EOF
-# Predefined connections
-zoonavigator.connections = []
-
-EOF
-
 CONNECTION_IDS=$(env | cut -f1 -d= | grep -E "CONNECTION_.*?_NAME" | sed -E "s/CONNECTION_(.*)_NAME/\1/g")
 
 for ID in $CONNECTION_IDS
