@@ -10,5 +10,6 @@ The following pages explain how to configure your Docker deployment.
    :maxdepth: 2
 
    configuration
-   auto-connect
+   preset-connections
+   autoconnect
    custom-url

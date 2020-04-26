@@ -6,15 +6,15 @@ ZooNavigator's Docker image can be configured using **environment variables**.
 
 Configuration options could be split into three groups:
 
-* `Server`_ - configures the web server that serves the application
+* `Application`_ - configures the application and a web server
 * `Java`_ - configures the Java Virtual Machine
 * `ZooKeeper client`_ - configuration related to ZooKeeper
 
 ----
 
-******
-Server
-******
+***********
+Application
+***********
 
 HTTP_PORT
 ---------
@@ -52,18 +52,34 @@ Secret key for Play Framework - used for signing session cookies and CSRF tokens
 Defaults to 64 random characters generated from */dev/urandom*.
 
 
-AUTO_CONNECT_CONNECTION_STRING
-------------------------------
-If set, ZooNavigator will use this value as a default connection string and skip
-the connect form, automatically connecting to listed ZooKeeper servers.
+CONNECTION_<myZooKeeper>_NAME
+-----------------------------
+Name for preset ZooKeeper connection *'<myZooKeeper>'*
 
 
-AUTO_CONNECT_AUTH_INFO
-----------------------
-In addition to presetting connection string as explained above, you can also
-set :ref:`Auth info <FaqAuthUserPass>` which ZooNavigator will use to authenticate with ZooKeeper
-during the auto-connect.  
-**Use semicolon (;) to separate multiple entries.**
+CONNECTION_<myZooKeeper>_CONN
+-----------------------------
+Connection string for preset ZooKeeper connection *'<myZooKeeper>'*
+
+
+CONNECTION_<myZooKeeper>_AUTH_<myAuth>_SCHEME
+---------------------------------------------
+Auth scheme for auth entry *'<myAuth>'* for preset ZooKeeper connection *'<myZooKeeper>'*
+
+
+CONNECTION_<myZooKeeper>_AUTH_<myAuth>_ID
+-----------------------------------------
+Auth id for auth entry *'<myAuth>'* for preset ZooKeeper connection *'<myZooKeeper>'*
+
+
+AUTO_CONNECT_CONNECTION_ID
+--------------------------
+If set, enables :doc:`Auto Connect <autoconnect>` feature.
+
+Set to :code:`myZooKeeper` to automatically connect to connection defined by these environment variables:
+
+- :code:`CONNECTION_myZooKeeper_NAME`
+- :code:`CONNECTION_myZooKeeper_CONN`
 
 ----
 
