@@ -6,9 +6,9 @@ The main goal of this project is to provide a way to efficiently manage ZNodes.
 This is a brief summary of what you get:
 
 * ZNode operations
-    - move, copy & paste,
-    - export & import, 
-    - mass delete,
+    - move, copy & paste
+    - export & import
+    - mass delete
     - regex search tool (currently limited to children nodes)
 * ZNode data editing
     - data validation, syntax highlighting and auto-formatting
