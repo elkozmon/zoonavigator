@@ -1,6 +1,6 @@
-=====
-Usage
-=====
+===========
+Quick Start
+===========
 
 Start Docker container with `ZooNavigator Docker image <https://hub.docker.com/r/elkozmon/zoonavigator>`_:
 

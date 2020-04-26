@@ -2,7 +2,7 @@
 Auto connect
 ============
 
-Auto connect lets you skip the `Connect form <../_static/images/screenshots/connect-form.png>`_ where you enter ZooKeeper server address and throws you directly into the `Editor UI <../_static/images/screenshots/znode-data-editor.png>`_. This is useful when you only have a single ZooKeeper cluster.
+Auto connect is a feature that lets you skip the `Connect form <../_static/images/screenshots/connect-form.png>`_ where you enter ZooKeeper server address and throws you directly into the `Editor UI <../_static/images/screenshots/znode-data-editor.png>`_. This is useful when you only have a single (or preferred) ZooKeeper cluster.
 
 To enable this feature simply add these environment variables to ZooNavigator's Web Docker container:
 

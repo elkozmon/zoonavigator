@@ -47,8 +47,9 @@ If you like this project, please, consider supporting me `by buying me a beer <h
    :maxdepth: 2
    :caption: Contents:
 
-   basics/index
+   quickstart
+   features
    docker/index
-   development/index
-   help/index
-   change-log
+   development
+   faqs
+   changelog
