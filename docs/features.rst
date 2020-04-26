@@ -17,3 +17,9 @@ This is a brief summary of what you get:
 * Auth & security
     - SASL and Auth scheme ZooKeeper authentication
     - ZNode ACL management (supports recursive changes)
+
+
+Compatibility
+-------------
+
+ZooKeeper versions 3.4.x and 3.5.x are currently supported.

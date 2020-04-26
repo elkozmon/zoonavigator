@@ -4,11 +4,11 @@ Configuration
 
 ZooNavigator's Docker image can be configured using **environment variables**.  
 
-----
+Configuration options could be split into three groups:
 
-* `Server`_
-* `Java`_
-* `ZooKeeper client`_
+* `Server`_ - configures the web server that serves the application
+* `Java`_ - configures the Java Virtual Machine
+* `ZooKeeper client`_ - configuration related to ZooKeeper
 
 ----
 

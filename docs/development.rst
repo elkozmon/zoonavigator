@@ -1,6 +1,6 @@
-===========
-Development
-===========
+=================
+Development Guide
+=================
 
 Development setup requires `NPM <https://www.npmjs.com/>`_ and `SBT <https://www.scala-sbt.org/>`_ to be installed on your machine.
 
