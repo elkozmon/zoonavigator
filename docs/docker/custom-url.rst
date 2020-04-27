@@ -16,6 +16,7 @@ There is a Docker build argument for that called :code:`BASE_HREF` in ZooNavigat
     -t my-zoonavigator \
     -f build/docker/Dockerfile \
     --build-arg BASE_HREF=/zoonavigator/ \
+    --build-arg APP_VERSION=my-build \
     .
 
 
