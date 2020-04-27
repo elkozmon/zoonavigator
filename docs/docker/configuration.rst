@@ -52,34 +52,53 @@ Secret key for Play Framework - used for signing session cookies and CSRF tokens
 Defaults to 64 random characters generated from */dev/urandom*.
 
 
-CONNECTION_<myZooKeeper>_NAME
+CONNECTION_<MYZK>_NAME
 -----------------------------
-Name for preset ZooKeeper connection *'<myZooKeeper>'*
+Name for preset ZooKeeper connection *'<MYZK>'*
 
 
-CONNECTION_<myZooKeeper>_CONN
+.. note::
+
+  environment variable name should consist only of uppercase letters, digits and underscores.
+
+CONNECTION_<MYZK>_CONN
 -----------------------------
-Connection string for preset ZooKeeper connection *'<myZooKeeper>'*
+Connection string for preset ZooKeeper connection *'<MYZK>'*
 
 
-CONNECTION_<myZooKeeper>_AUTH_<myAuth>_SCHEME
+.. note::
+
+  environment variable name should consist only of uppercase letters, digits and underscores.
+
+
+CONNECTION_<MYZK>_AUTH_<MYAUTH>_SCHEME
 ---------------------------------------------
-Auth scheme for auth entry *'<myAuth>'* for preset ZooKeeper connection *'<myZooKeeper>'*
+Auth scheme for auth entry *'<MYAUTH>'* for preset ZooKeeper connection *'<MYZK>'*
 
 
-CONNECTION_<myZooKeeper>_AUTH_<myAuth>_ID
+.. note::
+
+  environment variable name should consist only of uppercase letters, digits and underscores.
+
+
+CONNECTION_<MYZK>_AUTH_<MYAUTH>_ID
 -----------------------------------------
-Auth id for auth entry *'<myAuth>'* for preset ZooKeeper connection *'<myZooKeeper>'*
+Auth id for auth entry *'<MYAUTH>'* for preset ZooKeeper connection *'<MYZK>'*
+
+
+.. note::
+
+  environment variable name should consist only of uppercase letters, digits and underscores.
 
 
 AUTO_CONNECT_CONNECTION_ID
 --------------------------
 If set, enables :doc:`Auto Connect <autoconnect>` feature.
 
-Set to :code:`myZooKeeper` to automatically connect to connection defined by these environment variables:
+Set to :code:`MYZK` to automatically connect to connection defined by these environment variables:
 
-- :code:`CONNECTION_myZooKeeper_NAME`
-- :code:`CONNECTION_myZooKeeper_CONN`
+- :code:`CONNECTION_MYZK_NAME`
+- :code:`CONNECTION_MYZK_CONN`
 
 ----
 

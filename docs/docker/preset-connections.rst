@@ -16,12 +16,12 @@ To add a preset connection, you must set both these environment variable to a no
 
 .. note::
 
-   Replace <ID> by any id string you chose
+   Replace <ID> by any id string you chose. Keep in mind that environment variable name should consist only of uppercase letters, digits and underscores.
 
-For example, if one wants to add a ZooKeeper cluster running at *localhost:2181*, name it "Local ZooKeeper" and give it id *localZK*, then he/she would set the environment variables like so:
+For example, if one wants to add a ZooKeeper cluster running at *localhost:2181*, name it "Local ZooKeeper" and give it id *LOCALZK*, then he/she would set the environment variables like so:
 
-- :code:`CONNECTION_localZK_NAME` = **Local ZooKeeper**
-- :code:`CONNECTION_localZK_CONN` = **localhost:2181**
+- :code:`CONNECTION_LOCALZK_NAME` = **Local ZooKeeper**
+- :code:`CONNECTION_LOCALZK_CONN` = **localhost:2181**
 
 Adding auth entry to a Preset Connection
 ----------------------------------------
