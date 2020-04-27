@@ -87,6 +87,7 @@ RUN sbt play/dist \
 FROM ubuntu:18.04 as ubuntu
 
 ARG BASE_HREF
+ARG DOCS_URL
 
 # Get dockerize
 COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
