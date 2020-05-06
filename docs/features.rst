@@ -2,10 +2,11 @@
 Features
 ========
 
-The main goal of this project is to provide a way to efficiently manage ZNodes.  
+The main goal of this project is to provide a way to efficiently manage ZNodes.
+
 This is a brief summary of what you get:
 
-* Manage multiple ZooKeeper clusters at once
+* **Manage multiple ZooKeeper clusters at once**
 * Advanced ZNode operations
     - move, copy & paste
     - export & import
