@@ -5,6 +5,9 @@ ARG DOCKERIZE_VERSION=0.6.1
 ARG BASE_HREF="/"
 ARG DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
 ARG DEBUG=0
+ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
+ARG VCS_REF
+ARG BUILD_DATE
 
 FROM ubuntu:18.04 as dockerize
 MAINTAINER Lubos Kozmon <contact@elkozmon.com>
@@ -114,6 +117,12 @@ RUN chgrp -R 0 . \
 
 FROM openjdk:11-jdk-slim
 
+ARG APP_VERSION
+ARG DOCS_URL
+ARG VCS_URL
+ARG VCS_REF
+ARG BUILD_DATE
+
 # Default config
 ENV HTTP_PORT=9000 \
     REQUEST_TIMEOUT_MILLIS=10000 \
@@ -147,3 +156,13 @@ EXPOSE 9000
 
 ENTRYPOINT ["./run.sh"]
 USER 1000
+
+LABEL \
+  org.label-schema.name="ZooNavigator" \
+  org.label-schema.description="Web-based ZooKeeper UI/editor/browser" \
+  org.label-schema.url=${DOCS_URL} \
+  org.label-schema.vcs-url=${VCS_URL} \
+  org.label-schema.vcs-ref=${VCS_REF} \
+  org.label-schema.version=${APP_VERSION} \
+  org.label-schema.build-date=${BUILD_DATE} \
+  org.label-schema.docker.cmd="docker run -d --network host -e HTTP_PORT=9000 --name zoonavigator --restart unless-stopped elkozmon/zoonavigator:latest"
