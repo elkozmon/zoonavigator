@@ -11,6 +11,14 @@ table.zoo-screenshots, table.zoo-screenshots td, table.zoo-screenshots a  {
     border: none !important;
 }
 
+.zoo-screenshots img {
+    border: 1px solid #cbcbcb
+}
+
+.zoo-screenshots img:hover {
+    border: 1px solid #5d9cde;
+}
+
 /* Hide "On GitHub" section from versions menu */
 div.rst-versions > div.rst-other-versions > div.injected > dl:nth-child(4) {
     display: none;
