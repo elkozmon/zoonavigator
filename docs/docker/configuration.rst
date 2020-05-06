@@ -54,7 +54,7 @@ Defaults to 64 random characters generated from */dev/urandom*.
 
 CONNECTION_<MYZK>_NAME
 -----------------------------
-Name for preset ZooKeeper connection *'<MYZK>'*
+Optional name for preset ZooKeeper connection *'<MYZK>'*
 
 
 .. note::
@@ -95,10 +95,7 @@ AUTO_CONNECT_CONNECTION_ID
 --------------------------
 If set, enables :doc:`Auto Connect <autoconnect>` feature.
 
-Set to :code:`MYZK` to automatically connect to connection defined by these environment variables:
-
-- :code:`CONNECTION_MYZK_NAME`
-- :code:`CONNECTION_MYZK_CONN`
+Set to :code:`MYZK` to automatically connect to connection defined by :code:`CONNECTION_MYZK_CONN` environment variable.
 
 ----
 

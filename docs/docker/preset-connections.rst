@@ -9,14 +9,13 @@ Adding a Preset Connection
 
 Each connection must have a unique id, which is part of the environment variable name.
 
-To add a preset connection, you must set both these environment variable to a non-empty string:
+To add a preset connection, you must enter a valid connection string as :code:`CONNECTION_<ID>_CONN` environment variable.
 
-- :code:`CONNECTION_<ID>_NAME`
-- :code:`CONNECTION_<ID>_CONN`
+Optionally, you can add a name to your preset connection using environment variable :code:`CONNECTION_<ID>_NAME` which will be displayed in the UI instead of the id.
 
 .. note::
 
-   Replace <ID> by any id string you chose. Keep in mind that environment variable name should consist only of uppercase letters, digits and underscores.
+   Replace <ID> by any id string you choose. Keep in mind that environment variable name should consist only of uppercase letters, digits and underscores.
 
 For example, if one wants to add a ZooKeeper cluster running at *localhost:2181*, name it "Local ZooKeeper" and give it id *LOCALZK*, then he/she would set the environment variables like so:
 

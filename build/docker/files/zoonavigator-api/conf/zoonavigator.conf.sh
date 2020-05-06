@@ -12,16 +12,15 @@ fi
 
 if [ -n "$AUTO_CONNECT_CONNECTION_ID" ]
 then
-  NAME="CONNECTION_${AUTO_CONNECT_CONNECTION_ID}_NAME"
+  CONN="CONNECTION_${AUTO_CONNECT_CONNECTION_ID}_CONN"
 
   # throw error if name empty
-  if [ -z "${!NAME}" ]
+  if [ -z "${!CONN}" ]
   then
     >&2 cat <<EOF
 Invalid Auto Connect configuration: connection '${AUTO_CONNECT_CONNECTION_ID}' not properly defined.
 
 Make sure following environment variables are set:
- - CONNECTION_${AUTO_CONNECT_CONNECTION_ID}_NAME
  - CONNECTION_${AUTO_CONNECT_CONNECTION_ID}_CONN
 EOF
     exit 1;
@@ -29,36 +28,33 @@ EOF
 
   cat <<EOF
 # Client will cancel requests that take longer than this
-zoonavigator.autoConnect = \${zoonavigator.connection.${AUTO_CONNECT_CONNECTION_ID}.name}
+zoonavigator.autoConnect = "${AUTO_CONNECT_CONNECTION_ID}"
 
 EOF
 
 fi
 
-CONNECTION_IDS=$(env | cut -f1 -d= | grep -E "CONNECTION_.*?_NAME" | sed -E "s/CONNECTION_(.*)_NAME/\1/g")
+CONNECTION_IDS=$(env | cut -f1 -d= | grep -E "CONNECTION_.*?_CONN" | sed -E "s/CONNECTION_(.*)_CONN/\1/g")
 
 for ID in $CONNECTION_IDS
 do
-  NAME="CONNECTION_${ID}_NAME"
+  NAME="CONNECTION_${ID}_NAME" # this is optional
   CONN="CONNECTION_${ID}_CONN"
-
-  # throw error if conn or name empty
-  if [ -z "${!CONN}" ] || [ -z "${!NAME}" ]
-  then
-    >&2 cat <<EOF
-Invalid Connection '${ID}' configuration.
-
-Make sure following environment variables are set:
- - ${NAME}
- - ${CONN}
-EOF
-    exit 1;
-  fi
 
   cat <<EOF
 # Predefined connection ${ID}
-zoonavigator.connection.${ID} = {
+zoonavigator.connections.${ID} = {
+EOF
+
+  # add connection name if defined
+  if [ -n "${!NAME}" ]
+  then
+    cat <<EOF
   name = "${!NAME}"
+EOF
+  fi
+
+  cat <<EOF
   conn = "${!CONN}"
   auth = []
 }
@@ -86,18 +82,13 @@ EOF
     fi
 
     cat <<EOF
-zoonavigator.connection.${ID}.auths.${AUTH_ID} = {
+zoonavigator.connections.${ID}.auths.${AUTH_ID} = {
   scheme = "${!SCHEME_NAME}"
   id = "${!SCHEME_ID}"
 }
 
-zoonavigator.connection.${ID}.auth = \${zoonavigator.connection.${ID}.auth} [\${zoonavigator.connection.${ID}.auths.${AUTH_ID}}]
+zoonavigator.connections.${ID}.auth = \${zoonavigator.connections.${ID}.auth} [\${zoonavigator.connections.${ID}.auths.${AUTH_ID}}]
 
 EOF
   done
-
-  cat <<EOF
-zoonavigator.connections = \${zoonavigator.connections} [\${zoonavigator.connection.${ID}}]
-
-EOF
 done
