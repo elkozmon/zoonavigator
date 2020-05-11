@@ -27,7 +27,7 @@ EOF
   fi
 
   cat <<EOF
-# Client will cancel requests that take longer than this
+# Optional auto connect
 zoonavigator.autoConnect = "${AUTO_CONNECT_CONNECTION_ID}"
 
 EOF
