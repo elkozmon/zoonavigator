@@ -7,7 +7,7 @@ rm -f ./RUNNING_PID
 export SECRET_KEY=${SECRET_KEY:-$(cat /dev/urandom | tr -dc 'a-zA-Z0-9~!@#$%^&*_-' | fold -w 64 | head -n 1)}
 
 # Print warning about out-dated configuration
-[ -n "$AUTO_CONNECT_CONNECTION_STRING" ] && >&2 echo "Warning: detected usage of out-dated Auto Connect configuration.\nPlease see {{ .Env.DOCS_URL }}/docker/autoconnect.html for more info."
+[ -n "$AUTO_CONNECT_CONNECTION_STRING" ] && >&2 echo "Warning: detected usage of out-dated Auto Connect configuration.\nPlease see {{ .Env.DOCS_URL }}/docker/autoconnect.html for more info.\n"
 
 # Config
 ZOOKEEPER_34="true"

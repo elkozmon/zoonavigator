@@ -19,9 +19,9 @@ then
   then
     >&2 cat <<EOF
 Invalid Auto Connect configuration: connection '${AUTO_CONNECT_CONNECTION_ID}' not properly defined.
-
 Make sure following environment variables are set:
  - CONNECTION_${AUTO_CONNECT_CONNECTION_ID}_CONN
+
 EOF
     exit 1;
   fi
@@ -73,10 +73,10 @@ EOF
     then
       >&2 cat <<EOF
 Invalid Auth '${AUTH_ID}' configuration in Connection '${ID}'.
-
 Make sure following environment variables are set:
  - ${SCHEME_NAME}
  - ${SCHEME_ID}
+
 EOF
       exit 1;
     fi
