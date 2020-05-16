@@ -2,6 +2,23 @@
 Change Log
 ==========
 
+1.0.0
+-----
+
+*May 16, 2020*
+
+
+Adds capability to manage multiple ZooKeeper clusters at once for larger deployments
+
+**Changes:**
+
+* Add support for preset ZooKeeper connections
+* Switch between ZooKeeper clusters in Editor UI
+* Change Auto connect Docker configuration
+* Remove Session info dialog
+* Show build version on Connect page
+
+
 0.8.0
 -----
 
