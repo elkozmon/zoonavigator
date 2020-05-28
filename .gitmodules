@@ -1,6 +1,6 @@
 [submodule "zoonavigator-api"]
 	path = zoonavigator-api
-	url = git@github.com:elkozmon/zoonavigator-api.git
+	url = https://github.com/elkozmon/zoonavigator-api.git
 [submodule "zoonavigator-web"]
 	path = zoonavigator-web
-	url = git@github.com:elkozmon/zoonavigator-web.git
+	url = https://github.com/elkozmon/zoonavigator-web.git
