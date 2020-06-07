@@ -2,6 +2,17 @@
 Change Log
 ==========
 
+1.0.1
+-----
+
+*June 07, 2020*
+
+
+**Fixes:**
+
+* Custom base URL routing
+* ZNode import
+
 1.0.0
 -----
 
