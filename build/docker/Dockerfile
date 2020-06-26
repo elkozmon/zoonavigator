@@ -104,12 +104,12 @@ COPY /zoonavigator-api/play/conf/application.conf ./conf/application.conf
 
 # Create scripts and make them executable
 RUN dockerize \
-    -template ./run.sh.template:./run.sh \
-    -template ./healthcheck.sh.template:./healthcheck.sh \
+    -template ./bin/zoonavigator.sh.template:./bin/zoonavigator.sh \
+    -template ./bin/healthcheck.sh.template:./bin/healthcheck.sh \
   && chmod +x \
-    ./run.sh \
-    ./healthcheck.sh \
-    ./conf/zoonavigator.conf.sh
+    ./bin/zoonavigator.sh \
+    ./bin/healthcheck.sh \
+    ./bin/zoonavigator.conf.sh
 
 # Change permissions
 RUN chgrp -R 0 . \
@@ -127,7 +127,8 @@ ARG BUILD_DATE
 ENV HTTP_PORT=9000 \
     REQUEST_TIMEOUT_MILLIS=10000 \
     ZK_CLIENT_TIMEOUT_MILLIS=5000 \
-    ZK_CONNECT_TIMEOUT_MILLIS=5000
+    ZK_CONNECT_TIMEOUT_MILLIS=5000 \
+    DATA_DIR="/app/data"
 
 # Install dependencies
 RUN apt-get update \
@@ -149,12 +150,12 @@ COPY --from=ubuntu /app .
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s \
-    CMD ./healthcheck.sh
+    CMD ./bin/healthcheck.sh
 
 # Expose default HTTP port
 EXPOSE 9000
 
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["./bin/zoonavigator.sh"]
 USER 1000
 
 LABEL \

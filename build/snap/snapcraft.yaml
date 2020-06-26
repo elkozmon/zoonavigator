@@ -1,0 +1,27 @@
+name: zoonavigator
+summary: Web-based ZooKeeper UI / editor / browser
+description: |
+  ZooNavigator is a web-based ZooKeeper UI and editor/browser with many features.
+
+base: core18
+grade: devel
+confinement: devmode
+adopt-info: zoonavigator
+
+apps:
+  zoonavigator:
+    command: zoonavigator.sh
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  zoonavigator:
+    source: app/
+    plugin: dump
+    parse-info: []
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version $(cat version)
+    stage-packages:
+      - openjdk-11-jdk

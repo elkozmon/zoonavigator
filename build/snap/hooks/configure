@@ -1,0 +1,13 @@
+#!/bin/sh -e
+
+username="$(snapctl get username)"
+password="$(snapctl get password)"
+
+if [ -z "$username" -o -z "$password" ]; then
+    echo "Username and password are required."
+    exit 1
+fi
+
+mkdir -m 0600 $SNAP_DATA/options
+echo "username: $username" > $SNAP_DATA/options/credentials
+echo "password: $password" >> $SNAP_DATA/options/credentials
