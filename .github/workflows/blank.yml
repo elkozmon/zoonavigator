@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    branches:
+    - master
+    - feature/github-actions
+    tags:
+    - [0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Test
+      run: |
+        docker-compose \
+          -f $GITHUB_WORKSPACE/zoonavigator-api/docker-compose.test.yml \
+          -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml \
+          up
