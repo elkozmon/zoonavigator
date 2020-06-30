@@ -34,12 +34,8 @@ jobs:
       - name: Test
         run: docker-compose -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml up --exit-code-from=sut
 
-  release-docker:
+  build:
     runs-on: ubuntu-latest
-
-    needs:
-      - test-api
-      - test-web
 
     steps:
       - name: Checkout
@@ -51,8 +47,7 @@ jobs:
         id: version
         uses: battila7/get-version-action@v2
 
-      - name: Docker Build
-        id: build
+      - name: Get metadata
         run: |
           TAG="${{ steps.get_version.outputs.version-without-v }}"
 
@@ -68,7 +63,6 @@ jobs:
 
           # set image name
           IMAGE_NAME="elkozmon/zoonavigator:${DOCKER_TAG}"
-          echo "::set-output name=image_name::$IMAGE_NAME"
 
           # is docker tag semver?
           if [[ $DOCKER_TAG =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
@@ -78,14 +72,60 @@ jobs:
               DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
           fi
 
+          echo "" > metadata.env
+          echo "DOCKER_TAG=${DOCKER_TAG}" >> metadata.env
+          echo "APP_VERSION=${APP_VERSION}" >> metadata.env
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> metadata.env
+          echo "DOCS_URL=${DOCS_URL}" >> metadata.env
+
+      - name: Build
+        run: |
+          source metadata.env
+
           docker build \
             --build-arg APP_VERSION=$APP_VERSION \
             --build-arg DOCS_URL=$DOCS_URL \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
             --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-            -t $IMAGE_NAME \
+            -t ${IMAGE_NAME} \
             -f build/docker/Dockerfile \
             .
+
+      - name: Package
+        run: |
+          source metadata.env
+
+          id=$(docker create $IMAGE_NAME)
+          docker cp $id:lib out
+          docker rm $id
+
+          tar cvfz zoonavigator.tar.gz out
+
+      - name: Upload metadata
+        uses: actions/upload-artifact@v1
+        with:
+          name: metadata
+          path: metadata.env
+
+      - name: Upload package
+        uses: actions/upload-artifact@v1
+        with:
+          name: zoonavigator
+          path: zoonavigator.tar.gz
+
+  release-docker:
+    runs-on: ubuntu-latest
+
+    needs:
+      - test-api
+      - test-web
+      - build
+
+    steps:
+      - name: Download metadata
+        uses: actions/download-artifact@v1
+        with:
+          name: metadata
 
       - name: Docker Login
         uses: azure/docker-login@v1
@@ -94,7 +134,10 @@ jobs:
           password: ${{ secrets.DOCKERIO_PASSWORD }}
 
       - name: Docker Push
-        run: docker push ${{ steps.build.outputs.image_name }}
+        run: |
+          source metadata/metadata.env
+
+          docker push ${IMAGE_NAME}
 
       - name: Microbadger webhook
         uses: muinmomin/webhook-action@v1.0.0
@@ -107,8 +150,14 @@ jobs:
     needs:
       - test-api
       - test-web
+      - build
 
     steps:
+      - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: zoonavigator
+
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
         with:
