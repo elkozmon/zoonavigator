@@ -96,10 +96,11 @@ jobs:
           source metadata.env
 
           id=$(docker create $IMAGE_NAME)
-          docker cp $id:lib out
+          docker cp $id:/app/lib out/lib
+          docker cp $id:/app/extra out/extra
           docker rm $id
 
-          tar cvfz zoonavigator.tar.gz out
+          tar -cvfz zoonavigator.tar.gz out
 
       - name: Upload metadata
         uses: actions/upload-artifact@v1
@@ -137,7 +138,7 @@ jobs:
         run: |
           source metadata/metadata.env
 
-          docker push ${IMAGE_NAME}
+          # UNCOMMENT docker push ${IMAGE_NAME}
 
       - name: Microbadger webhook
         uses: muinmomin/webhook-action@v1.0.0

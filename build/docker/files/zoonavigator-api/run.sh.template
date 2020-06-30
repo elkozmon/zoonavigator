@@ -62,9 +62,9 @@ fi
 
 if [ "$ZOOKEEPER_34" = "true" ]
 then
-  cp lib/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
+  cp extra/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
 else
-  cp lib/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR
+  cp extra/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR
 fi
 
 # Exit if command fails
