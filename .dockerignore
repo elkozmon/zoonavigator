@@ -1,5 +1,4 @@
-build/snap/*.snap
-build/snap/*.Dockerfile
+build/snap/
 
 Dockerfile*
 docker-compose*

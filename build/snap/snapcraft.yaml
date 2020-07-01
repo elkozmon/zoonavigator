@@ -11,17 +11,27 @@ adopt-info: zoonavigator
 apps:
   zoonavigator:
     command: zoonavigator.sh
+    daemon: simple
+    environment:
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-$SNAP_ARCH
+      PATH: $JAVA_HOME/bin:$PATH
     plugs:
-      - network
-      - network-bind
+    - network
+    - network-bind
+    - home
 
 parts:
   zoonavigator:
-    source: app/
+    source: snap/local
     plugin: dump
     parse-info: []
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version $(cat version)
+    build-packages:
+    - ca-certificates
+    - ca-certificates-java
     stage-packages:
-      - openjdk-11-jdk
+    - openjdk-11-jdk-headless
+    - krb5-user
+    - jq

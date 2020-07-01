@@ -1,6 +1,6 @@
-build/snap/app
+build/snap/local/extra/
+build/snap/local/lib/
 build/snap/*.snap
-build/snap/*.Dockerfile
 
 .sass-cache/
 _site/

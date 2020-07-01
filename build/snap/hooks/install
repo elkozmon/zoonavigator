@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Exit if any command fails
+set -e
+
+# Generate secret key
+cat /dev/urandom | tr -dc 'a-zA-Z0-9~!@#$%^&*_-' | fold -w 64 | head -n 1 \
+  > $SNAP_DATA/.secret
