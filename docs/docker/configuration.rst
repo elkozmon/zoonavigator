@@ -52,6 +52,14 @@ Secret key for Play Framework - used for signing session cookies and CSRF tokens
 Defaults to 64 random characters generated from */dev/urandom*.
 
 
+BASE_HREF
+---------
+*default*: :code:`/`
+
+Sets base URL where ZooNavigator will be served.
+If you want ZooNavigator to be available at 'http://www.your-domain.com/zoonavigator' instead of 'http://www.your-domain.com' set this variable to `/zoonavigator`.
+
+
 CONNECTION_<MYZK>_NAME
 -----------------------------
 Optional name for preset ZooKeeper connection *'<MYZK>'*

@@ -19,10 +19,10 @@ JAVA_OPTS="$JAVA_OPTS \
   -J-XX:+UseContainerSupport \
   -J-server \
   -J-Dzookeeper.kinit=/usr/bin/kinit \
-  -J-Dplay.http.context={{ .Env.BASE_HREF }} \
   -J-Dplay.assets.path=/public \
   -J-Dplay.assets.urlPrefix=/"
 
+[ -n "$BASE_HREF" ] && JAVA_OPTS="$JAVA_OPTS -J-Dplay.http.context=$BASE_HREF"
 [ -n "$HTTP_PORT" ] && JAVA_OPTS="$JAVA_OPTS -J-Dplay.server.http.port=$HTTP_PORT"
 [ -n "$HTTPS_PORT" ] && JAVA_OPTS="$JAVA_OPTS -J-Dplay.server.https.port=$HTTPS_PORT"
 [ -n "$SSL_KEYSTORE_PATH" ] && JAVA_OPTS="$JAVA_OPTS -J-Dplay.server.https.keyStore.path=$SSL_KEYSTORE_PATH"

@@ -25,6 +25,5 @@ export const environment = {
   docsUrl: "{{ .Env.DOCS_URL }}",
   docsFaqsAuthUrl: "{{ .Env.DOCS_URL }}/faqs.html#what-should-i-fill-in-for-auth-username-and-auth-password",
   appVersion: "{{ .Env.APP_VERSION }}",
-  baseHref: "{{ .Env.BASE_HREF }}",
   apiHref: "/api"
 };

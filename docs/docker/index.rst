@@ -12,4 +12,4 @@ The following pages explain how to configure your Docker deployment.
    configuration
    preset-connections
    autoconnect
-   custom-url
+   custom-build

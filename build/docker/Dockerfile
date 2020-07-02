@@ -2,7 +2,6 @@ ARG APP_VERSION
 ARG SBT_VERSION=1.3.6
 ARG SBT_GPG_KEY=99E82A75642AC823
 ARG DOCKERIZE_VERSION=0.6.1
-ARG BASE_HREF="/"
 ARG DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
 ARG DEBUG=0
 ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
@@ -28,12 +27,8 @@ RUN curl \
 FROM node:13.6.0-stretch-slim as npm
 
 ARG APP_VERSION
-ARG BASE_HREF
 ARG DOCS_URL
 ARG DEBUG
-
-# Validate base href
-RUN echo ${BASE_HREF} | grep -Eq '^\/(.*\/)?$' || (>&2 echo "BASE_HREF must start and end with a forward slash" && exit 1)
 
 # Copy source code
 WORKDIR /src
@@ -54,7 +49,7 @@ RUN dockerize \
 # Install dependencies & build
 RUN npm install -g @angular/cli \
   && npm install \
-  && ng build --prod --base-href ${BASE_HREF} \
+  && ng build --prod \
   && mv dist /app
 
 FROM openjdk:11-jdk-slim as sbt
@@ -89,7 +84,6 @@ RUN sbt play/dist \
 
 FROM ubuntu:18.04 as ubuntu
 
-ARG BASE_HREF
 ARG DOCS_URL
 
 # Get dockerize
@@ -105,7 +99,6 @@ COPY /zoonavigator-api/play/conf/application.conf ./conf/application.conf
 # Create scripts and make them executable
 RUN dockerize \
     -template ./run.sh.template:./run.sh \
-    -template ./healthcheck.sh.template:./healthcheck.sh \
   && chmod +x \
     ./run.sh \
     ./healthcheck.sh \
