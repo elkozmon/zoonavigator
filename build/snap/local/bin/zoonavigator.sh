@@ -15,7 +15,7 @@ JAVA_OPTS="$JAVA_OPTS \
   -server \
   -Dplay.http.secret.key=$SECRET_KEY \
   -Dpidfile.path=$PID_FILE \
-  -Dzookeeper.kinit=/usr/bin/kinit"
+  -Dzookeeper.kinit=$SNAP/usr/bin/kinit"
 
 # Start application
 exec java \

@@ -49,7 +49,6 @@ get_conf() {
 #################################################
 
 add_appconf "play.application.loader = " "AppLoader"
-add_appconf "play.http.parser.maxMemoryBuffer = " "10m"
 add_appconf "play.filters.cors.allowedOrigins = " "null"
 add_appconf "play.filters.enabled = " "[]"
 add_appconf "play.filters.enabled += " "\"play.filters.headers.SecurityHeadersFilter\""
@@ -71,6 +70,7 @@ if [ -n "$AUTO_CONNECT_CONNECTION_ID" ]; then
 fi
 
 add_appconf "zoonavigator.requestTimeout = " "$(get_conf "zoonavigator.request.timeout" "10000")" " milliseconds"
+add_appconf "play.http.parser.maxMemoryBuffer = " "$(get_conf "zoonavigator.request.max-size" "10000")" "k"
 add_appconf "zoonavigator.autoConnect = " "$AUTO_CONNECT_CONNECTION_ID"
 add_appconf "zoonavigator.connections = " "{}"
 
@@ -105,14 +105,13 @@ done
 #################################################
 
 # Options
-add_javaopt "-Dplay.http.context=" "$(get_conf "base-href" "/")"
+add_javaopt "-Dplay.http.context=" "$(get_conf "zoonavigator.base-href" "/")"
 
-add_javaopt "-Dplay.server.http.port=" "$(get_conf "server.http.port" "9000")"
-add_javaopt "-Dplay.server.https.port=" "$(get_conf "server.https.port")"
-add_javaopt "-Dplay.server.https.keyStore.path=" "$(get_conf "server.https.key-store.path")"
-
-add_javaopt "-Dplay.server.https.keyStore.password=" "$(get_conf "server.https.key-store.password")"
-add_javaopt "-Dplay.server.https.keyStore.type=" "$(get_conf "server.https.key-store.type")"
+add_javaopt "-Dplay.server.http.port=" "$(get_conf "zoonavigator.server.http.port" "9000")"
+add_javaopt "-Dplay.server.https.port=" "$(get_conf "zoonavigator.server.https.port")"
+add_javaopt "-Dplay.server.https.keyStore.path=" "$(get_conf "zoonavigator.server.https.key-store.path")"
+add_javaopt "-Dplay.server.https.keyStore.password=" "$(get_conf "zoonavigator.server.https.key-store.password")"
+add_javaopt "-Dplay.server.https.keyStore.type=" "$(get_conf "zoonavigator.server.https.key-store.type")"
 
 add_javaopt "-Xmx=" "$(get_conf "java.xmx")"
 add_javaopt "-Xms=" "$(get_conf "java.xms")"
@@ -123,12 +122,11 @@ add_javaopt "-Djava.security.krb5.kdc=" "$(get_conf "java.security.krb5.kdc")"
 
 add_javaopt "-Dzookeeper.client.maxAge=" "$(get_conf "zookeeper.client.max-age" "5000")"
 add_javaopt "-Dzookeeper.client.connectTimeout=" "$(get_conf "zookeeper.client.connect-timeout" "5000")"
-add_javaopt "-Dzookeeper.sasl.client=" "$(get_conf "zookeeper.sasl.client.enabled" "false")"
+add_javaopt "-Dzookeeper.sasl.client=" "$(get_conf "zookeeper.sasl.client.enabled" "true")"
 add_javaopt "-Dzookeeper.sasl.clientconfig=" "$(get_conf "zookeeper.sasl.client.config")"
 add_javaopt "-Dzookeeper.sasl.client.username=" "$(get_conf "zookeeper.sasl.client.username")"
 add_javaopt "-Dzookeeper.server.realm=" "$(get_conf "zookeeper.server.realm")"
 add_javaopt "-Dzookeeper.client.secure=" "$(get_conf "zookeeper.client.secure")"
-add_javaopt "-Dzookeeper.clientCnxnSocket=" "$(get_conf "zookeeper.client.cnxn-socket")"
 add_javaopt "-Dzookeeper.ssl.keyStore.location=" "$(get_conf "zookeeper.ssl.key-store.location")"
 add_javaopt "-Dzookeeper.ssl.keyStore.password=" "$(get_conf "zookeeper.ssl.key-store.password")"
 add_javaopt "-Dzookeeper.ssl.trustStore.location=" "$(get_conf "zookeeper.ssl.trust-store.location")"
@@ -137,7 +135,8 @@ add_javaopt "-Dzookeeper.ssl.trustStore.password=" "$(get_conf "zookeeper.ssl.tr
 # Infer ZooKeeper version
 ZOOKEEPER_34="true"
 
-if [ -n "$(get_conf "zookeeper.client.secure")" -o "$(get_conf "zookeeper.client.cnxn-socket")" = "org.apache.zookeeper.ClientCnxnSocketNetty" ]; then
+if [ -n "$(get_conf "zookeeper.client.secure")" ]; then
+  add_javaopt "-Dzookeeper.clientCnxnSocket=" "org.apache.zookeeper.ClientCnxnSocketNetty"
   ZOOKEEPER_34="false"
 fi
 
@@ -159,5 +158,11 @@ add_javaopt "-cp " "$CLASSPATH"
 
 echo "$APPCONF" > "$SNAP_DATA/application.conf"
 echo "$JAVAOPT" > "$SNAP_DATA/.javaopts"
+
+SECRET_KEY="$(get_conf "zoonavigator.secret-key")"
+
+if [ -n "$SECRET_KEY" ]; then
+  echo "$SECRET_KEY" > "$SNAP_DATA/.secret"
+fi
 
 snapctl restart zoonavigator

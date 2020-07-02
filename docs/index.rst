@@ -50,6 +50,7 @@ If you like this project, please, consider supporting me `by buying me a beer <h
    quickstart
    features
    docker/index
+   snap/index
    development
    faqs
    changelog
