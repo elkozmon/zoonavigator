@@ -33,20 +33,15 @@ jobs:
       - name: Test
         run: docker-compose -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml up --exit-code-from=sut
 
-  build-docker:
+  build-metadata:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
       - name: Get version
         id: version
         uses: battila7/get-version-action@v2
 
-      - name: Get metadata
+      - name: Build metadata
         run: |
           TAG="${{ steps.get_version.outputs.version-without-v }}"
 
@@ -54,9 +49,11 @@ jobs:
           if [[ -z "$TAG" ]];
           then
               APP_VERSION=latest-${GITHUB_SHA::12}
+              SNAP_CHANNEL="edge"
               DOCKER_TAG="unstable"
           else
               APP_VERSION=$TAG
+              SNAP_CHANNEL="release"
               DOCKER_TAG=$TAG
           fi
 
@@ -74,11 +71,35 @@ jobs:
           echo "APP_VERSION=${APP_VERSION}" >> metadata.env
           echo "DOCKER_TAG=${DOCKER_TAG}" >> metadata.env
           echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> metadata.env
+          echo "SNAP_CHANNEL=${SNAP_CHANNEL}" >> metadata.env
           echo "DOCS_URL=${DOCS_URL}" >> metadata.env
+
+      - name: Upload metadata
+        uses: actions/upload-artifact@v1
+        with:
+          name: metadata
+          path: metadata.env
+
+  build-docker:
+    runs-on: ubuntu-latest
+
+    needs:
+      - build-metadata
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Download metadata
+        uses: actions/download-artifact@v1
+        with:
+          name: metadata
 
       - name: Build Docker image
         run: |
-          source metadata.env
+          source metadata/metadata.env
 
           docker build \
             --build-arg APP_VERSION=$APP_VERSION \
@@ -94,7 +115,7 @@ jobs:
 
       - name: Package jars
         run: |
-          source metadata.env
+          source metadata/metadata.env
 
           mkdir out
           id=$(docker create ${DOCKER_IMAGE}:${DOCKER_TAG})
@@ -104,12 +125,6 @@ jobs:
 
           tar -cvzf jars.tar.gz out
           rm -rf out
-
-      - name: Upload metadata
-        uses: actions/upload-artifact@v1
-        with:
-          name: metadata
-          path: metadata.env
 
       - name: Upload jars
         uses: actions/upload-artifact@v1
@@ -128,6 +143,7 @@ jobs:
 
     needs:
       - build-docker
+      - build-metadata
 
     steps:
       - name: Checkout
@@ -176,6 +192,7 @@ jobs:
       - test-api
       - test-web
       - build-docker
+      - build-metadata
 
     steps:
       - name: Download metadata
@@ -220,8 +237,14 @@ jobs:
       - test-api
       - test-web
       - build-snap
+      - build-metadata
 
     steps:
+      - name: Download metadata
+        uses: actions/download-artifact@v1
+        with:
+          name: metadata
+
       - name: Download Snap
         uses: actions/download-artifact@v1
         with:
@@ -236,11 +259,7 @@ jobs:
         run: |
           source metadata/metadata.env
 
-          if [ "${DOCKER_TAG}" != "unstable" ]; then
-            snapcraft upload --release=stable snap/zoonavigator_amd64.snap
-          else
-            snapcraft upload --release=edge snap/zoonavigator_amd64.snap
-          fi
+          snapcraft upload --release=$SNAP_CHANNEL snap/zoonavigator_amd64.snap
 
   cleanup:
     runs-on: ubuntu-latest
