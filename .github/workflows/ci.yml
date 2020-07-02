@@ -233,7 +233,14 @@ jobs:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
 
       - name: Snap Push
-        run: snapcraft upload snap/zoonavigator_amd64.snap
+        run: |
+          source metadata/metadata.env
+
+          if [ "${DOCKER_TAG}" != "unstable" ]; then
+            snapcraft upload --release=stable snap/zoonavigator_amd64.snap
+          else
+            snapcraft upload --release=edge snap/zoonavigator_amd64.snap
+          fi
 
   cleanup:
     runs-on: ubuntu-latest
