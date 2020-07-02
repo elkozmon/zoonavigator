@@ -45,26 +45,24 @@ JAVA_OPTS="$JAVA_OPTS \
 [ -n "$ZK_SASL_CLIENT_CONFIG" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.sasl.clientconfig=$ZK_SASL_CLIENT_CONFIG"
 [ -n "$ZK_SASL_CLIENT_USERNAME" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.sasl.client.username=$ZK_SASL_CLIENT_USERNAME"
 [ -n "$ZK_SERVER_REALM" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.server.realm=$ZK_SERVER_REALM"
-[ -n "$ZK_CLIENT_SECURE" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.client.secure=$ZK_CLIENT_SECURE"
-[ -n "$ZK_CLIENT_CNXN_SOCKET" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.clientCnxnSocket=$ZK_CLIENT_CNXN_SOCKET"
 [ -n "$ZK_SSL_KEYSTORE_PATH" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.keyStore.location=$ZK_SSL_KEYSTORE_PATH"
 [ -n "$ZK_SSL_KEYSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.keyStore.password=$ZK_SSL_KEYSTORE_PASSWORD"
 [ -n "$ZK_SSL_TRUSTSTORE_PATH" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.location=$ZK_SSL_TRUSTSTORE_PATH"
 [ -n "$ZK_SSL_TRUSTSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.password=$ZK_SSL_TRUSTSTORE_PASSWORD"
 
 # Infer ZooKeeper version
-if [ -n "$ZK_CLIENT_SECURE" ] || [ "$ZK_CLIENT_CNXN_SOCKET" = "org.apache.zookeeper.ClientCnxnSocketNetty" ]
-then
+if [ "$ZK_CLIENT_SECURE" = "true" ]; then
   ZOOKEEPER_34="false"
+  JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.client.secure=true"
+  JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"
 fi
 
 [ -f lib/$ZOOKEEPER_JAR ] && rm lib/$ZOOKEEPER_JAR
 
-if [ "$ZOOKEEPER_34" = "true" ]
-then
-  cp lib/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
+if [ "$ZOOKEEPER_34" = "true" ]; then
+  cp extra/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
 else
-  cp lib/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR
+  cp extra/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR
 fi
 
 # Exit if command fails

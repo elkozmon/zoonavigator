@@ -10,6 +10,15 @@ EOF
 
 fi
 
+if [ -n "$REQUEST_MAX_SIZE_KB" ]
+then
+  cat <<EOF
+play.http.parser.maxMemoryBuffer = ${REQUEST_MAX_SIZE_KB}k
+
+EOF
+
+fi
+
 if [ -n "$AUTO_CONNECT_CONNECTION_ID" ]
 then
   CONN="CONNECTION_${AUTO_CONNECT_CONNECTION_ID}_CONN"

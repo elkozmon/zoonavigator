@@ -1,3 +1,5 @@
+build/snap/
+
 Dockerfile*
 docker-compose*
 .scalafmt.conf

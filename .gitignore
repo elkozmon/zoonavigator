@@ -1,3 +1,7 @@
+build/snap/local/extra/
+build/snap/local/lib/
+build/snap/*.snap
+
 .sass-cache/
 _site/
 docs/_build/

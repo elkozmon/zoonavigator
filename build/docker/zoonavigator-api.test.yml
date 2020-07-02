@@ -1,3 +1,0 @@
-sut:
-  build: "../../zoonavigator-api"
-  dockerfile: Dockerfile.test
