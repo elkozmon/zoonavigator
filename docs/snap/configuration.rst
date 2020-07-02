@@ -50,6 +50,30 @@ Secret key for Play Framework - used for signing session cookies and CSRF tokens
 Defaults to 64 random characters generated from */dev/urandom*.
 
 
+zoonavigator.base-href
+----------------------
+*default*: :code:`/`
+
+Sets base URL where ZooNavigator will be served.
+If you want ZooNavigator to be available at 'http://www.your-domain.com/zoonavigator' instead of 'http://www.your-domain.com' set this option to `/zoonavigator`.
+
+
+zoonavigator.request.timeout
+----------------------------
+*default*: :code:`10000`
+
+Sets timeout for ZooNavigator requests.
+This value is in milliseconds.
+
+
+zoonavigator.request.max-size
+-----------------------------
+*default*: :code:`10000`
+
+Sets maximum request size. Important for large ZNode imports.
+This value is in kilobytes.
+
+
 zoonavigator.connection.<MYZK>.name
 -----------------------------------
 Optional name for preset ZooKeeper connection *'<MYZK>'*
