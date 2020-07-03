@@ -53,7 +53,7 @@ jobs:
               DOCKER_TAG="unstable"
           else
               APP_VERSION=$TAG
-              SNAP_CHANNEL="release"
+              SNAP_CHANNEL="candidate"
               DOCKER_TAG=$TAG
           fi
 
