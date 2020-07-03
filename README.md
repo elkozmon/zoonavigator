@@ -1,9 +1,9 @@
-[![](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![](https://img.shields.io/microbadger/layers/elkozmon/zoonavigator?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![](https://img.shields.io/microbadger/image-size/elkozmon/zoonavigator?style=flat-square)](https://hub.docker.com/r/elkozmon/zoonavigator)
-
-[![](https://raw.githubusercontent.com/snapcore/snap-store-badges/master/EN/%5BEN%5D-snap-store-white-uneditable.svg)](https://snapcraft.io/zoonavigator)
+[![](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/docker/image-size/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://img.shields.io/microbadger/layers/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
+[![](https://snapcraft.io//zoonavigator/badge.svg)](https://snapcraft.io/zoonavigator)
+[![](https://snapcraft.io//zoonavigator/trending.svg?name=0)](https://snapcraft.io/zoonavigator)
 
 # ZooNavigator
 
