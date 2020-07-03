@@ -82,14 +82,14 @@ add_appconf "play.http.parser.maxMemoryBuffer = " "$(get_conf "zoonavigator.requ
 add_appconf "zoonavigator.autoConnect = " "$AUTO_CONNECT_CONNECTION_ID"
 add_appconf "zoonavigator.connections = " "{}"
 
-for connectionId in $(snapctl get zoonavigator.connection | jq -r 'keys[]')
+for connectionId in $(snapctl get -d zoonavigator.connection | jq -r '.[]|keys[]')
 do
   echo "Registering preset connection: ${connectionId}"
   add_appconf "zoonavigator.connections.${connectionId}.name = " "$(get_conf "zoonavigator.connection.${connectionId}.name")"
   add_appconf "zoonavigator.connections.${connectionId}.conn = " "$(get_conf "zoonavigator.connection.${connectionId}.connection-string")"
   add_appconf "zoonavigator.connections.${connectionId}.auth = " "[]"
 
-  for authId in $(snapctl get "zoonavigator.connection.${connectionId}.auth" | jq -r 'keys[]')
+  for authId in $(snapctl get -d "zoonavigator.connection.${connectionId}.auth" | jq -r '.[]|keys[]')
   do
     SCHEME_NAME_CFG_NAME="zoonavigator.connection.${connectionId}.auth.${authId}.scheme"
     SCHEME_ID_CFG_NAME="zoonavigator.connection.${connectionId}.auth.${authId}.id"
