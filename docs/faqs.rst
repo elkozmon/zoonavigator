@@ -23,5 +23,5 @@ I'm getting error that says "Unable to establish connection with ZooKeeper."
 
 ZooNavigator cannot find ZooKeeper host(s) using the connection string you entered in the connect form. 
 
-**Windows and Mac users:**  
+**Windows and Mac users using ZooNavigator in Docker:**
 If you're trying to access ZooKeeper running locally on host machine (not in Docker container), `follow this advice <https://github.com/elkozmon/zoonavigator/issues/40#issue-495910852>`_.
