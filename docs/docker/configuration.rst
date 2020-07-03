@@ -59,6 +59,10 @@ BASE_HREF
 Sets base URL where ZooNavigator will be served.
 If you want ZooNavigator to be available at 'http://www.your-domain.com/zoonavigator' instead of 'http://www.your-domain.com' set this variable to `/zoonavigator`.
 
+.. note::
+
+  base href must start with '/'
+
 
 REQUEST_TIMEOUT_MILLIS
 ----------------------
@@ -133,8 +137,11 @@ ZK_CLIENT_TIMEOUT_MILLIS
 *default*: :code:`5000`
   
 Sets inactivity timeout for ZooKeeper client. If user doesn't make any request during this period ZooKeeper connection will be closed and recreated for the future request if any.  
-**Note that user does not get logged out unlike in event of session timeout.**  
 This value is in milliseconds.
+
+.. note::
+
+  on client timeout user does not get logged out unlike in event of session timeout
 
 
 ZK_CONNECT_TIMEOUT_MILLIS
