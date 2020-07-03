@@ -7,6 +7,8 @@ description: |
 
   Read official docs for more info and configuration options of ZooNavigator at https://zoonavigator.elkozmon.com/.
 
+  Built from the upstream source at https://github.com/elkozmon/zoonavigator.
+
 base: core18
 grade: devel
 confinement: devmode
