@@ -3,53 +3,9 @@ summary: Web-based ZooKeeper UI / editor / browser
 description: |
   ZooNavigator is a web-based ZooKeeper UI and editor/browser with many features.
 
-  Configuration options:
+  ZooKeeper versions 3.4.x and 3.5.x are currently supported.
 
-    ZooNavigator options:
-
-      zoonavigator.base-href - Base URL where ZooNavigator will be served, defaults to '/'
-
-      zoonavigator.request.timeout - Number of milliseconds after which request ZooNavigators is canceled due timeout
-      zoonavigator.request.max-size - Number of kilobytes of maximum allowed request size
-
-      zoonavigator.connection.<connectionId>.name - Name of preset connection with id <connectionId>
-      zoonavigator.connection.<connectionId>.connection-string - Connection string of preset connection with id <connectionId>
-      zoonavigator.connection.<connectionId>.auth.<authId>.scheme - ZooKeeper auth scheme of auth with id <authId> of connection with id <connectionId>
-      zoonavigator.connection.<connectionId>.auth.<authId>.id - ZooKeeper auth id of auth with id <authId> of connection with id <connectionId>
-
-      zoonavigator.auto-connect.connection-id - Id of the preset connection to use for auto-connecting to ZooKeeper
-
-      zoonavigator.server.http.port - Servers HTTP port, defaults to '9000'. set to 'disabled' if you don't want HTTP server
-      zoonavigator.server.https.port - Servers HTTPS port
-      zoonavigator.server.https.key-store.path - Path to key store with SSL certificate
-      zoonavigator.server.https.key-store.password - Passsword to key store with SSL certificate
-      zoonavigator.server.https.key-store.type - Type of the key store with SSL certificate
-
-      zoonavigator.secret-key - Secret key for Play Framework - used for signing session cookies and CSRF tokens.
-                                Defaults to 64 random characters generated from */dev/urandom*.
-
-    ZooKeeper client options:
-
-      zookeeper.client.max-age - Number of milliseconds defining TTL of idle ZooKeeper connection
-      zookeeper.client.connect-timeout - Number of milliseconds defining timeout for connecting to ZooKeeper cluster
-      zookeeper.sasl.client.enabled - Set the value to 'true' to enable SASL authentication. Defaults to 'true'
-      zookeeper.sasl.client.config - Specifies the context key in the JAAS login file
-      zookeeper.sasl.client.username - Specifies the primary part of the server principal
-      zookeeper.server.realm - Realm part of the server principal
-      zookeeper.client.secure - Set to 'true' to connect to the server secure client port
-      zookeeper.ssl.key-store.location - Path to the JKS containing the local credentials to be used for SSL connections
-      zookeeper.ssl.key-store.password - Password to the JKS containing the local credentials to be used for SSL connections
-      zookeeper.ssl.trust-store.location - Path to the JKS containing the remote credentials to be used for SSL connections
-      zookeeper.ssl.trust-store.password - Password to the JKS containing the remote credentials to be used for SSL connections
-
-    Java options (passed as parameters directly to JVM):
-
-      java.xmx
-      java.xms
-      java.security.auth.login.config
-      java.security.krb5.debug
-      java.security.krb5.realm
-      java.security.krb5.kdc
+  Read official docs for more info and configuration options of ZooNavigator at https://zoonavigator.elkozmon.com/.
 
 base: core18
 grade: devel
