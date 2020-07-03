@@ -51,7 +51,8 @@ JAVA_OPTS="$JAVA_OPTS \
 [ -n "$ZK_SSL_TRUSTSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.password=$ZK_SSL_TRUSTSTORE_PASSWORD"
 
 # Infer ZooKeeper version
-if [ "$ZK_CLIENT_SECURE" = "true" ]; then
+if [ "$ZK_CLIENT_SECURE" = "true" ]
+then
   ZOOKEEPER_34="false"
   JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.client.secure=true"
   JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"
@@ -59,7 +60,8 @@ fi
 
 [ -f lib/$ZOOKEEPER_JAR ] && rm lib/$ZOOKEEPER_JAR
 
-if [ "$ZOOKEEPER_34" = "true" ]; then
+if [ "$ZOOKEEPER_34" = "true" ]
+then
   cp extra/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
 else
   cp extra/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR

@@ -6,8 +6,10 @@ APPCONF=""
 JAVAOPT=""
 
 add_javaopt() {
-  if [ -n "$2" ]; then
-    if [ -n "$JAVAOPT" ]; then
+  if [ -n "$2" ]
+  then
+    if [ -n "$JAVAOPT" ]
+    then
       JAVAOPT="$JAVAOPT\n"
     fi
 
@@ -19,8 +21,10 @@ add_appconf() {
   cfgName="$1"
   cfgValue="$2"
 
-  if [ -n "$cfgValue" ]; then
-    if [ -n "$APPCONF" ]; then
+  if [ -n "$cfgValue" ]
+  then
+    if [ -n "$APPCONF" ]
+    then
       APPCONF="$APPCONF\n"
     fi
 
@@ -34,9 +38,11 @@ add_appconf() {
 get_conf() {
   val=$(snapctl get "$1")
 
-  if [ -n "$val" ]; then
+  if [ -n "$val" ]
+  then
     echo "$val"
-  elif [ -n "$2" ]; then
+  elif [ -n "$2" ]
+  then
     snapctl set "$1=$2"
     echo "$2"
   else
@@ -59,10 +65,12 @@ add_appconf "play.assets.urlPrefix = " "\"/\""
 AUTO_CONNECT_CONNECTION_ID="$(get_conf "zoonavigator.auto-connect.connection-id")"
 
 # Validate auto connect configuration
-if [ -n "$AUTO_CONNECT_CONNECTION_ID" ]; then
+if [ -n "$AUTO_CONNECT_CONNECTION_ID" ]
+then
   CONNECTION_CFG_NAME="zoonavigator.connection.${AUTO_CONNECT_CONNECTION_ID}.connection-string"
 
-  if [ -z "$(get_conf "$CONNECTION_CFG_NAME")" ]; then
+  if [ -z "$(get_conf "$CONNECTION_CFG_NAME")" ]
+  then
     >&2 echo "Invalid Auto Connect configuration: connection '${AUTO_CONNECT_CONNECTION_ID}' not properly defined."
     >&2 echo "Make sure following configuration option is set: ${CONNECTION_CFG_NAME}"
     exit 1;
@@ -74,7 +82,8 @@ add_appconf "play.http.parser.maxMemoryBuffer = " "$(get_conf "zoonavigator.requ
 add_appconf "zoonavigator.autoConnect = " "$AUTO_CONNECT_CONNECTION_ID"
 add_appconf "zoonavigator.connections = " "{}"
 
-for connectionId in $(snapctl get zoonavigator.connection | jq -r 'keys[]') ; do
+for connectionId in $(snapctl get zoonavigator.connection | jq -r 'keys[]')
+do
   add_appconf "zoonavigator.connections.${connectionId}.name = " "$(get_conf "zoonavigator.connection.${connectionId}.name")"
   add_appconf "zoonavigator.connections.${connectionId}.conn = " "$(get_conf "zoonavigator.connection.${connectionId}.connection-string")"
   add_appconf "zoonavigator.connections.${connectionId}.auth = " "[]"
@@ -87,7 +96,8 @@ for connectionId in $(snapctl get zoonavigator.connection | jq -r 'keys[]') ; do
     SCHEME_ID="$(get_conf "$SCHEME_ID_CFG_NAME")"
 
     # Validate auth config
-    if [ -z "${SCHEME_NAME}" -o -z "${SCHEME_ID}" ]; then
+    if [ -z "${SCHEME_NAME}" -o -z "${SCHEME_ID}" ]
+    then
       >&2 echo "Invalid Auth '${authId}' configuration in Connection '${connectionId}'."
       >&2 echo "Make sure following configuration options are set: $SCHEME_NAME_CFG_NAME $SCHEME_ID_CFG_NAME"
       exit 1;
@@ -135,7 +145,8 @@ add_javaopt "-Dzookeeper.ssl.trustStore.password=" "$(get_conf "zookeeper.ssl.tr
 # Infer ZooKeeper version
 ZOOKEEPER_34="true"
 
-if [ -n "$(get_conf "zookeeper.client.secure")" ]; then
+if [ -n "$(get_conf "zookeeper.client.secure")" ]
+then
   add_javaopt "-Dzookeeper.clientCnxnSocket=" "org.apache.zookeeper.ClientCnxnSocketNetty"
   ZOOKEEPER_34="false"
 fi
@@ -161,7 +172,8 @@ echo "$JAVAOPT" > "$SNAP_DATA/.javaopts"
 
 SECRET_KEY="$(get_conf "zoonavigator.secret-key")"
 
-if [ -n "$SECRET_KEY" ]; then
+if [ -n "$SECRET_KEY" ]
+then
   echo "$SECRET_KEY" > "$SNAP_DATA/.secret"
 fi
 
