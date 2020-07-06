@@ -16,7 +16,7 @@ adopt-info: zoonavigator
 
 apps:
   zoonavigator:
-    command: zoonavigator.sh
+    command: zoonavigator
     daemon: simple
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-$SNAP_ARCH
@@ -30,6 +30,8 @@ parts:
   zoonavigator:
     source: snap/local
     plugin: dump
+    organize:
+      bin/configure: snap/hooks/configure
     parse-info: []
     override-pull: |
       snapcraftctl pull
