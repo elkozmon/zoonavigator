@@ -35,6 +35,13 @@ add_appconf() {
   fi
 }
 
+enclose_quotes() {
+  if [ -n "$1" ]
+  then
+    echo "\"$1\""
+  fi
+}
+
 get_conf() {
   val=$(snapctl get "$1")
 
@@ -54,13 +61,13 @@ get_conf() {
 ################### APPs CONF ###################
 #################################################
 
-add_appconf "play.application.loader = " "AppLoader"
+add_appconf "play.application.loader = " "$(enclose_quotes "AppLoader")"
 add_appconf "play.filters.cors.allowedOrigins = " "null"
 add_appconf "play.filters.enabled = " "[]"
-add_appconf "play.filters.enabled += " "\"play.filters.headers.SecurityHeadersFilter\""
-add_appconf "play.filters.enabled += " "\"play.filters.cors.CORSFilter\""
-add_appconf "play.assets.path = " "\"/public\""
-add_appconf "play.assets.urlPrefix = " "\"/\""
+add_appconf "play.filters.enabled += " "$(enclose_quotes "play.filters.headers.SecurityHeadersFilter")"
+add_appconf "play.filters.enabled += " "$(enclose_quotes "play.filters.cors.CORSFilter")"
+add_appconf "play.assets.path = " "$(enclose_quotes "/public")"
+add_appconf "play.assets.urlPrefix = " "$(enclose_quotes "/")"
 
 AUTO_CONNECT_CONNECTION_ID="$(get_conf "zoonavigator.auto-connect.connection-id")"
 
@@ -75,17 +82,18 @@ then
     >&2 echo "Make sure following configuration option is set: ${CONNECTION_CFG_NAME}"
     exit 1;
   fi
+
+  add_appconf "zoonavigator.autoConnect = " "$(enclose_quotes "$AUTO_CONNECT_CONNECTION_ID")"
 fi
 
 add_appconf "zoonavigator.requestTimeout = " "$(get_conf "zoonavigator.request.timeout" "10000")" " milliseconds"
 add_appconf "play.http.parser.maxMemoryBuffer = " "$(get_conf "zoonavigator.request.max-size" "10000")" "k"
-add_appconf "zoonavigator.autoConnect = " "$AUTO_CONNECT_CONNECTION_ID"
 add_appconf "zoonavigator.connections = " "{}"
 
 for connectionId in $(snapctl get -d zoonavigator | jq -r ".zoonavigator.connection|keys?|.[]")
 do
-  add_appconf "zoonavigator.connections.${connectionId}.name = " "$(get_conf "zoonavigator.connection.${connectionId}.name")"
-  add_appconf "zoonavigator.connections.${connectionId}.conn = " "$(get_conf "zoonavigator.connection.${connectionId}.connection-string")"
+  add_appconf "zoonavigator.connections.${connectionId}.name = " "$(enclose_quotes $(get_conf "zoonavigator.connection.${connectionId}.name"))"
+  add_appconf "zoonavigator.connections.${connectionId}.conn = " "$(enclose_quotes $(get_conf "zoonavigator.connection.${connectionId}.connection-string"))"
   add_appconf "zoonavigator.connections.${connectionId}.auth = " "[]"
 
   for authId in $(snapctl get -d zoonavigator | jq -r ".zoonavigator.connection.${connectionId}.auth|keys?|.[]")
@@ -104,8 +112,8 @@ do
       exit 1;
     fi
 
-    add_appconf "zoonavigator.connections.${connectionId}.auths.${authId}.scheme = " "$SCHEME_NAME"
-    add_appconf "zoonavigator.connections.${connectionId}.auths.${authId}.id = " "$SCHEME_ID"
+    add_appconf "zoonavigator.connections.${connectionId}.auths.${authId}.scheme = " "$(enclose_quotes "$SCHEME_NAME")"
+    add_appconf "zoonavigator.connections.${connectionId}.auths.${authId}.id = " "$(enclose_quotes "$SCHEME_ID")"
 
     add_appconf "zoonavigator.connections.${connectionId}.auth = " "\${zoonavigator.connections.${connectionId}.auth} [\${zoonavigator.connections.${connectionId}.auths.${authId}}]"
   done
