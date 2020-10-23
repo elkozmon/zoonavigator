@@ -2,6 +2,16 @@
 Change Log
 ==========
 
+1.1.0
+-----
+
+*October 23, 2020*
+
+
+**Features:**
+
+* Configurable applications base URL
+
 1.0.1
 -----
 
