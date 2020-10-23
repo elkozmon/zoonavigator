@@ -10,8 +10,8 @@ description: |
   Built from the upstream source at https://github.com/elkozmon/zoonavigator.
 
 base: core18
-grade: devel
-confinement: devmode
+grade: stable
+confinement: strict
 adopt-info: zoonavigator
 
 apps:
@@ -24,7 +24,6 @@ apps:
     plugs:
     - network
     - network-bind
-    - home
 
 parts:
   zoonavigator:
