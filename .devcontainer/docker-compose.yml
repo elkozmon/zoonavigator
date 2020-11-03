@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  zoonavigator-api:
+    build: 
+      context: ../zoonavigator-api/.devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - ../zoonavigator-api:/workspace/zoonavigator/zoonavigator-api:cached
+    command: sleep infinity 
+  
+  zoonavigator-web:
+    build: 
+      context: ../zoonavigator-web/.devcontainer
+      dockerfile: Dockerfile
+      args: 
+        VARIANT: '14'
+    volumes:
+      - ../zoonavigator-web:/workspace/zoonavigator/zoonavigator-web:cached
+    command: sleep infinity 
+    
+  zookeeper-3.4:
+    image: zookeeper:3.4
+    
+  zookeeper-3.5:
+    image: zookeeper:3.5
