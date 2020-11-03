@@ -48,12 +48,12 @@ jobs:
           if [[ "${TAG}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
           then
               APP_VERSION="${TAG}"
-              SNAP_CHANNEL="candidate"
+              SNAP_CHANNEL="stable"
               DOCKER_TAG="${TAG}"
               DOCS_URL="https://zoonavigator.elkozmon.com/en/${TAG}"
           else
               APP_VERSION="latest-${GITHUB_SHA::12}"
-              SNAP_CHANNEL="edge"
+              SNAP_CHANNEL="beta"
               DOCKER_TAG="unstable"
               DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
           fi
