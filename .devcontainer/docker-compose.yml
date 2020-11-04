@@ -8,6 +8,10 @@ services:
     volumes:
       - ../zoonavigator-api:/workspace/zoonavigator/zoonavigator-api:cached
     command: sleep infinity 
+    networks:
+      zoonavigator:
+        aliases:
+          - api
   
   zoonavigator-web:
     build: 
@@ -18,9 +22,22 @@ services:
     volumes:
       - ../zoonavigator-web:/workspace/zoonavigator/zoonavigator-web:cached
     command: sleep infinity 
+    networks:
+      zoonavigator:
     
   zookeeper-3.4:
     image: zookeeper:3.4
+    networks:
+      zoonavigator:
+        aliases:
+          - zk34
     
   zookeeper-3.5:
     image: zookeeper:3.5
+    networks:
+      zoonavigator:
+        aliases:
+          - zk35
+    
+networks:
+  zoonavigator:
