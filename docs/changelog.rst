@@ -5,7 +5,7 @@ Change Log
 1.1.0
 -----
 
-*October 23, 2020*
+*November 03, 2020*
 
 
 **Features:**
