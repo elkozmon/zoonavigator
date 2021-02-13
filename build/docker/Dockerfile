@@ -159,4 +159,4 @@ LABEL \
   org.label-schema.vcs-ref=${VCS_REF} \
   org.label-schema.version=${APP_VERSION} \
   org.label-schema.build-date=${BUILD_DATE} \
-  org.label-schema.docker.cmd="docker run -d --network host -e HTTP_PORT=9000 --name zoonavigator --restart unless-stopped elkozmon/zoonavigator:latest"
+  org.label-schema.docker.cmd="docker run -d -p 9000:9000 -e HTTP_PORT=9000 --name zoonavigator --restart unless-stopped elkozmon/zoonavigator:latest"
