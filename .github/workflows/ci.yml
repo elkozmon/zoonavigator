@@ -133,7 +133,7 @@ jobs:
           path: dockerimage.tar
 
   build-snap:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     needs:
       - build-docker
@@ -226,7 +226,7 @@ jobs:
           url: ${{ secrets.MICROBADGER_WEBHOOK_URL }}
 
   publish-snap:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     needs:
       - test-api
