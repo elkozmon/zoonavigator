@@ -218,7 +218,7 @@ jobs:
             docker tag "${DOCKER_IMAGE}:${DOCKER_TAG}" "${DOCKER_IMAGE}:latest"
           fi
 
-          docker push ${DOCKER_IMAGE}
+          docker push --all-tags ${DOCKER_IMAGE}
 
       - name: Microbadger webhook
         uses: muinmomin/webhook-action@v1.0.0
