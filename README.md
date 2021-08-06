@@ -1,7 +1,6 @@
 [![](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://img.shields.io/docker/image-size/elkozmon/zoonavigator?sort=semver)](https://hub.docker.com/r/elkozmon/zoonavigator)
-[![](https://img.shields.io/microbadger/layers/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://snapcraft.io//zoonavigator/badge.svg)](https://snapcraft.io/zoonavigator)
 [![](https://snapcraft.io//zoonavigator/trending.svg?name=0)](https://snapcraft.io/zoonavigator)
 
