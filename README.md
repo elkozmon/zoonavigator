@@ -1,3 +1,4 @@
+[![](https://github.com/elkozmon/zoonavigator/actions/workflows/ci.yml/badge.svg)](https://github.com/elkozmon/zoonavigator/actions/workflows/ci.yml)
 [![](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://img.shields.io/docker/image-size/elkozmon/zoonavigator?sort=semver)](https://hub.docker.com/r/elkozmon/zoonavigator)
