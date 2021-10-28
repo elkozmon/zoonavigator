@@ -2,6 +2,20 @@
 Change Log
 ==========
 
+1.1.1
+-----
+
+*October 28, 2021*
+
+
+**Changes:**
+
+* Use custom Authorization header to allow auth in proxies
+
+**Fixes:**
+
+* Correctly handle HEAD HTTP requests
+
 1.1.0
 -----
 
