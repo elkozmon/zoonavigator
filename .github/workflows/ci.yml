@@ -220,11 +220,6 @@ jobs:
 
           docker push --all-tags ${DOCKER_IMAGE}
 
-      - name: Microbadger webhook
-        uses: muinmomin/webhook-action@v1.0.0
-        with:
-          url: ${{ secrets.MICROBADGER_WEBHOOK_URL }}
-
   publish-snap:
     runs-on: ubuntu-18.04
 
