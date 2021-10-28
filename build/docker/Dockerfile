@@ -24,7 +24,7 @@ RUN curl \
   && tar xzvf dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
   && rm dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz
 
-FROM node:13.6.0-stretch-slim as npm
+FROM node:14.18.1-buster-slim as npm
 
 ARG APP_VERSION
 ARG DOCS_URL
