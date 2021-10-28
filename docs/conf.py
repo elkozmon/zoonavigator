@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'ZooNavigator Docs'
-copyright = u'2020, Lubos Kozmon'
+copyright = u'2021, Lubos Kozmon'
 author = u'Lubos Kozmon'
 
 # The short X.Y version
