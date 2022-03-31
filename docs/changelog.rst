@@ -2,6 +2,16 @@
 Change Log
 ==========
 
+1.1.2
+-----
+
+*March 31, 2022*
+
+
+**Changes:**
+
+* CVE-2021-4101 - Remove Log4j 1.2 dependency
+
 1.1.1
 -----
 
