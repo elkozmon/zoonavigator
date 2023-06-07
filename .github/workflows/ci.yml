@@ -8,7 +8,7 @@ on:
       - '*'
 
 jobs:
-  test-api:
+  test_api:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: docker-compose -f $GITHUB_WORKSPACE/zoonavigator-api/docker-compose.test.yml up --exit-code-from=sut
 
-  test-web:
+  test_web:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,93 +32,88 @@ jobs:
       - name: Test
         run: docker-compose -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml up --exit-code-from=sut
 
-  build-metadata:
+  setup_env:
     runs-on: ubuntu-latest
+
+    needs:
+      - test_api
+      - test_web
+
+    outputs:
+      app_version: ${{ steps.set_vars.outputs.app_version }}
+      docker_tag: ${{ steps.set_vars.outputs.docker_tag }}
+      docker_image: ${{ steps.set_vars.outputs.docker_image }}
+      snap_channel: ${{ steps.set_vars.outputs.snap_channel }}
+      docs_url: ${{ steps.set_vars.outputs.docs_url }}
+      vcs_ref: ${{ steps.set_vars.outputs.vcs_ref }}
+      build_date: ${{ steps.set_vars.outputs.build_date }}
 
     steps:
       - name: Get version
         id: get_version
         uses: battila7/get-version-action@v2
 
-      - name: Build metadata
+      - id: set_vars
+        name: Set variables
         run: |
-          TAG="${{ steps.get_version.outputs.version-without-v }}"
+          tag="${{ steps.get_version.outputs.version-without-v }}"
 
           # is this a semver release?
-          if [[ "${TAG}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
+          if [[ "${tag}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
           then
-              APP_VERSION="${TAG}"
-              SNAP_CHANNEL="stable"
-              DOCKER_TAG="${TAG}"
-              DOCS_URL="https://zoonavigator.elkozmon.com/en/${TAG}"
+              app_version="${tag}"
+              snap_channel="stable"
+              docker_tag="${tag}"
+              docs_url="https://zoonavigator.elkozmon.com/en/${tag}"
           else
-              APP_VERSION="latest-${GITHUB_SHA::12}"
-              SNAP_CHANNEL="beta"
-              DOCKER_TAG="unstable"
-              DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
+              app_version="latest-${GITHUB_SHA::12}"
+              snap_channel="beta"
+              docker_tag="unstable"
+              docs_url="https://zoonavigator.elkozmon.com/en/latest"
           fi
 
           # set image name
-          DOCKER_IMAGE="elkozmon/zoonavigator"
+          docker_image="elkozmon/zoonavigator"
 
-          echo "" > metadata.env
-          echo "APP_VERSION=${APP_VERSION}" >> metadata.env
-          echo "DOCKER_TAG=${DOCKER_TAG}" >> metadata.env
-          echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> metadata.env
-          echo "SNAP_CHANNEL=${SNAP_CHANNEL}" >> metadata.env
-          echo "DOCS_URL=${DOCS_URL}" >> metadata.env
+          echo "app_version=${app_version}" >> "$GITHUB_OUTPUT"
+          echo "docker_tag=${docker_tag}" >> "$GITHUB_OUTPUT"
+          echo "docker_image=${docker_image}" >> "$GITHUB_OUTPUT"
+          echo "snap_channel=${snap_channel}" >> "$GITHUB_OUTPUT"
+          echo "docs_url=${docs_url}" >> "$GITHUB_OUTPUT"
+          echo "vcs_ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          echo "build_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
 
-      - name: Upload metadata
-        uses: actions/upload-artifact@v1
-        with:
-          name: metadata
-          path: metadata.env
-
-  build-docker:
+  build_docker:
     runs-on: ubuntu-latest
 
     needs:
-      - build-metadata
+      - setup_env
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
-      - name: Download metadata
-        uses: actions/download-artifact@v1
-        with:
-          name: metadata
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
-        run: |
-          source metadata/metadata.env
-
-          docker build \
-            --build-arg APP_VERSION=$APP_VERSION \
-            --build-arg DOCS_URL=$DOCS_URL \
-            --build-arg VCS_REF=$(git rev-parse --short HEAD) \
-            --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
-            -t ${DOCKER_IMAGE}:${DOCKER_TAG} \
-            -f build/docker/Dockerfile \
-            .
-
-          docker save ${DOCKER_IMAGE}:${DOCKER_TAG} \
-            > dockerimage.tar
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ${{ github.workspace }}/build/docker/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: false
+          outputs: type=local,dest=out
+          tags: ${{ needs.setup_env.outputs.docker_image }}:${{ needs.setup_env.outputs.docker_tag }}
+          build-args: APP_VERSION=${{ needs.setup_env.outputs.app_version }},DOCS_URL=${{ needs.setup_env.outputs.docs_url }},VCS_REF=${{ needs.setup_env.outputs.vcs_ref }},BUILD_DATE=${{ needs.setup_env.outputs.build_date }}
 
       - name: Package jars
-        run: |
-          source metadata/metadata.env
-
-          mkdir out
-          id=$(docker create ${DOCKER_IMAGE}:${DOCKER_TAG})
-          docker cp $id:/app/lib out/lib
-          docker cp $id:/app/extra out/extra
-          docker rm $id
-
-          tar -cvzf jars.tar.gz out
-          rm -rf out
+        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib extra
 
       - name: Upload jars
         uses: actions/upload-artifact@v1
@@ -126,18 +121,12 @@ jobs:
           name: jars
           path: jars.tar.gz
 
-      - name: Upload Docker image
-        uses: actions/upload-artifact@v1
-        with:
-          name: dockerimage
-          path: dockerimage.tar
-
-  build-snap:
+  build_snap:
     runs-on: ubuntu-18.04
 
     needs:
-      - build-docker
-      - build-metadata
+      - setup_env
+      - build_docker
 
     steps:
       - name: Checkout
@@ -148,11 +137,6 @@ jobs:
         with:
           name: jars
 
-      - name: Download metadata
-        uses: actions/download-artifact@v1
-        with:
-          name: metadata
-
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
         with:
@@ -160,103 +144,24 @@ jobs:
 
       - name: Snap Build
         run: |
-          source metadata/metadata.env
-
           echo "$APP_VERSION" \
             > ${GITHUB_WORKSPACE}/build/snap/local/version
 
           tar \
             -xvf ${GITHUB_WORKSPACE}/jars/jars.tar.gz \
-            -C ${GITHUB_WORKSPACE}/build/snap/local \
-            --strip 1
+            -C ${GITHUB_WORKSPACE}/build/snap/local
 
           cd ${GITHUB_WORKSPACE}/build
           sg lxd -c 'snapcraft snap --use-lxd -o zoonavigator_amd64.snap'
 
-      - name: Upload Snap
-        uses: actions/upload-artifact@v1
-        with:
-          name: snap
-          path: build/zoonavigator_amd64.snap
-
-  publish-docker:
-    runs-on: ubuntu-latest
-
-    needs:
-      - test-api
-      - test-web
-      - build-docker
-      - build-metadata
-
-    steps:
-      - name: Download metadata
-        uses: actions/download-artifact@v1
-        with:
-          name: metadata
-
-      - name: Download Docker image
-        uses: actions/download-artifact@v1
-        with:
-          name: dockerimage
-
-      - name: Docker Load
-        run: docker load --input dockerimage/dockerimage.tar
-
-      - name: Docker Login
-        uses: azure/docker-login@v1
-        with:
-          username: ${{ secrets.DOCKERIO_USERNAME }}
-          password: ${{ secrets.DOCKERIO_PASSWORD }}
-
-      - name: Docker Push
-        run: |
-          source metadata/metadata.env
-
-          # tag stable version as latest
-          if [ "${DOCKER_TAG}" != "unstable" ]
-          then
-            docker tag "${DOCKER_IMAGE}:${DOCKER_TAG}" "${DOCKER_IMAGE}:latest"
-          fi
-
-          docker push --all-tags ${DOCKER_IMAGE}
-
-  publish-snap:
-    runs-on: ubuntu-18.04
-
-    needs:
-      - test-api
-      - test-web
-      - build-snap
-      - build-metadata
-
-    steps:
-      - name: Download metadata
-        uses: actions/download-artifact@v1
-        with:
-          name: metadata
-
-      - name: Download Snap
-        uses: actions/download-artifact@v1
-        with:
-          name: snap
-
-      - name: Install Snapcraft
-        uses: samuelmeuli/action-snapcraft@v1
-        with:
-          snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
-
-      - name: Snap Push
-        run: |
-          source metadata/metadata.env
-
-          snapcraft upload --release=$SNAP_CHANNEL snap/zoonavigator_amd64.snap
+          snapcraft upload --release=${{ needs.setup_env.outputs.snap_channel }} build/zoonavigator_amd64.snap
 
   cleanup:
     runs-on: ubuntu-latest
 
     needs:
-      - publish-docker
-      - publish-snap
+      - build_docker
+      - build_snap
 
     if: ${{ always() }}
 
@@ -264,9 +169,4 @@ jobs:
       - name: Delete artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
-          failOnError: false
-          name: |
-            jars
-            snap
-            dockerimage
-            metadata
+          name: jars
