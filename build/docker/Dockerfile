@@ -9,7 +9,6 @@ ARG VCS_REF
 ARG BUILD_DATE
 
 FROM ubuntu:18.04 as dockerize
-MAINTAINER Lubos Kozmon <contact@elkozmon.com>
 
 ARG DOCKERIZE_VERSION
 
@@ -152,6 +151,7 @@ ENTRYPOINT ["./run.sh"]
 USER 1000
 
 LABEL \
+  maintainer="Lubos Kozmon <contact@elkozmon.com>" \
   org.label-schema.name="ZooNavigator" \
   org.label-schema.description="Web-based ZooKeeper UI/editor/browser" \
   org.label-schema.url=${DOCS_URL} \
