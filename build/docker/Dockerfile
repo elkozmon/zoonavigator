@@ -1,14 +1,12 @@
 ARG APP_VERSION
-ARG SBT_VERSION=1.3.6
-ARG SBT_GPG_KEY=99E82A75642AC823
-ARG DOCKERIZE_VERSION=0.6.1
+ARG DOCKERIZE_VERSION=0.7.0
 ARG DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
 ARG DEBUG=0
 ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
 ARG VCS_REF
 ARG BUILD_DATE
 
-FROM ubuntu:18.04 as dockerize
+FROM ubuntu:22.04 as dockerize
 
 ARG DOCKERIZE_VERSION
 
@@ -51,10 +49,7 @@ RUN npm install -g @angular/cli \
   && ng build --prod \
   && mv dist /app
 
-FROM openjdk:11-jdk-slim as sbt
-
-ARG SBT_VERSION
-ARG SBT_GPG_KEY
+FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 as sbt
 
 # Install required packages
 RUN apt-get update \
@@ -65,23 +60,13 @@ WORKDIR /src
 COPY /zoonavigator-api .
 COPY --from=npm /app ./play/public
 
-# Install sbt
-RUN apt-get update \
-  && apt-get install -y aria2 gnupg ca-certificates \
-  && aria2c -x4 "https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz" \
-  && aria2c -x4 "https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz.asc" \
-  && gpg --keyserver keyserver.ubuntu.com --recv-keys ${SBT_GPG_KEY} \
-  && gpg --verify sbt-${SBT_VERSION}.tgz.asc sbt-${SBT_VERSION}.tgz \
-  && tar xvfz sbt-${SBT_VERSION}.tgz -C /usr/local \
-  && ln -s /usr/local/sbt/bin/sbt /usr/bin/sbt
-
 # Build project
 RUN sbt play/dist \
   && VERSION=$(ls play/target/universal/zoonavigator-play-*.zip | sed -E 's/.*zoonavigator-play-(.*).zip$/\1/') \
   && unzip play/target/universal/zoonavigator-play-$VERSION.zip \
   && mv zoonavigator-play-$VERSION /app
 
-FROM ubuntu:18.04 as ubuntu
+FROM ubuntu:22.04 as ubuntu
 
 ARG DOCS_URL
 
@@ -107,7 +92,7 @@ RUN dockerize \
 RUN chgrp -R 0 . \
   && chmod -R g=u .
 
-FROM eclipse-temurin:11.0.19_7-jdk
+FROM eclipse-temurin:17-jdk-jammy
 
 ARG APP_VERSION
 ARG DOCS_URL
