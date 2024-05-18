@@ -44,7 +44,7 @@ RUN dockerize \
     -template ./environment.ts.template:./src/environments/environment.prod.ts
 
 # Install dependencies & build
-RUN npm install -g @angular/cli \
+RUN npm install -g @angular/cli@15.2.0 \
   && npm install \
   && ng build --prod \
   && mv dist /app
