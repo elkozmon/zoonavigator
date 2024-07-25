@@ -9,17 +9,17 @@ description: |
 
   Built from the upstream source at https://github.com/elkozmon/zoonavigator.
 
-base: core18
+base: core22
 grade: stable
 confinement: strict
 adopt-info: zoonavigator
 
 apps:
   zoonavigator:
-    command: zoonavigator
+    command: bin/zoonavigator
     daemon: simple
     environment:
-      JAVA_HOME: $SNAP/usr/lib/jvm/java-11-openjdk-$SNAP_ARCH
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-17-openjdk-$SNAP_ARCH
       PATH: $JAVA_HOME/bin:$PATH
     plugs:
     - network
@@ -33,14 +33,12 @@ parts:
       bin/configure: snap/hooks/configure
     parse-info: []
     override-pull: |
-      snapcraftctl pull
-      snapcraftctl set-version $(cat version)
+      craftctl default
+      craftctl set version=$(cat version)
     build-packages:
     - ca-certificates
     - ca-certificates-java
-    stage:
-    - -usr/lib/jvm/java-11-openjdk-amd64/lib/security/blacklisted.certs
     stage-packages:
-    - openjdk-11-jdk-headless
+    - openjdk-17-jdk-headless
     - krb5-user
     - jq
