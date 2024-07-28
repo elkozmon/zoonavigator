@@ -1,3 +1,7 @@
+.git/
+.github/
+.devcontainer/
+
 build/snap/
 
 Dockerfile*
