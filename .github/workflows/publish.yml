@@ -41,8 +41,7 @@ jobs:
 
     outputs:
       app_version: ${{ steps.set_vars.outputs.app_version }}
-      docker_tag: ${{ steps.set_vars.outputs.docker_tag }}
-      docker_image: ${{ steps.set_vars.outputs.docker_image }}
+      docker_tags: ${{ steps.set_vars.outputs.docker_tags }}
       snap_channel: ${{ steps.set_vars.outputs.snap_channel }}
       docs_url: ${{ steps.set_vars.outputs.docs_url }}
       vcs_ref: ${{ steps.set_vars.outputs.vcs_ref }}
@@ -52,28 +51,27 @@ jobs:
       - id: set_vars
         name: Set variables
         run: |
-          tag="${GITHUB_REF_NAME#v}"
-
-          # is this a semver release?
-          if [[ "${tag}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
-          then
-              app_version="${tag}"
-              snap_channel="stable"
-              docker_tag="${tag}"
-              docs_url="https://zoonavigator.elkozmon.com/en/${tag}"
-          else
-              app_version="latest-${GITHUB_SHA::12}"
-              snap_channel="beta"
-              docker_tag="unstable"
-              docs_url="https://zoonavigator.elkozmon.com/en/latest"
-          fi
+          ref="${GITHUB_REF_NAME#v}"
 
           # set image name
           docker_image="elkozmon/zoonavigator"
 
+          # is this a semver release?
+          if [[ "${ref}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
+          then
+              app_version="${ref}"
+              snap_channel="stable"
+              docker_tags="${docker_image}:${ref},${docker_image}:latest"
+              docs_url="https://zoonavigator.elkozmon.com/en/${ref}"
+          else
+              app_version="latest-${GITHUB_SHA::12}"
+              snap_channel="beta"
+              docker_tags="${docker_image}:unstable"
+              docs_url="https://zoonavigator.elkozmon.com/en/latest"
+          fi
+
           echo "app_version=${app_version}" >> "$GITHUB_OUTPUT"
-          echo "docker_tag=${docker_tag}" >> "$GITHUB_OUTPUT"
-          echo "docker_image=${docker_image}" >> "$GITHUB_OUTPUT"
+          echo "docker_tags=${docker_tags}" >> "$GITHUB_OUTPUT"
           echo "snap_channel=${snap_channel}" >> "$GITHUB_OUTPUT"
           echo "docs_url=${docs_url}" >> "$GITHUB_OUTPUT"
           echo "vcs_ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
@@ -113,7 +111,7 @@ jobs:
             linux/arm64
           push: true
           outputs: type=local,dest=out
-          tags: ${{ needs.setup_env.outputs.docker_image }}:${{ needs.setup_env.outputs.docker_tag }}
+          tags: ${{ needs.setup_env.outputs.docker_tags }}
           build-args: |
             APP_VERSION=${{ needs.setup_env.outputs.app_version }}
             DOCS_URL=${{ needs.setup_env.outputs.docs_url }}
