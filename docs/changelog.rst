@@ -2,6 +2,21 @@
 Change Log
 ==========
 
+1.1.3
+-----
+
+*July 29, 2024*
+
+
+**Changes:**
+
+* Updated Play Framework to version 2.8.22
+* Updated Docker and Snap builds to use OpenJDK 17 and Ubuntu 22.04
+
+**Features:**
+
+* Provide Docker image for arm64 architecture
+
 1.1.2
 -----
 

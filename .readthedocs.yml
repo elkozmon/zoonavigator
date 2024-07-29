@@ -1,5 +1,10 @@
 version: 2
 
+build:
+  os: "ubuntu-22.04"
+  tools:
+    python: "latest"
+
 sphinx:
   configuration: docs/conf.py
 
@@ -9,6 +14,5 @@ submodules:
   exclude: all
 
 python:
-  version: 3.7
   install:
     - requirements: docs/requirements.txt
