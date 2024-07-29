@@ -1,4 +1,5 @@
 [![](https://github.com/elkozmon/zoonavigator/actions/workflows/publish.yml/badge.svg)](https://github.com/elkozmon/zoonavigator/actions/workflows/publish.yml)
+[![](https://readthedocs.org/projects/zoonavigator/badge/?version=latest)](https://zoonavigator.elkozmon.com/en/latest/?badge=latest)
 [![](https://img.shields.io/docker/pulls/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://img.shields.io/docker/stars/elkozmon/zoonavigator.svg)](https://hub.docker.com/r/elkozmon/zoonavigator)
 [![](https://img.shields.io/docker/image-size/elkozmon/zoonavigator?sort=semver)](https://hub.docker.com/r/elkozmon/zoonavigator)
