@@ -18,7 +18,7 @@ jobs:
           submodules: recursive
 
       - name: Test
-        run: docker-compose -f $GITHUB_WORKSPACE/zoonavigator-api/docker-compose.test.yml up --exit-code-from=sut
+        run: docker compose -f $GITHUB_WORKSPACE/zoonavigator-api/docker-compose.test.yml up --exit-code-from=sut
 
   test_web:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
           submodules: recursive
 
       - name: Test
-        run: docker-compose -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml up --exit-code-from=sut
+        run: docker compose -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml up --exit-code-from=sut
 
   setup_env:
     runs-on: ubuntu-latest
