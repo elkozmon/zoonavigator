@@ -6,7 +6,7 @@ ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
 ARG VCS_REF
 ARG BUILD_DATE
 
-FROM ubuntu:22.04 as dockerize
+FROM ubuntu:22.04 AS dockerize
 
 ARG DOCKERIZE_VERSION
 
@@ -21,7 +21,7 @@ RUN curl \
   && tar xzvf dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
   && rm dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz
 
-FROM node:14.20.1-buster-slim as npm
+FROM node:14.20.1-buster-slim AS npm
 
 ARG APP_VERSION
 ARG DOCS_URL
@@ -49,7 +49,7 @@ RUN npm install -g @angular/cli@15.2.0 \
   && ng build --prod \
   && mv dist /app
 
-FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 as sbt
+FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 AS sbt
 
 # Install required packages
 RUN apt-get update \
@@ -66,7 +66,7 @@ RUN sbt play/dist \
   && unzip play/target/universal/zoonavigator-play-$VERSION.zip \
   && mv zoonavigator-play-$VERSION /app
 
-FROM ubuntu:22.04 as ubuntu
+FROM ubuntu:22.04 AS ubuntu
 
 ARG DOCS_URL
 
