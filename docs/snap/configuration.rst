@@ -99,7 +99,7 @@ Auth id for auth entry *'<MYAUTH>'* for preset ZooKeeper connection *'<MYZK>'*
 
 
 zoonavigator.auto-connect.connection-id
---------------------------
+---------------------------------------
 If set, enables :doc:`Auto Connect <autoconnect>` feature.
 
 Set to :code:`MYZK` to automatically connect to connection defined by :code:`zoonavigator.connection.MYZK.connection-string` configuration option.

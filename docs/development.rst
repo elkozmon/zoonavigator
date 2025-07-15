@@ -30,4 +30,4 @@ Next step is to start up ZooNavigator Web:
 
 This starts up Angular development server with proxy configured in :code:`proxy.conf.json` that will forward API requests to http://localhost:9000 where ZooNavigator API should be running.
 
-Once you've done all that open up http://localhost:4200 in your browser and you should see the `Connect form <../_static/images/screenshots/connect-form.png>`_.
+Once you've done all that open up http://localhost:4200 in your browser and you should see the `Connect form <./_static/images/screenshots/connect-form.png>`_.
