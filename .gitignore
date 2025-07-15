@@ -2,6 +2,7 @@ build/snap/local/lib/
 build/snap/*.snap
 .metals/
 .direnv/
+.DS_Store
 
 .sass-cache/
 _site/
