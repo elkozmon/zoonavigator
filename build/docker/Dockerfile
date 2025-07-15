@@ -21,7 +21,7 @@ RUN curl \
   && tar xzvf dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
   && rm dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz
 
-FROM node:14.20.1-buster-slim AS npm
+FROM node:20-bookworm-slim AS npm
 
 ARG APP_VERSION
 ARG DOCS_URL
@@ -30,11 +30,11 @@ ARG DEBUG
 # Copy source code
 WORKDIR /src
 COPY /web .
-COPY /build/docker/files/zoonavigator-web .
+COPY /build/docker/files/web .
 
 # Install required packages
 RUN apt-get update \
-  && apt-get install -y python-dev make g++
+  && apt-get install -y make g++
 
 # Get dockerize
 COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
@@ -44,9 +44,8 @@ RUN dockerize \
     -template ./environment.ts.template:./src/environments/environment.prod.ts
 
 # Install dependencies & build
-RUN npm install -g @angular/cli@15.2.0 \
-  && npm install \
-  && ng build --prod \
+RUN npm install \
+  && npm run build:prod \
   && mv dist /app
 
 FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 AS sbt
@@ -76,8 +75,8 @@ COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
 # Copy app files
 WORKDIR /app
 COPY --from=sbt /app .
-COPY /build/docker/files/zoonavigator-web .
-COPY /build/docker/files/zoonavigator-api .
+COPY /build/docker/files/web .
+COPY /build/docker/files/api .
 COPY /api/play/conf/application.conf ./conf/application.conf
 
 # Create scripts and make them executable

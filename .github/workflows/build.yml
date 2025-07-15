@@ -1,0 +1,152 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      publish:
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  setup-env:
+    runs-on: ubuntu-latest
+    outputs:
+      app-version: ${{ steps.set-vars.outputs.app-version }}
+      docker-tags: ${{ steps.set-vars.outputs.docker-tags }}
+      snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
+      docs-url: ${{ steps.set-vars.outputs.docs-url }}
+      vcs-ref: ${{ steps.set-vars.outputs.vcs-ref }}
+      build-date: ${{ steps.set-vars.outputs.build-date }}
+    steps:
+      - name: Set variables
+        id: set-vars
+        run: |
+          ref="${GITHUB_REF_NAME#v}"
+
+          # set image name
+          docker_image="elkozmon/zoonavigator"
+
+          # is this a semver release?
+          if [[ "${ref}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
+          then
+              app_version="${ref}"
+              snap_channel="stable"
+              docker_tags="${docker_image}:${ref},${docker_image}:latest"
+              docs_url="https://zoonavigator.elkozmon.com/en/${ref}"
+          else
+              app_version="latest-${GITHUB_SHA::12}"
+              snap_channel="beta"
+              docker_tags="${docker_image}:unstable"
+              docs_url="https://zoonavigator.elkozmon.com/en/latest"
+          fi
+
+          echo "app-version=${app_version}" >> "$GITHUB_OUTPUT"
+          echo "docker-tags=${docker_tags}" >> "$GITHUB_OUTPUT"
+          echo "snap-channel=${snap_channel}" >> "$GITHUB_OUTPUT"
+          echo "docs-url=${docs_url}" >> "$GITHUB_OUTPUT"
+          echo "vcs-ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          echo "build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
+
+  build-docker:
+    runs-on: ubuntu-latest
+    needs:
+      - setup-env
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        if: inputs.publish
+        with:
+          username: ${{ secrets.DOCKERIO_USERNAME }}
+          password: ${{ secrets.DOCKERIO_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ github.workspace }}/build/docker/Dockerfile
+          platforms: |
+            linux/amd64
+            linux/arm64
+          push: ${{ inputs.publish }}
+          outputs: type=local,dest=out
+          tags: ${{ needs.setup-env.outputs.docker-tags }}
+          build-args: |
+            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
+            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
+            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
+            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Package jars
+        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib
+
+      - name: Upload jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: jars
+          path: jars.tar.gz
+
+  build-snap:
+    runs-on: ubuntu-latest
+    needs:
+      - setup-env
+      - build-docker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download jars
+        id: download-jars
+        uses: actions/download-artifact@v4
+        with:
+          name: jars
+
+      - name: Prepare source
+        run: |
+          echo "${{ needs.setup-env.outputs.app-version }}" \
+            > ${GITHUB_WORKSPACE}/build/snap/local/version
+
+          tar \
+            -xvf ${{ steps.download-jars.outputs.download-path }}/jars.tar.gz \
+            -C ${GITHUB_WORKSPACE}/build/snap/local
+
+      - name: Build Snap
+        id: build-snap
+        uses: snapcore/action-build@v1
+        with:
+          path: build/
+
+      - name: Publish Snap
+        if: inputs.publish
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
+        with:
+          snap: ${{ steps.build-snap.outputs.snap }}
+          release: ${{ needs.setup-env.outputs.snap-channel }}
+
+  cleanup:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - build-docker
+      - build-snap
+    steps:
+      - name: Delete artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: jars
