@@ -6,7 +6,6 @@ object Dependencies {
     val curator   = "5.8.0"
     val curatorTest = "5.8.0"
     val macwire   = "2.5.9"
-    val zookeeper = "3.9.1"
     val log4j     = "2.22.1"
     val slf4j     = "2.0.9"
     val shapeless = "2.3.10"
@@ -25,12 +24,8 @@ object Dependencies {
   val macwireProxy  = "com.softwaremill.macwire" %% "proxy"  % V.macwire
   val macwireMacros = "com.softwaremill.macwire" %% "macros" % V.macwire % Provided
 
-  val curatorTest =
-    "org.apache.curator" % "curator-test" % V.curatorTest % Test exclude ("org.apache.zookeeper", "zookeeper")
-  val curatorFramework =
-    "org.apache.curator" % "curator-framework" % V.curator exclude ("org.apache.zookeeper", "zookeeper")
-
-  val zookeeper = "org.apache.zookeeper" % "zookeeper" % V.zookeeper exclude ("log4j", "log4j")
+  val curatorTest = "org.apache.curator" % "curator-test" % V.curatorTest
+  val curatorFramework = "org.apache.curator" % "curator-framework" % V.curator
 
   val monixEval = "io.monix" %% "monix-eval" % V.monix
 

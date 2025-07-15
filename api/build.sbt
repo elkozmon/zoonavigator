@@ -42,7 +42,6 @@ val core = project
       Dependencies.slf4jApi,
       Dependencies.curatorFramework,
       Dependencies.curatorTest,
-      Dependencies.zookeeper,
       Dependencies.log4jApi,
       Dependencies.log4jCore,
       Dependencies.monixEval,
@@ -59,7 +58,6 @@ val play = project
       filters,
       Dependencies.commonsIo,
       Dependencies.logbackClassic,
-      Dependencies.zookeeper,
       Dependencies.macwireUtil,
       Dependencies.macwireProxy,
       Dependencies.macwireMacros,
@@ -72,7 +70,6 @@ val play = project
       "com.elkozmon.zoonavigator.core.zookeeper.znode.ZNodeDataVersion"
     ),
     Compile / doc / sources                := Seq.empty,
-    Compile / packageDoc / publishArtifact := false,
-    scriptClasspath in bashScriptDefines ~= (cp => "zookeeper.jar" +: cp)
+    Compile / packageDoc / publishArtifact := false
   )
   .dependsOn(core)
