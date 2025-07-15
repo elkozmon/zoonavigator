@@ -17,12 +17,13 @@
 
 package api.formats.json.zookeeper.acl
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 
 import com.elkozmon.zoonavigator.core.zookeeper.acl.Permission
 
-class JsonPermissionSpec extends FlatSpec with JsonPermission {
+class JsonPermissionSpec extends AnyFlatSpec with Assertions with JsonPermission {
 
   "JsonPermission" should "serialize Create permission as a JSON string 'create'" in {
     val j = implicitly[Writes[Permission]].writes(Permission.Create)

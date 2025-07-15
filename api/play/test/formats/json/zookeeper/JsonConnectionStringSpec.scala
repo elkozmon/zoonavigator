@@ -17,11 +17,12 @@
 
 package api.formats.json.zookeeper
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 import zookeeper.ConnectionString
 
-class JsonConnectionStringSpec extends FlatSpec with JsonConnectionString {
+class JsonConnectionStringSpec extends AnyFlatSpec with Assertions with JsonConnectionString {
 
   "Serialized JsonConnectionString" should "be a string" in {
     val j = ConnectionString("localhost:2181")

@@ -17,13 +17,14 @@
 
 package api.formats.json.cats
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 
 import cats.Eval
 import cats.free.Cofree
 
-class JsonCofreeSpec extends FlatSpec with JsonCofree {
+class JsonCofreeSpec extends AnyFlatSpec with JsonCofree with Assertions {
 
   "JsonCofree" should "serialize simple integer tree" in {
     val c = Cofree(

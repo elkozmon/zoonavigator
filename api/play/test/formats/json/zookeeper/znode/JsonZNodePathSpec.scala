@@ -17,12 +17,13 @@
 
 package api.formats.json.zookeeper.znode
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 
 import com.elkozmon.zoonavigator.core.zookeeper.znode.ZNodePath
 
-class JsonZNodePathSpec extends FlatSpec with JsonZNodePath {
+class JsonZNodePathSpec extends AnyFlatSpec with Assertions with JsonZNodePath {
 
   "JsonZNodePath" should "be serialized as a string" in {
     val j = ZNodePath.parse("/node0/node1").get

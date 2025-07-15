@@ -17,7 +17,8 @@
 
 package api.formats.json.zookeeper.znode
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 
 import com.elkozmon.zoonavigator.core.zookeeper.znode._
@@ -25,7 +26,7 @@ import com.elkozmon.zoonavigator.core.zookeeper.znode._
 import java.time.Instant
 import scala.language.postfixOps
 
-class JsonZNodeMetaSpec extends FlatSpec with JsonZNodeMeta {
+class JsonZNodeMetaSpec extends AnyFlatSpec with Assertions with JsonZNodeMeta {
 
   private val zNodeMeta =
     ZNodeMeta(

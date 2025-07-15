@@ -17,11 +17,12 @@
 
 package api.formats.json.zookeeper
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 import zookeeper.AuthInfo
 
-class JsonAuthInfoSpec extends FlatSpec with JsonAuthInfo {
+class JsonAuthInfoSpec extends AnyFlatSpec with Assertions with JsonAuthInfo {
 
   "JsonZNodeWithChildren" should "deserialize simple auth info" in {
     val s = """{"scheme":"world","id":"anyone"}"""

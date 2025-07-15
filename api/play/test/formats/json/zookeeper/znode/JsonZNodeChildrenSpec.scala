@@ -17,14 +17,15 @@
 
 package api.formats.json.zookeeper.znode
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json.JsArray
 import play.api.libs.json.Writes
 
 import com.elkozmon.zoonavigator.core.zookeeper.znode.ZNodeChildren
 import com.elkozmon.zoonavigator.core.zookeeper.znode.ZNodePath
 
-class JsonZNodeChildrenSpec extends FlatSpec with JsonZNodeChildren {
+class JsonZNodeChildrenSpec extends AnyFlatSpec with Assertions with JsonZNodeChildren {
 
   "Serialized JsonZNodeChildren" should "be a JSON array" in {
     val zNodeChildren = ZNodeChildren(List.empty[ZNodePath])

@@ -17,7 +17,8 @@
 
 package api.formats.json.zookeeper.acl
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 
 import com.elkozmon.zoonavigator.core.utils.CommonUtils._
@@ -27,7 +28,7 @@ import com.elkozmon.zoonavigator.core.zookeeper.acl.Permission
 
 import scala.language.postfixOps
 
-class JsonAclSpec extends FlatSpec with JsonAcl {
+class JsonAclSpec extends AnyFlatSpec with Assertions with JsonAcl {
 
   private val acl =
     Acl(AclId("world", "anyone"), Permission.All)
