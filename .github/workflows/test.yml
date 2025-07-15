@@ -1,0 +1,121 @@
+name: Test
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_call:
+    inputs:
+      skip-api:
+        required: false
+        type: boolean
+        default: false
+      skip-web:
+        required: false
+        type: boolean
+        default: false
+      skip-build:
+        required: false
+        type: boolean
+        default: false
+      skip-docs:
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    if: inputs.skip-api != true
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: sbt
+      
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
+
+      - name: Check API formatting
+        run: |
+          cd api
+          sbt scalafmtCheckAll
+      
+      - name: Run API tests
+        run: |
+          cd api
+          sbt test
+
+  test-web:
+    runs-on: ubuntu-latest
+    if: inputs.skip-web != true
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      
+      - name: Set up Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-dependencies: true
+      
+      - name: Install dependencies
+        run: |
+          cd web
+          npm ci
+      
+      - name: Run linting
+        run: |
+          cd web
+          npm run lint
+      
+      - name: Run tests
+        env:
+          CHROME_BIN: "${{ steps.setup-chrome.outputs.chrome-path }}"
+        run: |
+          cd web
+          npm run test:ci
+
+  test-build:
+    if: inputs.skip-build != true
+    uses: ./.github/workflows/build.yml
+
+  test-docs:
+    runs-on: ubuntu-latest
+    if: inputs.skip-docs != true
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+          cache: pip
+          cache-dependency-path: docs/requirements.txt
+      
+      - name: Install documentation dependencies
+        run: |
+          cd docs
+          pip install -r requirements.txt
+      
+      - name: Build documentation
+        run: |
+          cd docs
+          sphinx-build -W -b html . _build/html
+      
+      - name: Check documentation links
+        run: |
+          cd docs
+          sphinx-build -b linkcheck . _build/linkcheck
