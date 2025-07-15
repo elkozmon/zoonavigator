@@ -19,7 +19,8 @@ package com.elkozmon.zoonavigator.core.curator
 
 import monix.eval.Task
 import monix.execution.Scheduler
-import org.scalatest.FreeSpec
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.Assertions
 
 import cats.Eval
 import cats.effect.Resource
@@ -47,12 +48,14 @@ import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 import scala.util.Try
 
-class CuratorActionInterpreterSpec extends FreeSpec with CuratorSpec {
+class CuratorActionInterpreterSpec extends AnyFreeSpec with CuratorSpec with Assertions {
 
   import Scheduler.Implicits.global
 
-  def interpreter(implicit curator: CuratorFramework): CuratorActionInterpreter[Task] =
+  def interpreter(implicit curator: CuratorFramework): CuratorActionInterpreter[Task] = {
+    implicit val F: cats.Applicative[Task] = monix.eval.Task.catsAsync
     new CuratorActionInterpreter[Task](Resource.pure(curator))
+  }
 
   "DuplicateZNodeRecursiveAction" - {
     "should copy child nodes data" in withCurator { implicit curatorFramework =>

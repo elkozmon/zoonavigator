@@ -17,11 +17,12 @@
 
 package api.formats.json.zookeeper
 
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 import zookeeper.ConnectionParams
 
-class JsonConnectionParamsSpec extends FlatSpec with JsonConnectionParams {
+class JsonConnectionParamsSpec extends AnyFlatSpec with Assertions with JsonConnectionParams {
 
   "JsonConnectionParams" should "deserialize simple connection param" in {
     val s =

@@ -18,12 +18,13 @@
 package api.formats.json.api
 
 import api.ApiResponse
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.Assertions
 import play.api.libs.json._
 
 import scala.language.postfixOps
 
-class JsonApiResponseSpec extends FlatSpec with JsonApiResponse {
+class JsonApiResponseSpec extends AnyFlatSpec with JsonApiResponse with Assertions {
 
   "Serialized JsonApiResponse" should "be a JSON object with 'success' boolean field of value JsTrue" in {
     val a = ApiResponse(success = true, Some("foo"), Some(123))
