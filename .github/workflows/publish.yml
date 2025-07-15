@@ -2,185 +2,22 @@ name: Publish
 
 on:
   push:
-    branches:
-      - master
-    tags:
-      - '*'
+    branches: [ master, main ]
+    tags: [ '*' ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  test_api:
-    runs-on: ubuntu-latest
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      skip-build: true
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Test
-        run: docker compose -f $GITHUB_WORKSPACE/zoonavigator-api/docker-compose.test.yml up --exit-code-from=sut
-
-  test_web:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Test
-        run: docker compose -f $GITHUB_WORKSPACE/zoonavigator-web/docker-compose.test.yml up --exit-code-from=sut
-
-  setup_env:
-    runs-on: ubuntu-latest
-
+  publish:
+    uses: ./.github/workflows/build.yml
     needs:
-      - test_api
-      - test_web
-
-    outputs:
-      app_version: ${{ steps.set_vars.outputs.app_version }}
-      docker_tags: ${{ steps.set_vars.outputs.docker_tags }}
-      snap_channel: ${{ steps.set_vars.outputs.snap_channel }}
-      docs_url: ${{ steps.set_vars.outputs.docs_url }}
-      vcs_ref: ${{ steps.set_vars.outputs.vcs_ref }}
-      build_date: ${{ steps.set_vars.outputs.build_date }}
-
-    steps:
-      - id: set_vars
-        name: Set variables
-        run: |
-          ref="${GITHUB_REF_NAME#v}"
-
-          # set image name
-          docker_image="elkozmon/zoonavigator"
-
-          # is this a semver release?
-          if [[ "${ref}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
-          then
-              app_version="${ref}"
-              snap_channel="stable"
-              docker_tags="${docker_image}:${ref},${docker_image}:latest"
-              docs_url="https://zoonavigator.elkozmon.com/en/${ref}"
-          else
-              app_version="latest-${GITHUB_SHA::12}"
-              snap_channel="beta"
-              docker_tags="${docker_image}:unstable"
-              docs_url="https://zoonavigator.elkozmon.com/en/latest"
-          fi
-
-          echo "app_version=${app_version}" >> "$GITHUB_OUTPUT"
-          echo "docker_tags=${docker_tags}" >> "$GITHUB_OUTPUT"
-          echo "snap_channel=${snap_channel}" >> "$GITHUB_OUTPUT"
-          echo "docs_url=${docs_url}" >> "$GITHUB_OUTPUT"
-          echo "vcs_ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
-          echo "build_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
-
-  build_docker:
-    runs-on: ubuntu-latest
-
-    needs:
-      - setup_env
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERIO_USERNAME }}
-          password: ${{ secrets.DOCKERIO_PASSWORD }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: |
-            linux/amd64
-            linux/arm64
-          push: true
-          outputs: type=local,dest=out
-          tags: ${{ needs.setup_env.outputs.docker_tags }}
-          build-args: |
-            APP_VERSION=${{ needs.setup_env.outputs.app_version }}
-            DOCS_URL=${{ needs.setup_env.outputs.docs_url }}
-            VCS_REF=${{ needs.setup_env.outputs.vcs_ref }}
-            BUILD_DATE=${{ needs.setup_env.outputs.build_date }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Package jars
-        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib extra
-
-      - name: Upload jars
-        uses: actions/upload-artifact@v4
-        with:
-          name: jars
-          path: jars.tar.gz
-
-  build_snap:
-    runs-on: ubuntu-latest
-
-    needs:
-      - setup_env
-      - build_docker
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - id: download_jars
-        name: Download jars
-        uses: actions/download-artifact@v4
-        with:
-          name: jars
-
-      - name: Prepare source
-        run: |
-          echo "${{ needs.setup_env.outputs.app_version }}" \
-            > ${GITHUB_WORKSPACE}/build/snap/local/version
-
-          tar \
-            -xvf ${{ steps.download_jars.outputs.download-path }}/jars.tar.gz \
-            -C ${GITHUB_WORKSPACE}/build/snap/local
-
-      - id: build_snap
-        name: Build Snap
-        uses: snapcore/action-build@v1
-        with:
-          path: build/
-
-      - name: Publish Snap
-        uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
-        with:
-          snap: ${{ steps.build_snap.outputs.snap }}
-          release: ${{ needs.setup_env.outputs.snap_channel }}
-
-  cleanup:
-    runs-on: ubuntu-latest
-
-    needs:
-      - build_docker
-      - build_snap
-
-    if: ${{ always() }}
-
-    steps:
-      - name: Delete artifacts
-        uses: geekyeggo/delete-artifact@v5
-        with:
-          name: jars
+      - test
+    with:
+      publish: true

@@ -1,0 +1,43 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: [ master, main ]
+
+permissions:
+  contents: read
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.changes.outputs.api }}
+      web: ${{ steps.changes.outputs.web }}
+      docs: ${{ steps.changes.outputs.docs }}
+      build: ${{ steps.changes.outputs.build }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            api:
+              - 'api/**'
+            web:
+              - 'web/**'
+            docs:
+              - 'docs/**'
+            build:
+              - 'build/**'
+              - '.github/workflows/**'
+
+  test:
+    needs:
+      - detect-changes
+    uses: ./.github/workflows/test.yml
+    with:
+      skip-api: ${{ needs.detect-changes.outputs.api != 'true' }}
+      skip-web: ${{ needs.detect-changes.outputs.web != 'true' }}
+      skip-build: ${{ needs.detect-changes.outputs.build != 'true' && needs.detect-changes.outputs.api != 'true' && needs.detect-changes.outputs.web != 'true' }}
+      skip-docs: ${{ needs.detect-changes.outputs.docs != 'true' }}
