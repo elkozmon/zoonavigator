@@ -1,6 +1,7 @@
 .git/
 .github/
 .devcontainer/
+.direnv/
 
 build/snap/
 
