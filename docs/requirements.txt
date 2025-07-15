@@ -1,2 +1,3 @@
-sphinx-rtd-theme~=2.0
+sphinx~=8.2
+sphinx-rtd-theme~=3.0
 docutils<0.21
