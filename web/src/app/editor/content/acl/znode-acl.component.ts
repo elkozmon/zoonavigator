@@ -149,7 +149,7 @@ export class ZNodeAclComponent implements OnInit, OnDestroy {
             const redirect = this.router.navigate([], {
               relativeTo: this.route,
               queryParams: {
-                sid: (parseInt(this.route.snapshot.queryParamMap.get("sid")) || 0) + 1
+                sid: (parseInt(this.route.snapshot.queryParamMap.get("sid"), 10) || 0) + 1
               },
               queryParamsHandling: "merge"
             });

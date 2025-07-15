@@ -56,7 +56,7 @@ export class DefaultDialogService extends DialogService {
 
   constructor(
     private dialogService: TdDialogService,
-    private dialog: MatDialog,
+    private matDialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
     super();
@@ -69,7 +69,7 @@ export class DefaultDialogService extends DialogService {
           groupBy(([id, confirmData, viewRef]) => id),
           mergeMap((observable) => observable.pipe(debounceTime(this.debounceTime))),
           mergeMap(([id, confirmData, viewRef]) => {
-            const dialog = this.dialog.open(ConfirmDialogComponent, {
+            const dialog = this.matDialog.open(ConfirmDialogComponent, {
               data: confirmData,
               viewContainerRef: viewRef,
               role: "dialog",
@@ -96,7 +96,7 @@ export class DefaultDialogService extends DialogService {
           groupBy(([id, infoData, viewRef]) => id),
           mergeMap((observable) => observable.pipe(debounceTime(this.debounceTime))),
           mergeMap(([id, infoData, viewRef]) => {
-            const dialog = this.dialog.open(InfoDialogComponent, {
+            const dialog = this.matDialog.open(InfoDialogComponent, {
               data: infoData,
               viewContainerRef: viewRef,
               role: "dialog",
@@ -153,7 +153,7 @@ export class DefaultDialogService extends DialogService {
     defaults: CreateZNodeData,
     viewRef?: ViewContainerRef
   ): Observable<Maybe<CreateZNodeData>> {
-    const dialog = this.dialog.open(CreateZNodeDialogComponent, {
+    const dialog = this.matDialog.open(CreateZNodeDialogComponent, {
       data: defaults,
       viewContainerRef: viewRef,
       role: "dialog",
@@ -174,7 +174,7 @@ export class DefaultDialogService extends DialogService {
     defaults: ImportZNodesData,
     viewRef?: ViewContainerRef
   ): Observable<Maybe<ImportZNodesData>> {
-    const dialog = this.dialog.open(ImportZNodesDialogComponent, {
+    const dialog = this.matDialog.open(ImportZNodesDialogComponent, {
       data: defaults,
       viewContainerRef: viewRef,
       role: "dialog",
@@ -195,7 +195,7 @@ export class DefaultDialogService extends DialogService {
     defaults: DuplicateZNodeData,
     viewRef?: ViewContainerRef
   ): Observable<Maybe<DuplicateZNodeData>> {
-    const dialog = this.dialog.open(DuplicateZNodeDialogComponent, {
+    const dialog = this.matDialog.open(DuplicateZNodeDialogComponent, {
       data: defaults,
       viewContainerRef: viewRef,
       role: "dialog",
@@ -229,7 +229,7 @@ export class DefaultDialogService extends DialogService {
     defaults: MoveZNodeData,
     viewRef?: ViewContainerRef
   ): Observable<Maybe<MoveZNodeData>> {
-    const dialog = this.dialog.open(MoveZNodeDialogComponent, {
+    const dialog = this.matDialog.open(MoveZNodeDialogComponent, {
       data: defaults,
       viewContainerRef: viewRef,
       role: "dialog",
@@ -269,7 +269,7 @@ export class DefaultDialogService extends DialogService {
       const id = options.title + options.message + options.acceptText;
       const sub = this.showConfirmOutput.subscribe(
         ([id2, confirm]) => {
-          if (id2 == id) {
+          if (id2 === id) {
             subscriber.next(confirm);
             subscriber.complete();
           }
@@ -292,7 +292,7 @@ export class DefaultDialogService extends DialogService {
       const id = options.title + options.message;
       const sub = this.showInfoOutput.subscribe(
         ([id2]) => {
-          if (id2 == id) {
+          if (id2 === id) {
             subscriber.next();
             subscriber.complete();
           }
@@ -314,7 +314,7 @@ export class DefaultDialogService extends DialogService {
     return Observable.create(subscriber => {
       const sub = this.showSnackbarOutput.subscribe(
         ([message2]) => {
-          if (message2 == message) {
+          if (message2 === message) {
             subscriber.next();
             subscriber.complete();
           }

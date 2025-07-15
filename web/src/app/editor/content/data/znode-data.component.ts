@@ -63,6 +63,55 @@ export class ZNodeDataComponent implements OnInit, OnDestroy {
   modeIds: ModeId[] = Object.keys(ModeId).map(k => ModeId[k]);
   compIds: CompressionId[] = Object.keys(CompressionId).map(k => CompressionId[k]);
 
+  static inferCompression(base64: string, compIds: CompressionId[], compProvider: CompressionProvider): Observable<Maybe<CompressionId>> {
+    const raw = Buffer
+      .from(base64, "base64")
+      .buffer;
+
+    return of(
+      Maybe.maybe(
+        compIds.find(c => compProvider.getCompression(c).isCompressed(raw) || null)
+      )
+    );
+  }
+
+  static translateDataMode(data: string, oldMode: Mode, newMode: Mode): string {
+    const encodedData = oldMode.encodeData(data);
+
+    return newMode.decodeData(encodedData);
+  }
+
+  static decodeFromRawData(base64: string, mode: Mode, maybeComp: Maybe<Compression>): Observable<string> {
+    const raw: ArrayBuffer = Buffer
+      .from(base64, "base64")
+      .buffer;
+
+    const decompressedRx = maybeComp
+      .map(c => c.decompress(raw))
+      .valueOr(of(raw));
+
+
+    return decompressedRx.pipe(
+      map(decompressed => mode.decodeData(decompressed))
+    );
+  }
+
+  static encodeToRawData(text: string, mode: Mode, maybeComp: Maybe<Compression>): Observable<string> {
+    const encoded = mode.encodeData(text);
+
+    const compressedRx = maybeComp
+      .map(c => c.compress(encoded))
+      .valueOr(of(encoded));
+
+    return compressedRx.pipe(
+      map(compressed =>
+        Buffer
+          .from(compressed)
+          .toString("base64")
+      )
+    );
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -153,7 +202,7 @@ export class ZNodeDataComponent implements OnInit, OnDestroy {
     // update pristine flag (note: if node not available -> editor is pristine)
     this.isEditorDataPristine =
       combineLatest([this.editorNode, this.editorDataRaw])
-        .pipe(map(([node, rawData]) => node.map(n => n.data == rawData).valueOr(true)));
+        .pipe(map(([node, rawData]) => node.map(n => n.data === rawData).valueOr(true)));
 
     // update submit ready flag
     this.isSubmitReady =
@@ -221,7 +270,7 @@ export class ZNodeDataComponent implements OnInit, OnDestroy {
             const redirect = this.router.navigate([], {
               relativeTo: this.route,
               queryParams: {
-                sid: (parseInt(this.route.snapshot.queryParamMap.get("sid")) || 0) + 1
+                sid: (parseInt(this.route.snapshot.queryParamMap.get("sid"), 10) || 0) + 1
               },
               queryParamsHandling: "merge"
             });
@@ -260,7 +309,7 @@ export class ZNodeDataComponent implements OnInit, OnDestroy {
           ),
           mapTo(newMode)
         )
-        .subscribe(newMode => this.editorModeId.next(newMode))
+        .subscribe(m => this.editorModeId.next(m))
     );
   }
 
@@ -299,55 +348,6 @@ export class ZNodeDataComponent implements OnInit, OnDestroy {
           catchError(error => this.dialogService.showSnackbar("Error:  " + error.message, this.viewContainerRef))
         )
         .subscribe()
-    );
-  }
-
-  static inferCompression(base64: string, compIds: CompressionId[], compProvider: CompressionProvider): Observable<Maybe<CompressionId>> {
-    const raw = Buffer
-      .from(base64, "base64")
-      .buffer;
-
-    return of(
-      Maybe.maybe(
-        compIds.find(c => compProvider.getCompression(c).isCompressed(raw) || null)
-      )
-    );
-  }
-
-  static translateDataMode(data: string, oldMode: Mode, newMode: Mode): string {
-    const encodedData = oldMode.encodeData(data);
-
-    return newMode.decodeData(encodedData);
-  }
-
-  static decodeFromRawData(base64: string, mode: Mode, maybeComp: Maybe<Compression>): Observable<string> {
-    const raw: ArrayBuffer = Buffer
-      .from(base64, "base64")
-      .buffer;
-
-    const decompressedRx = maybeComp
-      .map(c => c.decompress(raw))
-      .valueOr(of(raw));
-
-
-    return decompressedRx.pipe(
-      map(decompressed => mode.decodeData(decompressed))
-    );
-  }
-
-  static encodeToRawData(text: string, mode: Mode, maybeComp: Maybe<Compression>): Observable<string> {
-    const encoded = mode.encodeData(text);
-
-    const compressedRx = maybeComp
-      .map(c => c.compress(encoded))
-      .valueOr(of(encoded));
-
-    return compressedRx.pipe(
-      map(compressed =>
-        Buffer
-          .from(compressed)
-          .toString("base64")
-      )
     );
   }
 }
