@@ -10,11 +10,6 @@ export SECRET_KEY=${SECRET_KEY:-$(cat /dev/urandom | tr -dc 'a-zA-Z0-9~!@#$%^&*_
 [ -n "$AUTO_CONNECT_CONNECTION_STRING" ] && >&2 echo "Warning: detected usage of out-dated Auto Connect configuration.\nPlease see {{ .Env.DOCS_URL }}/docker/autoconnect.html for more info.\n"
 
 # Config
-ZOOKEEPER_34="true"
-ZOOKEEPER_34_JAR="zookeeper-3.4.11.jar"
-ZOOKEEPER_35_JAR="zookeeper-3.5.6.jar"
-ZOOKEEPER_JAR="zookeeper.jar"
-
 JAVA_OPTS="$JAVA_OPTS \
   -J-XX:+UseContainerSupport \
   -J-server \
@@ -50,21 +45,10 @@ JAVA_OPTS="$JAVA_OPTS \
 [ -n "$ZK_SSL_TRUSTSTORE_PATH" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.location=$ZK_SSL_TRUSTSTORE_PATH"
 [ -n "$ZK_SSL_TRUSTSTORE_PASSWORD" ] && JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.ssl.trustStore.password=$ZK_SSL_TRUSTSTORE_PASSWORD"
 
-# Infer ZooKeeper version
 if [ "$ZK_CLIENT_SECURE" = "true" ]
 then
-  ZOOKEEPER_34="false"
   JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.client.secure=true"
   JAVA_OPTS="$JAVA_OPTS -J-Dzookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty"
-fi
-
-[ -f lib/$ZOOKEEPER_JAR ] && rm lib/$ZOOKEEPER_JAR
-
-if [ "$ZOOKEEPER_34" = "true" ]
-then
-  cp extra/$ZOOKEEPER_34_JAR lib/$ZOOKEEPER_JAR
-else
-  cp extra/$ZOOKEEPER_35_JAR lib/$ZOOKEEPER_JAR
 fi
 
 # Exit if command fails
