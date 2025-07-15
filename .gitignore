@@ -2,6 +2,7 @@ build/snap/local/extra/
 build/snap/local/lib/
 build/snap/*.snap
 .metals/
+.direnv/
 
 .sass-cache/
 _site/
@@ -25,3 +26,13 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
