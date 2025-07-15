@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  zoonavigator:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+      args:
+        - APP_VERSION=development
+        - VCS_REF=development
+        - BUILD_DATE=${BUILD_DATE:-$(date -u +'%Y-%m-%dT%H:%M:%SZ')}
+    ports:
+      - "9000:9000"
+    environment:
+      - HTTP_PORT=9000
+    depends_on:
+      - zookeeper
+    restart: unless-stopped
+
+  zookeeper:
+    image: zookeeper:3.9.1
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
