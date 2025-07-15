@@ -1,0 +1,82 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute -->
+<button
+  mat-icon-button
+  matTooltip="Toggle select all"
+  matTooltipPosition="below"
+  (click)="onSelectAllClick()">
+  <mat-icon class="mat-24">select_all</mat-icon>
+</button>
+
+<button
+  mat-icon-button
+  matTooltip="Toggle ordering direction"
+  matTooltipPosition="below"
+  [@flippedState]="toggleSortButtonFlippedState"
+  (click)="onToggleSortClick()">
+  <mat-icon class="mat-24">sort</mat-icon>
+</button>
+
+<button
+  mat-icon-button
+  matTooltip="Import nodes"
+  matTooltipPosition="below"
+  (click)="onImportClick()">
+  <mat-icon class="mat-24">cloud_upload</mat-icon>
+</button>
+
+<button
+  mat-icon-button
+  matTooltip="Create node"
+  matTooltipPosition="below"
+  (click)="onCreateClick()">
+  <mat-icon class="mat-24">create_new_folder</mat-icon>
+</button>
+
+<button
+  mat-icon-button
+  matTooltip="Selected nodes actions ..."
+  matTooltipPosition="below"
+  [matMenuTriggerFor]="selectedNodesMenu"
+  [disabled]="zNodes.length === 0"
+  [ngSwitch]="zNodes.length">
+  <mat-icon class="mat-24" *ngSwitchCase="0">filter_none</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="1">filter_1</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="2">filter_2</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="3">filter_3</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="4">filter_4</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="5">filter_5</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="6">filter_6</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="7">filter_7</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="8">filter_8</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchCase="9">filter_9</mat-icon>
+  <mat-icon class="mat-24 active-selected" *ngSwitchDefault>filter_9_plus</mat-icon>
+</button>
+<mat-menu #selectedNodesMenu="matMenu">
+  <button
+    mat-menu-item
+    (click)="onDeleteClick()">
+    <mat-icon>delete_forever</mat-icon><span>Delete</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="onExportClick()">
+    <mat-icon>cloud_download</mat-icon><span>Export</span>
+  </button>
+</mat-menu>

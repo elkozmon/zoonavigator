@@ -1,0 +1,87 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownAttribute, HtmlFormInputWithoutLabel, HtmlUnknownTag -->
+<zoo-editor-actionbar>
+  <button
+    class="tc-deep-orange-500"
+    [matTooltip]="submitShortcutTooltip"
+    matTooltipPosition="below"
+    (click)="onSubmit()"
+    [disabled]="!submitEnabled">
+    <mat-icon class="mat-24">save</mat-icon>
+    <span>save</span>
+  </button>
+
+  <button
+    class="tc-blue-grey-600"
+    (click)="onToggleWrap()">
+    <mat-icon class="mat-24">wrap_text</mat-icon>
+    <span>wrap: {{wrapEnabled ? 'on' : 'off'}}</span>
+  </button>
+
+  <button
+    class="tc-blue-grey-600"
+    [matMenuTriggerFor]="editorModesMenu">
+    <mat-icon class="mat-24">code</mat-icon>
+    <span>mode: {{mode}}</span>
+  </button>
+
+  <mat-menu #editorModesMenu="matMenu">
+    <button
+      mat-menu-item
+      *ngFor="let mode of modes"
+      [value]="mode"
+      (click)="onModeChange(mode)">
+      {{mode}}
+    </button>
+  </mat-menu>
+
+  <button
+    class="tc-blue-grey-600"
+    matTooltip="Compression"
+    matTooltipPosition="below"
+    [matMenuTriggerFor]="editorCompressionsMenu">
+    <mat-icon class="mat-24">compare_arrows</mat-icon>
+    <span>comp: {{compressionLabel}}</span>
+  </button>
+
+  <mat-menu #editorCompressionsMenu="matMenu">
+    <button
+      mat-menu-item
+      (click)="onCompressionChange(null)">
+      none
+    </button>
+    <button
+      mat-menu-item
+      *ngFor="let compression of compressions"
+      [value]="compression"
+      (click)="onCompressionChange(compression)">
+      {{compression}}
+    </button>
+  </mat-menu>
+
+  <button
+    class="tc-blue-grey-600"
+    (click)="onFormat()"
+    [matTooltip]="formatEnabled ? null : 'Unavailable in \'' + mode + '\' mode'"
+    matTooltipPosition="below"
+    [disabled]="!formatEnabled">
+    <mat-icon class="mat-24">format_paint</mat-icon>
+    <span>reformat</span>
+  </button>
+</zoo-editor-actionbar>

@@ -1,0 +1,71 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute, UnnecessaryLabelJS -->
+<a
+  mat-list-item
+  class="zoo-nav-item"
+  *ngIf="!zPath.isRoot"
+  (click)="onNavigateClick(zPath.goUp())">
+  <mat-icon>
+    arrow_back
+  </mat-icon>
+  ../
+</a>
+<ng-container *ngFor="let zNodePath of zNodesSorted; trackBy: trackByPath">
+  <a
+    mat-list-item
+    *ngIf="{inactive: zNodesFiltered && zNodesFiltered.indexOf(zNodePath) === -1} as state"
+    [ngClass]="['zoo-node-item', 'zoo-nav-item', state.inactive ? 'zoo-nav-item-inactive' : '']">
+    <mat-checkbox
+      [disabled]="state.inactive"
+      [checked]="zNodesSelected.indexOf(zNodePath) >= 0"
+      (click)="$event.stopPropagation()"
+      (change)="$event.checked ? onNodeChecked(zNodePath) : onNodeUnchecked(zNodePath)">
+    </mat-checkbox>
+    <a
+      class="zoo-node-name"
+      #zooNodeName
+      [matTooltip]="(zooNodeName.offsetWidth < zooNodeName.scrollWidth) ? zNodePath.name.valueOrThrow() : null"
+      matTooltipPosition="below"
+      (click)="onNavigateClick(zNodePath)">
+      {{zNodePath.name.valueOrThrow()}}
+    </a>
+    <div class="zoo-node-actions">
+      <button
+        mat-icon-button
+        #nodeMenuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="nodeMenu">
+        <mat-icon class="mat-24">more_vert</mat-icon>
+      </button>
+      <mat-menu #nodeMenu="matMenu">
+        <button mat-menu-item (click)="onNodeDeleteClick(zNodePath)">
+          <mat-icon>delete_forever</mat-icon><span>Delete</span>
+        </button>
+        <button mat-menu-item (click)="onNodeExportClick(zNodePath)">
+          <mat-icon>cloud_download</mat-icon><span>Export</span>
+        </button>
+        <button mat-menu-item (click)="onNodeDuplicateClick(zNodePath)">
+          <mat-icon>content_copy</mat-icon><span>Duplicate</span>
+        </button>
+        <button mat-menu-item (click)="onNodeMoveClick(zNodePath)">
+          <mat-icon>content_cut</mat-icon><span>Move</span>
+        </button>
+      </mat-menu>
+    </div>
+  </a>
+</ng-container>

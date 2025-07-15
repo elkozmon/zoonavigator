@@ -1,0 +1,116 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute, JSBitwiseOperatorUsage -->
+<td-layout>
+  <td-layout-nav toolbarTitle="ZooNavigator" logo="assets:paw">
+
+    <div td-toolbar-content layout="row" flex>
+      <span flex></span>
+      <a
+        mat-icon-button
+        href="https://www.paypal.me/elkozmon"
+        target="_blank"
+        matTooltip="Donate"
+        matTooltipPosition="below">
+        <fa name="heart" class="mat-24"></fa>
+      </a>
+      <a
+        mat-icon-button
+        [href]="docsUrl"
+        target="_blank"
+        matTooltip="Documentation"
+        matTooltipPosition="below">
+        <fa name="book" class="mat-24"></fa>
+      </a>
+      <a
+        mat-icon-button
+        href="https://github.com/elkozmon/zoonavigator"
+        target="_blank"
+        matTooltip="GitHub"
+        matTooltipPosition="below">
+        <fa name="github" class="mat-24"></fa>
+      </a>
+      <a
+        mat-icon-button
+        matTooltip="Disconnect"
+        matTooltipPosition="below"
+        (click)="disconnect()">
+        <fa name="sign-out" class="mat-24"></fa>
+      </a>
+    </div>
+
+    <td-layout-manage-list
+      #manageList
+      [opened]="mediaService.registerQuery('gt-sm') | async"
+      [mode]="(mediaService.registerQuery('gt-sm') | async) ? 'side' :  'over'"
+      [sidenavWidth]="(mediaService.registerQuery('gt-xs') | async) ? '309px' : '100%'">
+
+      <mat-toolbar td-sidenav-content>
+        <zoo-editor-nav-actions
+          [zPath]="zPath | async"
+          [zNodes]="selectedFilteredNodes"
+          [(ordering)]="childrenOrdering"
+          (refresh)="reloadEditor()"
+          (selectAll)="toggleSelectAll()">
+        </zoo-editor-nav-actions>
+      </mat-toolbar>
+
+      <mat-nav-list
+        td-sidenav-content
+        (click)="!mediaService.query('gt-sm') && manageList.close()">
+        <div class="zoo-list-actions">
+          <zoo-regexp-filter
+            #childrenFilter
+            matTooltip="Regexp filter"
+            matTooltipPosition="below"
+            (regexpChange)="onFilterRegexpChange($event)">
+          </zoo-regexp-filter>
+        </div>
+        <zoo-editor-nav-list
+          [zPath]="zPath | async"
+          [zNodesChildren]="childrenZNodes"
+          [zNodesFiltered]="childrenFilterRegexp ? filteredZNodes : null"
+          [zNodesSelected]="selectedFilteredNodes"
+          [zNodesOrdering]="childrenOrdering"
+          (refresh)="reloadEditor()"
+          (select)="selectZNode($event)"
+          (deselect)="deselectZNode($event)">
+        </zoo-editor-nav-list>
+        <div class="zoo-nav-info bgc-grey-200 tc-grey-900" *ngIf="childrenZNodes.length === 0">
+          <mat-icon class="mat-18">info_outline</mat-icon>
+          There are no child nodes
+        </div>
+      </mat-nav-list>
+
+      <mat-toolbar>
+        <div layout="row" layout-align="start center" flex>
+          <zoo-toolbar
+            [zPath]="zPath | async"
+            [zNode]="zNode | async"
+            (refresh)="reloadEditor()">
+          </zoo-toolbar>
+        </div>
+      </mat-toolbar>
+
+      <router-outlet>
+      </router-outlet>
+
+    </td-layout-manage-list>
+
+  </td-layout-nav>
+</td-layout>

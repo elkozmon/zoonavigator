@@ -1,0 +1,87 @@
+/*!
+ * Copyright (C) 2018  Ľuboš Kozmon
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "./themes";
+@import "./utils";
+@import "./bootstrap";
+
+html, body {
+  background: #eeeeee !important;
+}
+
+div.zoo-error-bar {
+  padding: 10px !important;
+  margin-bottom: 20px;
+  color: #f4f4f4;
+  background-color: #d02337;
+  @include border-radius(2px);
+}
+
+.mat-icon {
+  .mat-18 {
+    @include mat-icon-size(18px);
+  }
+  .mat-16 {
+    @include mat-icon-size(16px);
+  }
+}
+
+fa.mat-24 {
+  height: 24px;
+  width: 24px;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.mat-dialog-container > * {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mat-dialog-content {
+  max-height: inherit !important;
+  flex: 1;
+}
+
+.zoo-full-width {
+  width: 100%;
+}
+
+.zoo-bold {
+  font-weight: bold;
+}
+
+.zoo-warn {
+  color: #d03e3c;
+}
+
+mat-toolbar mat-icon {
+  width: 40px !important;
+}
+
+button {
+  text-transform: uppercase;
+}
+
+button.mat-menu-item {
+  text-transform: none;
+}
+
+mat-checkbox.zoo-nolabel .mat-checkbox-label {
+  display: none;
+}

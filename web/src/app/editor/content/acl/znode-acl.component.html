@@ -1,0 +1,165 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute, HtmlFormInputWithoutLabel -->
+<zoo-editor-content *ngIf="aclForm" layout="row">
+  <zoo-editor-actionbar>
+    <button
+      class="tc-deep-orange-500"
+      (click)="onSubmit(false)"
+      [disabled]="!aclForm.isValid || !aclForm.isDirty">
+      <mat-icon class="mat-24">done</mat-icon>
+      <span>apply</span>
+    </button>
+
+    <button
+      class="tc-deep-orange-500"
+      (click)="onSubmit(true)"
+      [disabled]="!aclForm.isValid">
+      <mat-icon class="mat-24">done_all</mat-icon>
+      <span>recursively</span>
+    </button>
+
+    <button
+      class="tc-red-600"
+      (click)="clearForm()"
+      [disabled]="aclForm.aclFormArray.length < 2">
+      <mat-icon class="mat-24">clear</mat-icon>
+      <span>clear</span>
+    </button>
+  </zoo-editor-actionbar>
+
+  <div class="zoo-editor-container">
+    <form [formGroup]="aclForm.form">
+      <input
+        type="hidden"
+        formControlName="aclVersion"/>
+      <div formArrayName="aclArray">
+        <table>
+          <colgroup>4</colgroup>
+          <thead>
+          <tr>
+            <th rowspan="2" align="left">Scheme</th>
+            <th rowspan="2" align="left">Id</th>
+            <th colspan="5">Permissions</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th matTooltip="Create" matTooltipPosition="below">C</th>
+            <th matTooltip="Read" matTooltipPosition="below">R</th>
+            <th matTooltip="Delete" matTooltipPosition="below">D</th>
+            <th matTooltip="Write" matTooltipPosition="below">W</th>
+            <th matTooltip="Admin" matTooltipPosition="below">A</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let acl of aclForm.aclFormArray.controls; let i = index" [formGroup]="acl">
+            <td>
+              <mat-form-field class="zoo-input-scheme">
+                <input
+                  matInput
+                  required
+                  type="text"
+                  formControlName="scheme"/>
+                <mat-error *ngIf="!acl.get('scheme').valid" class="zoo-warn">
+                  Scheme is required
+                </mat-error>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field class="zoo-input-id">
+                <input
+                  matInput
+                  type="text"
+                  formControlName="id"/>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-checkbox
+                [formControl]="acl.get('permissions').get('canCreate')"
+                matTooltip="Create"
+                matTooltipPosition="below"
+                class="zoo-nolabel"
+                color="primary">
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox
+                [formControl]="acl.get('permissions').get('canRead')"
+                matTooltip="Read"
+                matTooltipPosition="below"
+                class="zoo-nolabel"
+                color="primary">
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox
+                [formControl]="acl.get('permissions').get('canDelete')"
+                matTooltip="Delete"
+                matTooltipPosition="below"
+                class="zoo-nolabel"
+                color="primary">
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox
+                [formControl]="acl.get('permissions').get('canWrite')"
+                matTooltip="Write"
+                matTooltipPosition="below"
+                class="zoo-nolabel"
+                color="primary">
+              </mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox
+                [formControl]="acl.get('permissions').get('canAdmin')"
+                matTooltip="Admin"
+                matTooltipPosition="below"
+                class="zoo-nolabel"
+                color="primary">
+              </mat-checkbox>
+            </td>
+            <td>
+              <button
+                mat-icon-button
+                disableRipple
+                matTooltip="Remove"
+                matTooltipPosition="below"
+                color="warn"
+                (click)="aclForm.removeAclFormItem(i)"
+                [disabled]="aclForm.aclFormArray.length < 2">
+                <mat-icon class="mat-24">delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div layout="row" class="zoo-form-controls">
+        <button
+          mat-button
+          type="button"
+          color="primary"
+          (click)="aclForm.addAclFormItem()">
+          Add ACL input
+        </button>
+      </div>
+    </form>
+  </div>
+</zoo-editor-content>

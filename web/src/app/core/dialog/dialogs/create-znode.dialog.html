@@ -1,0 +1,41 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<h3 mat-dialog-title>
+  <div class="zoo-dialog-title" layout="row" layout-align="start center" flex>
+    <mat-icon>create_new_folder</mat-icon>
+    <div>Create node</div>
+  </div>
+</h3>
+<mat-dialog-content>
+  <mat-form-field class="zoo-full-width">
+    <input
+      matInput
+      placeholder="Enter new path"
+      (keypress)="onKeyPress($event)"
+      [(ngModel)]="data.path"/>
+  </mat-form-field>
+  <div *ngIf="data.redirect !== null">
+    <mat-checkbox [(ngModel)]="data.redirect">
+      Open the new node afterwards
+    </mat-checkbox>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions layout-align="end">
+  <button mat-button [mat-dialog-close]="null">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" color="accent" #submitButton="matButton">Create</button>
+</mat-dialog-actions>
