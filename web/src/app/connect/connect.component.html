@@ -1,0 +1,113 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute -->
+<div layout="column" layout-align="start center" layout-fill>
+  <div layout="column" layout-align="center center" class="zoo-header">
+    <span layout-margin class="mat-display-1 tc-blue-grey-600">
+      <fa name="paw"></fa>
+    </span>
+    <p layout-margin class="mat-subhead">
+      <span class="tc-blue-grey-600 zoo-bold">
+        ZooNavigator.
+      </span>
+      <i class="tc-blue-grey-600">
+        An awesome ZooKeeper web editor.
+      </i>
+    </p>
+  </div>
+  <div *ngIf="errorMessage" class="zoo-error-bar">
+    {{errorMessage}}
+  </div>
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="cxnParamsForm"
+            layout="column"
+            layout-align="center center">
+        <div>
+          <mat-form-field>
+            <input matInput
+                   type="text"
+                   placeholder="Connection string"
+                   formControlName="connectionString"
+                   name="connectionString"/>
+            <!--<span mat-prefix><mat-icon>public</mat-icon></span>-->
+            <mat-hint>Required</mat-hint>
+          </mat-form-field>
+        </div>
+        <div formArrayName="credentialsArray">
+          <div layout="row"
+               *ngFor="let credentials of cxnParamsCredentialsFormArray.controls; let i = index"
+               [formGroup]="credentials">
+            <mat-form-field>
+              <input matInput
+                     type="text"
+                     placeholder="Auth username"
+                     formControlName="username"
+                     (change)="onCxnParamsCredentialsChange(i)"/>
+              <!--<span mat-prefix><mat-icon>person</mat-icon></span>-->
+              <mat-hint *ngIf="i == 0"><a
+                [href]="docsFaqsAuthUrl"
+                target="_blank">What's this?</a></mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     type="password"
+                     placeholder="Auth password"
+                     formControlName="password"
+                     (change)="onCxnParamsCredentialsChange(i)"/>
+              <!--<span mat-prefix><mat-icon>lock</mat-icon></span>-->
+            </mat-form-field>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" [disabled]="!cxnParamsForm.valid" (click)="onCxnParamsSubmit()">
+          Connect
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <p class="tc-grey-600 text-md" *ngIf="cxnPresetConnectionsArray?.length">
+    or select from preset connections
+  </p>
+  <mat-card *ngIf="cxnPresetConnectionsArray?.length">
+    <mat-card-content>
+      <form [formGroup]="cxnPresetForm"
+            layout="column"
+            layout-align="center center">
+        <div>
+          <mat-form-field>
+            <mat-label>Connection name</mat-label>
+            <mat-select
+              formControlName="connectionName"
+              [required]="true">
+              <mat-option *ngFor="let connection of cxnPresetConnectionsArray" [value]="connection">
+                {{connection.name || connection.id}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>Required</mat-hint>
+          </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" [disabled]="!cxnPresetForm.valid" (click)="onCxnPresetSubmit()">
+          Connect
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <p class="tc-grey-600 text-md zoo-footer">
+    {{appVersion}}
+  </p>
+</div>

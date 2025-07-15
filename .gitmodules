@@ -1,6 +1,0 @@
-[submodule "zoonavigator-api"]
-	path = zoonavigator-api
-	url = https://github.com/elkozmon/zoonavigator-api.git
-[submodule "zoonavigator-web"]
-	path = zoonavigator-web
-	url = https://github.com/elkozmon/zoonavigator-web.git

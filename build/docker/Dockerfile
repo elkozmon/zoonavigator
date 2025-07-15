@@ -29,7 +29,7 @@ ARG DEBUG
 
 # Copy source code
 WORKDIR /src
-COPY /zoonavigator-web .
+COPY /web .
 COPY /build/docker/files/zoonavigator-web .
 
 # Install required packages
@@ -57,7 +57,7 @@ RUN apt-get update \
 
 # Copy source files
 WORKDIR /src
-COPY /zoonavigator-api .
+COPY /api .
 COPY --from=npm /app ./play/public
 
 # Build project
@@ -78,7 +78,7 @@ WORKDIR /app
 COPY --from=sbt /app .
 COPY /build/docker/files/zoonavigator-web .
 COPY /build/docker/files/zoonavigator-api .
-COPY /zoonavigator-api/play/conf/application.conf ./conf/application.conf
+COPY /api/play/conf/application.conf ./conf/application.conf
 
 # Create scripts and make them executable
 RUN dockerize \

@@ -1,0 +1,111 @@
+<!--
+  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, either version 3 of the
+  ~ License, or (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress HtmlUnknownTag, HtmlUnknownAttribute -->
+<div *ngIf="zPath" layout="row" layout-align="start center" flex>
+  <button
+    mat-icon-button
+    matTooltip="Current node actions ..."
+    [matMenuTriggerFor]="nodeMenu"
+    [disabled]="zNode == null || zNode.isNothing">
+    <mat-icon class="mat-24">more_vert</mat-icon>
+  </button>
+
+  <mat-menu #nodeMenu="matMenu">
+    <button
+      mat-menu-item
+      [disabled]="zPath.isRoot"
+      [matTooltip]="zPath.isRoot ? 'Cannot delete root node' : ''"
+      matTooltipPosition="after"
+      (click)="onDeleteClick()">
+      <mat-icon>delete_forever</mat-icon><span>Delete</span>
+    </button>
+    <button
+      mat-menu-item
+      [disabled]="zPath.isRoot"
+      [matTooltip]="zPath.isRoot ? 'Cannot export root node' : ''"
+      matTooltipPosition="after"
+      (click)="onExportClick()">
+      <mat-icon>cloud_download</mat-icon><span>Export</span>
+    </button>
+    <button
+      mat-menu-item
+      (click)="onDuplicateClick()">
+      <mat-icon>content_copy</mat-icon><span>Duplicate</span>
+    </button>
+    <button
+      mat-menu-item
+      [disabled]="zPath.isRoot"
+      [matTooltip]="zPath.isRoot ? 'Cannot move root node' : ''"
+      matTooltipPosition="after"
+      (click)="onMoveClick()">
+      <mat-icon>content_cut</mat-icon><span>Move</span>
+    </button>
+  </mat-menu>
+
+  <button
+    mat-icon-button
+    matTooltip="Refresh editor and children nodes"
+    matTooltipPosition="below"
+    [@rotatedState]="refreshButtonRotatedState"
+    (click)="onRefreshClick()">
+    <mat-icon class="mat-24">refresh</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    matTooltip="Go to root node"
+    (click)="onHomeClick()">
+    <mat-icon class="mat-24">home</mat-icon>
+  </button>
+
+  <mat-form-field>
+    <mat-select
+      [required]="true"
+      (selectionChange)="onConnectionOptionChange($event)"
+      [compareWith]="compareConnections"
+      [value]="connectionsOptionCurrent | async"
+      matTooltip="Switch ZooKeeper connection"
+      matTooltipPosition="below">
+      <mat-option *ngFor="let connection of connectionsOptionArray | async" [value]="connection">
+        {{connection.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <span style="margin-left: 12px">
+    @
+  </span>
+
+  <mat-form-field style="flex-grow: 5">
+    <input
+      matInput
+      #pathInput="matInput"
+      (keypress)="onPathKeyPress($event)"
+      [value]="zPath.path">
+    <mat-error *ngIf="navigationError">
+      {{navigationError}}
+    </mat-error>
+  </mat-form-field>
+
+  <button
+    mat-icon-button
+    matTooltip="Go to address"
+    (click)="navigatePath(pathInput.value)">
+    <mat-icon class="mat-24">arrow_forward</mat-icon>
+  </button>
+</div>
