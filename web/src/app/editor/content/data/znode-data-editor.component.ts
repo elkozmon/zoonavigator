@@ -81,7 +81,7 @@ export class ZNodeDataEditorComponent {
   }
 
   onKeyDown(event: KeyboardEvent): void {
-    if(navigator.platform.match('Mac')){
+    if (navigator.platform.match("Mac")) {
       this.onMacKeyDown(event);
     } else {
       this.onWindowsKeyDown(event);
@@ -89,8 +89,8 @@ export class ZNodeDataEditorComponent {
   }
 
   onMacKeyDown(event: KeyboardEvent) {
-    let charCode = String.fromCharCode(event.which).toLowerCase();
-    if (event.metaKey && charCode === 's') {
+    const charCode = String.fromCharCode(event.which).toLowerCase();
+    if (event.metaKey && charCode === "s") {
       // Submit on CMD + S
       event.preventDefault();
       this.submit.emit();
@@ -98,8 +98,8 @@ export class ZNodeDataEditorComponent {
   }
 
   onWindowsKeyDown(event: KeyboardEvent) {
-    let charCode = String.fromCharCode(event.which).toLowerCase();
-    if (event.ctrlKey && charCode === 's') {
+    const charCode = String.fromCharCode(event.which).toLowerCase();
+    if (event.ctrlKey && charCode === "s") {
       // Submit on CTRL + S
       event.preventDefault();
       this.submit.emit();

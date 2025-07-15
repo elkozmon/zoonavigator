@@ -59,7 +59,7 @@ import {EditorModule} from "./editor";
     },
     {
       provide: APP_BASE_HREF,
-      useValue: window['base-href']
+      useValue: window["base-href"]
     }
   ],
   declarations: [

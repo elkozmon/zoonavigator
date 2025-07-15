@@ -48,7 +48,7 @@ export class CanDeactivateZNodeDataComponent implements CanDeactivate<ZNodeDataC
         const nextAt = nextState.root.queryParamMap.get("at");
         const nextPath = nextState.root.queryParamMap.get("path");
 
-        const isSubmitRedirect = currentAt == nextAt && currentPath == nextPath;
+        const isSubmitRedirect = currentAt === nextAt && currentPath === nextPath;
 
         if (isSubmitRedirect) {
           return of(true);
