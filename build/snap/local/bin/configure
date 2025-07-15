@@ -151,25 +151,13 @@ add_javaopt "-Dzookeeper.ssl.keyStore.password=" "$(get_conf "zookeeper.ssl.key-
 add_javaopt "-Dzookeeper.ssl.trustStore.location=" "$(get_conf "zookeeper.ssl.trust-store.location")"
 add_javaopt "-Dzookeeper.ssl.trustStore.password=" "$(get_conf "zookeeper.ssl.trust-store.password")"
 
-# Infer ZooKeeper version
-ZOOKEEPER_34="true"
-
 if [ -n "$(get_conf "zookeeper.client.secure")" ]
 then
   add_javaopt "-Dzookeeper.clientCnxnSocket=" "org.apache.zookeeper.ClientCnxnSocketNetty"
-  ZOOKEEPER_34="false"
 fi
 
 # Classpath
 CLASSPATH="$SNAP/lib/*:$SNAP/conf/:$SNAP_DATA/"
-
-if [ "$ZOOKEEPER_34" = "true" ]
-then
-  CLASSPATH="$CLASSPATH:$SNAP/extra/zookeeper-3.4.11.jar"
-else
-  CLASSPATH="$CLASSPATH:$SNAP/extra/zookeeper-3.5.6.jar"
-fi
-
 add_javaopt "-cp " "$CLASSPATH"
 
 #################################################

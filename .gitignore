@@ -1,4 +1,3 @@
-build/snap/local/extra/
 build/snap/local/lib/
 build/snap/*.snap
 .metals/
