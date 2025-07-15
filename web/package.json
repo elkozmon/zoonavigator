@@ -10,9 +10,7 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
-    "dev:devcontainer": "ng serve --host 0.0.0.0 --proxy-config ./.devcontainer/proxy.conf.json",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json --aot",
-    "start:devcontainer": "ng serve --host 0.0.0.0 --proxy-config ./.devcontainer/proxy.conf.json --aot",
     "build": "ng build",
     "preversion": "npm run test:docker",
     "version": "./scripts/version.sh $npm_package_version",
