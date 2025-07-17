@@ -21,3 +21,4 @@ jobs:
       - test
     with:
       publish: true
+    secrets: inherit
