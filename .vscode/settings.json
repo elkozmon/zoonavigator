@@ -1,0 +1,21 @@
+{
+  "files.watcherExclude": {
+    "**/target": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/target": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/target": true,
+    "**/.git": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}
