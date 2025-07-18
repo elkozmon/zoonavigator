@@ -1,6 +1,6 @@
 {
   "name": "zoonavigator-web",
-  "version": "0.6.3-dev.1",
+  "version": "0.0.0-dev",
   "license": "GNU Affero GPL V3",
   "author": {
     "name": "Ľuboš Kozmon",
@@ -13,8 +13,6 @@
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json --aot",
     "build": "ng build",
     "build:prod": "ng build --prod",
-    "preversion": "npm run test:docker",
-    "version": "./scripts/version.sh $npm_package_version",
     "test": "ng test",
     "test:ci": "ng test --browsers=ChromeHeadlessCI --no-watch --no-progress",
     "lint": "ng lint",
