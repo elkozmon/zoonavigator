@@ -24,7 +24,7 @@ val commonSettings = Seq(
       id = "elkozmon",
       name = "Ľuboš Kozmon",
       email = "contact@elkozmon.com",
-      url = url("http://www.elkozmon.com")
+      url = url("https://www.elkozmon.com")
     )
   ),
   libraryDependencies ++= Seq(
