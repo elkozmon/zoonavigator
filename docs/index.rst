@@ -1,12 +1,15 @@
-Welcome
-=======
+==============
+ZooNavigator
+==============
 
-ZooNavigator is a **web-based ZooKeeper UI and editor/browser** with many features.
+ZooNavigator is a **feature-rich web interface for ZooKeeper**.
 
-It is an open source project and the source code is available on `GitHub <https://github.com/elkozmon/zoonavigator>`_.
+The source code is licensed under AGPLv3 and is available on `GitHub <https://github.com/elkozmon/zoonavigator>`_.
 
 If you like this project, please, consider supporting me `by buying me a beer <https://www.paypal.me/elkozmon>`_, thanks! 🍺❤️
 
+Screenshots
+===========
 
 .. |img1| image:: _static/images/screenshots/connect-form.png
    :align: middle
@@ -45,7 +48,7 @@ If you like this project, please, consider supporting me `by buying me a beer <h
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    quickstart
    features

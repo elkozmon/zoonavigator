@@ -1,9 +1,9 @@
 name: zoonavigator
-summary: Web-based ZooKeeper UI / editor / browser
+summary: Web-based ZooKeeper UI
 description: |
-  ZooNavigator is a web-based ZooKeeper UI and editor/browser with many features.
+  ZooNavigator is a feature-rich web interface for ZooKeeper.
 
-  ZooKeeper versions 3.4.x and 3.5.x are currently supported.
+  ZooKeeper versions 3.5.x to 3.9.x are currently supported.
 
   Read official docs for more info and configuration options of ZooNavigator at https://zoonavigator.elkozmon.com/.
 
