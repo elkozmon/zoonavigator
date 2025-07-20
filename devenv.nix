@@ -1,7 +1,12 @@
 { pkgs, lib, config, inputs, ... }:
 {
   # https://devenv.sh/basics/
-  env.DOCKER_TIMEOUT = "60";
+  env = {
+    DOCKER_TIMEOUT = lib.mkDefault 60;
+    API_PORT = lib.mkDefault 9000;
+    WEB_PORT = lib.mkDefault 4200;
+    DOCS_PORT = lib.mkDefault 8000;
+  };
 
   # https://devenv.sh/packages/
   packages = with pkgs; [
@@ -44,9 +49,17 @@
   };
 
   # https://devenv.sh/processes/
-  # avoid mounting $HOME by mounting dummy dir instead (https://github.com/abiosoft/colima/blob/75b104a37eca590e1f72a2cd39ef43ed4093bfef/config/config.go#L134-L143)
   processes = {
-    "colima".exec = "colima start --arch x86_64 --memory 4 -f -V /tmp/dummy";
+    "api" = {
+      exec = ''api:dev'';
+      process-compose = {
+        is_tty = true;
+      };
+    };
+    "web".exec = ''web:dev'';
+    "docs".exec = ''docs:dev'';
+    # avoid mounting $HOME by mounting dummy dir instead (https://github.com/abiosoft/colima/blob/75b104a37eca590e1f72a2cd39ef43ed4093bfef/config/config.go#L134-L143)
+    "colima".exec = ''colima start --arch x86_64 --memory 4 -f -V /tmp/dummy'';
   };
 
   # https://devenv.sh/services/
@@ -55,20 +68,21 @@
   # https://devenv.sh/scripts/
   scripts = {
     # API
-    "api:run".exec = "cd $DEVENV_ROOT/api && sbt play/run";
-    "api:test".exec = "cd $DEVENV_ROOT/api && sbt test";
-    "api:format".exec = "cd $DEVENV_ROOT/api && sbt scalafmtAll";
-    "api:format:check".exec = "cd $DEVENV_ROOT/api && sbt scalafmtCheckAll";
+    "api:dev".exec = ''cd "$DEVENV_ROOT/api" && sbt "play/run $API_PORT"'';
+    "api:test".exec = ''cd "$DEVENV_ROOT/api" && sbt test'';
+    "api:format".exec = ''cd "$DEVENV_ROOT/api" && sbt scalafmtAll'';
+    "api:format:check".exec = ''cd "$DEVENV_ROOT/api" && sbt scalafmtCheckAll'';
 
     # Web
-    "web:dev".exec = "cd $DEVENV_ROOT/web && npm run dev";
-    "web:build".exec = "cd $DEVENV_ROOT/web && npm run build $@";
-    "web:test".exec = "cd $DEVENV_ROOT/web && npm run test $@";
-    "web:lint".exec = "cd $DEVENV_ROOT/web && npm run lint $@";
+    "web:dev".exec = ''cd "$DEVENV_ROOT/web" && npm run dev -- --port "$WEB_PORT" $@'';
+    "web:build".exec = ''cd "$DEVENV_ROOT/web" && npm run build -- $@'';
+    "web:test".exec = ''cd "$DEVENV_ROOT/web" && npm run test -- $@'';
+    "web:lint".exec = ''cd "$DEVENV_ROOT/web" && npm run lint -- $@'';
 
     # Docs
-    "docs:build".exec = "cd $DEVENV_ROOT/docs && sphinx-build -W -b html . _build/html";
-    "docs:linkcheck".exec = "cd $DEVENV_ROOT/docs && sphinx-build -b linkcheck . _build/linkcheck";
+    "docs:dev".exec = ''sphinx-autobuild --port "$DOCS_PORT" "$DEVENV_ROOT/docs" "$DEVENV_ROOT/docs/_build/autobuild"'';
+    "docs:build".exec = ''cd "$DEVENV_ROOT/docs" && sphinx-build -W -b html . _build/html'';
+    "docs:linkcheck".exec = ''cd "$DEVENV_ROOT/docs" && sphinx-build -b linkcheck . _build/linkcheck'';
   };
 
   enterShell = ''
@@ -77,7 +91,7 @@
 
 Available scripts:
   📦 API
-    api:run          - Start API server
+    api:dev          - Start API dev server
     api:test         - Run API tests
     api:format       - Format API code
     api:format:check - Check API formatting
@@ -89,6 +103,7 @@ Available scripts:
     web:lint  - Run web linting
 
   📚 Docs
+    docs:dev       - Start docs dev server
     docs:build     - Build documentation
     docs:linkcheck - Check documentation links
 
@@ -102,8 +117,8 @@ EOF
   # https://devenv.sh/tasks/
   tasks = {
     "web:install" = {
-      exec = "cd $DEVENV_ROOT/web && npm install";
-      status = "test -d web/node_modules";
+      exec = ''cd "$DEVENV_ROOT/web" && npm install'';
+      status = ''test -d web/node_modules'';
       before = [ "devenv:enterShell" ];
     };
   };

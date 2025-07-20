@@ -9,8 +9,8 @@
   },
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
-    "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json --aot",
+    "dev": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.js",
+    "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.js --aot",
     "build": "ng build",
     "build:prod": "ng build --prod",
     "test": "ng test",
