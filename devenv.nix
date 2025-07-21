@@ -34,6 +34,11 @@
     javascript = {
       enable = true;
       package = pkgs.nodejs_20;
+      directory = "$DEVENV_ROOT/web";
+      npm = {
+        enable = true;
+        install.enable = true;
+      };
     };
 
     typescript.enable = true;
@@ -41,6 +46,7 @@
     python = {
       enable = true;
       package = pkgs.python313;
+      directory = "$DEVENV_ROOT/docs";
       venv = {
         enable = true;
         requirements = ./docs/requirements.txt;
@@ -115,13 +121,7 @@ EOF
   '';
 
   # https://devenv.sh/tasks/
-  tasks = {
-    "web:install" = {
-      exec = ''cd "$DEVENV_ROOT/web" && npm install'';
-      status = ''test -d web/node_modules'';
-      before = [ "devenv:enterShell" ];
-    };
-  };
+  # tasks = {};
 
   # https://devenv.sh/tests/
   enterTest = ''
