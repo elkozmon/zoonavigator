@@ -34,7 +34,7 @@
     javascript = {
       enable = true;
       package = pkgs.nodejs_20;
-      directory = "$DEVENV_ROOT/web";
+      directory = "${config.env.DEVENV_ROOT}/web";
       npm = {
         enable = true;
         install.enable = true;
@@ -46,7 +46,7 @@
     python = {
       enable = true;
       package = pkgs.python313;
-      directory = "$DEVENV_ROOT/docs";
+      directory = "${config.env.DEVENV_ROOT}/docs";
       venv = {
         enable = true;
         requirements = ./docs/requirements.txt;
@@ -74,21 +74,21 @@
   # https://devenv.sh/scripts/
   scripts = {
     # API
-    "api:dev".exec = ''cd "$DEVENV_ROOT/api" && sbt "play/run $API_PORT"'';
-    "api:test".exec = ''cd "$DEVENV_ROOT/api" && sbt test'';
-    "api:format".exec = ''cd "$DEVENV_ROOT/api" && sbt scalafmtAll'';
-    "api:format:check".exec = ''cd "$DEVENV_ROOT/api" && sbt scalafmtCheckAll'';
+    "api:dev".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt "play/run $API_PORT"'';
+    "api:test".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt test'';
+    "api:format".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt scalafmtAll'';
+    "api:format:check".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt scalafmtCheckAll'';
 
     # Web
-    "web:dev".exec = ''cd "$DEVENV_ROOT/web" && npm run dev -- --port "$WEB_PORT" $@'';
-    "web:build".exec = ''cd "$DEVENV_ROOT/web" && npm run build -- $@'';
-    "web:test".exec = ''cd "$DEVENV_ROOT/web" && npm run test -- $@'';
-    "web:lint".exec = ''cd "$DEVENV_ROOT/web" && npm run lint -- $@'';
+    "web:dev".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run dev -- --port "$WEB_PORT" $@'';
+    "web:build".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run build -- $@'';
+    "web:test".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run test -- $@'';
+    "web:lint".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run lint -- $@'';
 
     # Docs
-    "docs:dev".exec = ''sphinx-autobuild --port "$DOCS_PORT" "$DEVENV_ROOT/docs" "$DEVENV_ROOT/docs/_build/autobuild"'';
-    "docs:build".exec = ''cd "$DEVENV_ROOT/docs" && sphinx-build -W -b html . _build/html'';
-    "docs:linkcheck".exec = ''cd "$DEVENV_ROOT/docs" && sphinx-build -b linkcheck . _build/linkcheck'';
+    "docs:dev".exec = ''sphinx-autobuild --port "$DOCS_PORT" "${config.env.DEVENV_ROOT}/docs" "${config.env.DEVENV_ROOT}/docs/_build/autobuild"'';
+    "docs:build".exec = ''cd "${config.env.DEVENV_ROOT}/docs" && sphinx-build -W -b html . _build/html'';
+    "docs:linkcheck".exec = ''cd "${config.env.DEVENV_ROOT}/docs" && sphinx-build -b linkcheck . _build/linkcheck'';
   };
 
   enterShell = ''
