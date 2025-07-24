@@ -1,4 +1,27 @@
 { pkgs, lib, config, inputs, ... }:
+let
+  scriptCategories = [
+    { icon = "📦"; title = "API"; prefix = "api:"; }
+    { icon = "🌐"; title = "Web"; prefix = "web:"; }
+    { icon = "📚"; title = "Docs"; prefix = "docs:"; }
+  ];
+
+  generateAvailableScripts = scripts:
+    let
+      maxLength = lib.foldl' (max: name: lib.max max (lib.stringLength name)) 0 (lib.attrNames scripts);
+
+      generateCategory = { icon, title, prefix }:
+        let
+          categoryScripts = lib.filterAttrs (name: _: lib.hasPrefix prefix name) scripts;
+          scriptEntries = lib.mapAttrsToList (name: script:
+            let padding = lib.concatStrings (lib.genList (_: " ") (maxLength - lib.stringLength name + 1));
+            in "    ${name}${padding}- ${script.description}"
+          ) categoryScripts;
+        in
+        lib.optionalString (categoryScripts != {}) "  ${icon} ${title}\n${lib.concatStringsSep "\n" scriptEntries}\n";
+    in
+    lib.concatMapStringsSep "\n" generateCategory scriptCategories;
+in
 {
   # https://devenv.sh/basics/
   env = {
@@ -74,50 +97,62 @@
   # https://devenv.sh/scripts/
   scripts = {
     # API
-    "api:dev".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt "play/run $API_PORT"'';
-    "api:test".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt test'';
-    "api:format".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt scalafmtAll'';
-    "api:format:check".exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt scalafmtCheckAll'';
+    "api:dev" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt "play/run $API_PORT"'';
+      description = "Start API dev server";
+    };
+    "api:test" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt test'';
+      description = "Run API tests";
+    };
+    "api:format" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt scalafmtAll'';
+      description = "Format API code";
+    };
+    "api:format:check" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/api" && sbt scalafmtCheckAll'';
+      description = "Check API formatting";
+    };
 
     # Web
-    "web:dev".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run dev -- --port "$WEB_PORT" $@'';
-    "web:build".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run build -- $@'';
-    "web:test".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run test -- $@'';
-    "web:lint".exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run lint -- $@'';
+    "web:dev" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run dev -- --port "$WEB_PORT" $@'';
+      description = "Start web dev server";
+    };
+    "web:build" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run build -- $@'';
+      description = "Build web app";
+    };
+    "web:test" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run test -- $@'';
+      description = "Run web tests";
+    };
+    "web:lint" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/web" && npm run lint -- $@'';
+      description = "Run web linting";
+    };
 
     # Docs
-    "docs:dev".exec = ''sphinx-autobuild --port "$DOCS_PORT" "${config.env.DEVENV_ROOT}/docs" "${config.env.DEVENV_ROOT}/docs/_build/autobuild"'';
-    "docs:build".exec = ''cd "${config.env.DEVENV_ROOT}/docs" && sphinx-build -W -b html . _build/html'';
-    "docs:linkcheck".exec = ''cd "${config.env.DEVENV_ROOT}/docs" && sphinx-build -b linkcheck . _build/linkcheck'';
+    "docs:dev" = {
+      exec = ''sphinx-autobuild --port "$DOCS_PORT" "${config.env.DEVENV_ROOT}/docs" "${config.env.DEVENV_ROOT}/docs/_build/autobuild"'';
+      description = "Start docs dev server";
+    };
+    "docs:build" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/docs" && sphinx-build -W -b html . _build/html'';
+      description = "Build documentation";
+    };
+    "docs:linkcheck" = {
+      exec = ''cd "${config.env.DEVENV_ROOT}/docs" && sphinx-build -b linkcheck . _build/linkcheck'';
+      description = "Check documentation links";
+    };
   };
 
   enterShell = ''
-    cat <<EOF
-🚀 Welcome to ZooNavigator Development Environment
-
-Available scripts:
-  📦 API
-    api:dev          - Start API dev server
-    api:test         - Run API tests
-    api:format       - Format API code
-    api:format:check - Check API formatting
-
-  🌐 Web
-    web:dev   - Start web dev server
-    web:build - Build web app
-    web:test  - Run web tests
-    web:lint  - Run web linting
-
-  📚 Docs
-    docs:dev       - Start docs dev server
-    docs:build     - Build documentation
-    docs:linkcheck - Check documentation links
-
-  🔧 General
-    devenv up   - Start all services
-    devenv test - Run all tests
-
-EOF
+    echo "🚀 Welcome to ZooNavigator Development Environment"
+    echo ""
+    echo "Available scripts:"
+    echo ""
+    echo "${generateAvailableScripts config.scripts}"
   '';
 
   # https://devenv.sh/tasks/
