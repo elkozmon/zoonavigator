@@ -1,8 +1,5 @@
 { pkgs, lib, config,... }:
 
-let
-  webDirectory = "${config.env.DEVENV_ROOT}/web";
-in
 {
   env = {
     WEB_PORT = lib.mkDefault 4200;
@@ -16,7 +13,7 @@ in
     javascript = {
       enable = true;
       package = pkgs.nodejs_20;
-      directory = webDirectory;
+      directory = config.env.WEB_ROOT;
       npm = {
         enable = true;
         install.enable = true;
@@ -31,19 +28,19 @@ in
 
   scripts = {
     "web:dev" = {
-      exec = ''npm run --prefix ${webDirectory} dev -- --port "$WEB_PORT" $@'';
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} dev -- --port "$WEB_PORT" $@'';
       description = "Start web dev server";
     };
     "web:build" = {
-      exec = ''npm run --prefix ${webDirectory} build -- $@'';
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} build -- $@'';
       description = "Build web app";
     };
     "web:test" = {
-      exec = ''npm run --prefix ${webDirectory} test -- $@'';
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} test -- $@'';
       description = "Run web tests";
     };
     "web:lint" = {
-      exec = ''npm run --prefix ${webDirectory} lint -- $@'';
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} lint -- $@'';
       description = "Run web linting";
     };
   };

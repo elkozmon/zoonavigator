@@ -1,8 +1,5 @@
 { pkgs, lib, config, ... }:
 
-let
-  apiDirectory = "${config.env.DEVENV_ROOT}/api";
-in
 {
   env = {
     API_PORT = lib.mkDefault 9000;
@@ -28,19 +25,19 @@ in
 
   scripts = {
     "api:dev" = {
-      exec = ''cd ${apiDirectory} && sbt "play/run $API_PORT"'';
+      exec = ''cd ${config.env.API_ROOT} && sbt "play/run $API_PORT"'';
       description = "Start API dev server";
     };
     "api:test" = {
-      exec = ''cd ${apiDirectory} && sbt test'';
+      exec = ''cd ${config.env.API_ROOT} && sbt test'';
       description = "Run API tests";
     };
     "api:format" = {
-      exec = ''cd ${apiDirectory} && sbt scalafmtAll'';
+      exec = ''cd ${config.env.API_ROOT} && sbt scalafmtAll'';
       description = "Format API code";
     };
     "api:format:check" = {
-      exec = ''cd ${apiDirectory} && sbt scalafmtCheckAll'';
+      exec = ''cd ${config.env.API_ROOT} && sbt scalafmtCheckAll'';
       description = "Check API formatting";
     };
   };

@@ -24,6 +24,9 @@ let
 in
 {
   env = {
+    API_ROOT = "${config.env.DEVENV_ROOT}/api";
+    WEB_ROOT = "${config.env.DEVENV_ROOT}/web";
+    DOCS_ROOT = "${config.env.DEVENV_ROOT}/docs";
     DOCKER_TIMEOUT = lib.mkDefault 60;
   };
 
