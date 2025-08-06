@@ -41,6 +41,9 @@ in
 
     # Tests
     act
+
+    # Formatting
+    nixfmt-rfc-style
   ];
 
   processes = {
@@ -73,4 +76,8 @@ in
       --artifact-server-path /tmp/actas \
       --container-daemon-socket unix:///var/run/docker.sock
   '';
+
+  git-hooks = {
+    hooks.nixfmt-rfc-style.enable = true;
+  };
 }
