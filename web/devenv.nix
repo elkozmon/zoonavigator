@@ -1,8 +1,14 @@
-{ pkgs, lib, config,... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 {
   env = {
     WEB_PORT = lib.mkDefault 4200;
+    ZK_CONNECTION_STRING = lib.mkDefault "localhost:${toString config.env.ZK_CLIENT_PORT}";
   };
 
   packages = with pkgs; [
@@ -35,13 +41,25 @@
       exec = ''npm run --prefix ${config.env.WEB_ROOT} build -- $@'';
       description = "Build web app";
     };
+    "web:lint" = {
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} lint -- $@'';
+      description = "Run web linting";
+    };
     "web:test" = {
       exec = ''npm run --prefix ${config.env.WEB_ROOT} test -- $@'';
       description = "Run web tests";
     };
-    "web:lint" = {
-      exec = ''npm run --prefix ${config.env.WEB_ROOT} lint -- $@'';
-      description = "Run web linting";
+    "web:e2e" = {
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} e2e -- $@'';
+      description = "Run web integration tests";
+    };
+    "web:e2e:ui" = {
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} e2e:ui -- $@'';
+      description = "Open web test UI";
+    };
+    "web:e2e:headed" = {
+      exec = ''npm run --prefix ${config.env.WEB_ROOT} e2e:headed -- $@'';
+      description = "Run web tests in headed mode";
     };
   };
 }

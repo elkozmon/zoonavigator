@@ -21,6 +21,9 @@
     "module": "es2015",
     "types": [
       "node"
-    ]
+    ],
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
   }
 }

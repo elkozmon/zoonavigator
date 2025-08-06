@@ -48,6 +48,7 @@ in
     coreutils
     colima
     zookeeper
+    firefox-bin
 
     # Docker
     docker
