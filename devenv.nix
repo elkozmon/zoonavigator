@@ -37,12 +37,17 @@ in
     WEB_ROOT = "${config.env.DEVENV_ROOT}/web";
     DOCS_ROOT = "${config.env.DEVENV_ROOT}/docs";
     DOCKER_TIMEOUT = lib.mkDefault 60;
+
+    # ZooKeeper configuration
+    ZK_DATA_DIR = "${config.env.DEVENV_ROOT}/.devenv/state/zookeeper";
+    ZK_CLIENT_PORT = lib.mkDefault 2181;
   };
 
   packages = with pkgs; [
     stdenv
     coreutils
     colima
+    zookeeper
 
     # Docker
     docker
@@ -58,6 +63,17 @@ in
   processes = {
     # avoid mounting $HOME by mounting dummy dir instead (https://github.com/abiosoft/colima/blob/75b104a37eca590e1f72a2cd39ef43ed4093bfef/config/config.go#L134-L143)
     "colima".exec = ''colima start --arch x86_64 --memory 4 -f -V /tmp/dummy'';
+    "zookeeper".exec =
+      let
+        zkConfig = pkgs.writeText "zoo.cfg" ''
+          dataDir=${config.env.ZK_DATA_DIR}
+          clientPort=${toString config.env.ZK_CLIENT_PORT}
+        '';
+      in
+      ''
+        mkdir -p ${config.env.ZK_DATA_DIR}
+        zkServer.sh start-foreground ${zkConfig}
+      '';
   };
 
   scripts = {
