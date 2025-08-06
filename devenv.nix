@@ -7,29 +7,6 @@
 }:
 let
   utils = import ./utils.nix { inherit lib; };
-
-  scriptCategories = [
-    {
-      icon = "📦";
-      title = "API";
-      prefix = "api:";
-    }
-    {
-      icon = "🌐";
-      title = "Web";
-      prefix = "web:";
-    }
-    {
-      icon = "📚";
-      title = "Docs";
-      prefix = "docs:";
-    }
-    {
-      icon = "🔧";
-      title = "Misc";
-      prefix = null;
-    }
-  ];
 in
 {
   env = {
@@ -45,17 +22,18 @@ in
 
   packages = with pkgs; [
     stdenv
+    gh
     coreutils
-    colima
     zookeeper
-    firefox-bin
 
     # Docker
+    colima
     docker
     docker-compose
 
     # Tests
     act
+    firefox-bin
 
     # Formatting
     nixfmt-rfc-style
@@ -78,16 +56,41 @@ in
   };
 
   scripts = {
-    help = {
-      description = "Show this help information";
-      exec = ''
-        echo "🚀 Welcome to ZooNavigator Development Environment"
-        echo ""
-        echo "Available scripts:"
-        echo ""
-        echo "${utils.generateAvailableScripts scriptCategories config.scripts}"
-      '';
-    };
+    help =
+      let
+        scriptCategories = [
+          {
+            icon = "📦";
+            title = "API";
+            prefix = "api:";
+          }
+          {
+            icon = "🌐";
+            title = "Web";
+            prefix = "web:";
+          }
+          {
+            icon = "📚";
+            title = "Docs";
+            prefix = "docs:";
+          }
+          {
+            icon = "🔧";
+            title = "Misc";
+            prefix = null;
+          }
+        ];
+      in
+      {
+        description = "Show this help information";
+        exec = ''
+          echo "🚀 Welcome to ZooNavigator Development Environment"
+          echo ""
+          echo "Available commands:"
+          echo ""
+          echo "${utils.generateAvailableScripts scriptCategories config.scripts}"
+        '';
+      };
   };
 
   enterShell = config.scripts.help.exec;
