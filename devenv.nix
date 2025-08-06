@@ -1,26 +1,35 @@
-{ pkgs, lib, config, inputs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}:
 let
+  utils = import ./utils.nix { inherit lib; };
+
   scriptCategories = [
-    { icon = "📦"; title = "API"; prefix = "api:"; }
-    { icon = "🌐"; title = "Web"; prefix = "web:"; }
-    { icon = "📚"; title = "Docs"; prefix = "docs:"; }
+    {
+      icon = "📦";
+      title = "API";
+      prefix = "api:";
+    }
+    {
+      icon = "🌐";
+      title = "Web";
+      prefix = "web:";
+    }
+    {
+      icon = "📚";
+      title = "Docs";
+      prefix = "docs:";
+    }
+    {
+      icon = "🔧";
+      title = "Misc";
+      prefix = null;
+    }
   ];
-
-  generateAvailableScripts = scripts:
-    let
-      maxLength = lib.foldl' (max: name: lib.max max (lib.stringLength name)) 0 (lib.attrNames scripts);
-
-      generateCategory = { icon, title, prefix }:
-        let
-          categoryScripts = lib.filterAttrs (name: _: lib.hasPrefix prefix name) scripts;
-          scriptEntries = lib.mapAttrsToList (name: script:
-            let padding = lib.concatStrings (lib.genList (_: " ") (maxLength - lib.stringLength name + 1));
-            in "    ${name}${padding}- ${script.description}"
-          ) categoryScripts;
-        in
-        lib.optionalString (categoryScripts != {}) "  ${icon} ${title}\n${lib.concatStringsSep "\n" scriptEntries}\n";
-    in
-    lib.concatMapStringsSep "\n" generateCategory scriptCategories;
 in
 {
   env = {
@@ -51,13 +60,20 @@ in
     "colima".exec = ''colima start --arch x86_64 --memory 4 -f -V /tmp/dummy'';
   };
 
-  enterShell = ''
-    echo "🚀 Welcome to ZooNavigator Development Environment"
-    echo ""
-    echo "Available scripts:"
-    echo ""
-    echo "${generateAvailableScripts config.scripts}"
-  '';
+  scripts = {
+    help = {
+      description = "Show this help information";
+      exec = ''
+        echo "🚀 Welcome to ZooNavigator Development Environment"
+        echo ""
+        echo "Available scripts:"
+        echo ""
+        echo "${utils.generateAvailableScripts scriptCategories config.scripts}"
+      '';
+    };
+  };
+
+  enterShell = config.scripts.help.exec;
 
   enterTest = ''
     wait_for_processes
