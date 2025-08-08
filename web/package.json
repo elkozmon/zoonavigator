@@ -13,10 +13,12 @@
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.js --aot",
     "build": "ng build",
     "build:prod": "ng build --prod",
+    "lint": "ng lint",
     "test": "ng test",
     "test:ci": "ng test --browsers=ChromeHeadlessCI --no-watch --no-progress",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "e2e:headed": "playwright test --headed"
   },
   "private": true,
   "dependencies": {
@@ -59,6 +61,7 @@
     "@angular-devkit/build-angular": "^0.12.2",
     "@angular/cli": "^7.2.1",
     "@angular/compiler-cli": "^7.2.1",
+    "@playwright/test": "^1.54.2",
     "@types/jasmine": "^3.3.7",
     "@types/node": "^10.12.18",
     "@types/text-encoding-utf-8": "^1.0.1",
@@ -73,7 +76,6 @@
     "karma-coverage-istanbul-reporter": "2.0.4",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
-    "protractor": "5.4.2",
     "sass": "^1.77.8",
     "ts-node": "^7.0.1",
     "tslint": "^5.12.1",

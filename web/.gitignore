@@ -6,7 +6,7 @@
 /out-tsc
 
 # dependencies
-/node_modules
+node_modules/
 
 # IDEs and editors
 /.idea
@@ -36,6 +36,13 @@ testem.log
 # e2e
 /e2e/*.js
 /e2e/*.map
+/test-results/
+/playwright-report/
+/playwright-report copy/
+/playwright-report-quick/
+/playwright-report-stress/
+/playwright/.cache/
+/blob-report/
 
 # System Files
 .DS_Store

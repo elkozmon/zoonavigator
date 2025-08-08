@@ -1,6 +1,6 @@
 const PROXY_CONFIG = {
   "/api": {
-    "target": `http://localhost:${process.env.API_PORT || 9000}`,
+    "target": `http://${process.env.API_HOST || "localhost"}:${process.env.API_PORT || 9000}`,
     "secure": false
   }
 };

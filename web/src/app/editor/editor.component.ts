@@ -18,8 +18,8 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TdMediaService} from "@covalent/core";
-import {Observable, of, Subscription, throwError} from "rxjs";
-import {catchError, map, mapTo, pluck, switchMap, tap} from "rxjs/operators";
+import {Observable, of, Subject, Subscription, throwError} from "rxjs";
+import {catchError, debounceTime, map, mapTo, pluck, switchMap, tap} from "rxjs/operators";
 import {Either, Maybe} from "tsmonad";
 import {Ordering} from "./ordering";
 import {EDITOR_QUERY_NODE_PATH} from "./editor-routing.constants";
@@ -36,6 +36,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("childrenFilter") childrenFilter: RegexpFilterComponent;
 
   private subscription: Subscription;
+  private reloadSubject = new Subject<void>();
 
   zPath: Observable<ZPath>;
   zNode: Observable<Maybe<ZNodeWithChildren>>;
@@ -105,6 +106,12 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription = new Subscription(() => {});
 
     this.subscription.add(
+      this.reloadSubject.pipe(
+        debounceTime(50)
+      ).subscribe(() => this.performReload())
+    );
+
+    this.subscription.add(
       this.zNode.subscribe(maybeNode =>
         maybeNode.caseOf({
           just: node => this.updateChildren(node.children),
@@ -157,15 +164,19 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   reloadEditor(): void {
+    this.reloadSubject.next();
+  }
+
+  private performReload(): void {
     this.router
       .navigate([], {
         relativeTo: this.route,
         queryParams: {
-          at: (Math.round((new Date()).getTime() / 1000))
+          at: new Date().getTime()
         },
         queryParamsHandling: "merge"
       })
-      .catch(err => this.dialogService.showError(err, this.viewContainerRef))
+      .catch(err => this.dialogService.showError(err, this.viewContainerRef));
   }
 
   private updateChildren(children: ZNodePath[]): void {
