@@ -88,8 +88,10 @@ jobs:
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha
+          cache-to: |
+            type=gha,mode=max
 
       - name: Package jars
         run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib

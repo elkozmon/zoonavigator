@@ -1,36 +1,29 @@
+# Docker files
 Dockerfile*
 docker-compose*
+
+# IDE and editor files
+.idea/
+*.iws
+.idea_modules/
+.vscode/
+
+# Build outputs and artifacts
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+out/
+
+# SBT and Scala
+.history
+.cache
+.lib/
 .scalafmt.conf
 
-### IntelliJ
-
-.idea
-*.iws
-/out
-.idea_modules/
-
-### JIRA plugin
-
-atlassian-ide-plugin.xml
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-
-### Java
-
-# Compiled class file
+# Compiled outputs
 *.class
-
-# Log file
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.ear
@@ -38,35 +31,26 @@ fabric.properties
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Logs and debugging
+*.log
+logs/
 hs_err_pid*
 
-### SBT
-
-# Simple Build Tool
-# http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
-
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-.history
-.cache
-.lib/
-
-### Linux
-
+# OS and temporary files
 *~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
+.DS_Store
 .fuse_hidden*
-
-# KDE directory preferences
 .directory
-
-# Linux trash folder which might appear on any partition or disk
 .Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
 .nfs*
+
+# IDE plugin files (rarely needed)
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Development files
+*.ctxt
+.mtj.tmp/
