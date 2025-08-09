@@ -3,17 +3,23 @@
     "**/target": true,
     "**/node_modules": true,
     "**/dist": true,
+    "**/.devenv*": true,
+    "**/.direnv": true,
     "**/.git": true
   },
   "files.exclude": {
     "**/node_modules": true,
     "**/dist": true,
+    "**/.devenv*": true,
+    "**/.direnv": true,
     "**/target": true
   },
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
     "**/target": true,
+    "**/.devenv*": true,
+    "**/.direnv": true,
     "**/.git": true
   },
   "files.trimTrailingWhitespace": true,
