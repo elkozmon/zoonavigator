@@ -39,6 +39,5 @@ jobs:
     with:
       skip-api: ${{ needs.detect-changes.outputs.api != 'true' }}
       skip-web: ${{ needs.detect-changes.outputs.web != 'true' }}
-      skip-e2e: ${{ needs.detect-changes.outputs.api != 'true' && needs.detect-changes.outputs.web != 'true' }}
       skip-build: ${{ needs.detect-changes.outputs.build != 'true' && needs.detect-changes.outputs.api != 'true' && needs.detect-changes.outputs.web != 'true' }}
       skip-docs: ${{ needs.detect-changes.outputs.docs != 'true' }}

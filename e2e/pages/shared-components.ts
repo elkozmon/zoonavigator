@@ -23,7 +23,6 @@ export abstract class BaseDialog {
 
 export class CreateNodeDialog extends BaseDialog {
   readonly nodePathInput: Locator;
-  readonly nodeDataTextarea: Locator;
   readonly createButton: Locator;
   readonly cancelButton: Locator;
   readonly openNodeAfterwardsCheckbox: Locator;

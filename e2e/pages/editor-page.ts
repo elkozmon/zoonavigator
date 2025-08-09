@@ -203,7 +203,6 @@ export class SideBar {
 
 export class DataTab {
   readonly dataEditor: Locator;
-  readonly formatSelect: Locator;
   readonly saveButton: Locator;
   readonly wrapButton: Locator;
   readonly modeButton: Locator;

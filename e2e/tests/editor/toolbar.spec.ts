@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures";
+import { test, expect } from "../../fixtures";
 import * as path from "path";
 
 test.describe("Toolbar", () => {

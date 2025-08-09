@@ -8,4 +8,5 @@ allowUnfree: false
 imports:
   - ./api
   - ./web
+  - ./e2e
   - ./docs

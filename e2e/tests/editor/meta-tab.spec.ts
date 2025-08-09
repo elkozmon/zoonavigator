@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures";
+import { test, expect } from "../../fixtures";
 import { METADATA_PROPERTIES } from "../../pages/editor-page";
 
 test.describe("Meta Tab", () => {
