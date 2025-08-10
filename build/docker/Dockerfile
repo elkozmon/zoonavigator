@@ -1,10 +1,5 @@
-ARG APP_VERSION
 ARG DOCKERIZE_VERSION=0.7.0
-ARG DOCS_URL="https://zoonavigator.elkozmon.com/en/latest"
 ARG DEBUG=0
-ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
-ARG VCS_REF
-ARG BUILD_DATE
 
 FROM ubuntu:22.04 AS dockerize
 
@@ -23,29 +18,34 @@ RUN curl \
 
 FROM node:20-bookworm-slim AS npm
 
-ARG APP_VERSION
-ARG DOCS_URL
-ARG DEBUG
-
-# Copy source code
-WORKDIR /src
-COPY /web .
-COPY /build/docker/files/web .
-
 # Install required packages
 RUN apt-get update \
   && apt-get install -y make g++
+
+# Copy package files
+WORKDIR /src
+COPY /web/package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY /web .
+COPY /build/docker/files/web .
 
 # Get dockerize
 COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
 
 # Create env config for web app
+ARG APP_VERSION
+ARG DOCS_URL
+ARG DEBUG
+
 RUN dockerize \
     -template ./environment.ts.template:./src/environments/environment.prod.ts
 
-# Install dependencies & build
-RUN npm install \
-  && npm run build:prod \
+# Build web app
+RUN npm run build:prod \
   && mv dist /app
 
 FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 AS sbt
@@ -54,20 +54,25 @@ FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 AS sbt
 RUN apt-get update \
   && apt-get install -y zip
 
-# Copy source files
+# Copy build files
 WORKDIR /src
+COPY /api/build.sbt ./
+COPY /api/project ./project/
+
+# Download dependencies
+RUN sbt update
+
+# Copy source files
 COPY /api .
 COPY --from=npm /app ./play/public
 
-# Build project
+# Build api
 RUN sbt play/dist \
   && VERSION=$(ls play/target/universal/zoonavigator-play-*.zip | sed -E 's/.*zoonavigator-play-(.*).zip$/\1/') \
   && unzip play/target/universal/zoonavigator-play-$VERSION.zip \
   && mv zoonavigator-play-$VERSION /app
 
 FROM ubuntu:22.04 AS ubuntu
-
-ARG DOCS_URL
 
 # Get dockerize
 COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
@@ -80,6 +85,7 @@ COPY /build/docker/files/api .
 COPY /api/play/conf/application.conf ./conf/application.conf
 
 # Create scripts and make them executable
+ARG DOCS_URL
 RUN dockerize \
     -template ./run.sh.template:./run.sh \
   && chmod +x \
@@ -92,12 +98,6 @@ RUN chgrp -R 0 . \
   && chmod -R g=u .
 
 FROM eclipse-temurin:17-jdk-jammy
-
-ARG APP_VERSION
-ARG DOCS_URL
-ARG VCS_URL
-ARG VCS_REF
-ARG BUILD_DATE
 
 # Default config
 ENV HTTP_PORT=9000 \
@@ -133,6 +133,12 @@ EXPOSE 9000
 
 ENTRYPOINT ["./run.sh"]
 USER 1000
+
+ARG APP_VERSION
+ARG DOCS_URL
+ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
+ARG VCS_REF
+ARG BUILD_DATE
 
 LABEL \
   maintainer="Lubos Kozmon <contact@elkozmon.com>" \

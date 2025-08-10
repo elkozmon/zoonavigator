@@ -8,7 +8,7 @@ import {
   MoveNodeDialog,
   DuplicateNodeDialog,
   DiscardChangesDialog,
-  ConfirmRecursiveChangeDialog
+  ConfirmRecursiveChangeDialog,
 } from "./shared-components";
 
 export type AclPermission = "CREATE" | "READ" | "DELETE" | "WRITE" | "ADMIN";
@@ -29,7 +29,7 @@ export const METADATA_PROPERTIES: readonly MetadataProperty[] = [
   "ACL version",
   "Children version",
   "Children number",
-  "Ephemeral owner"
+  "Ephemeral owner",
 ];
 
 export class EditorPage {
@@ -203,7 +203,6 @@ export class SideBar {
 
 export class DataTab {
   readonly dataEditor: Locator;
-  readonly formatSelect: Locator;
   readonly saveButton: Locator;
   readonly wrapButton: Locator;
   readonly modeButton: Locator;

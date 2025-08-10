@@ -15,10 +15,7 @@
     "build:prod": "ng build --prod",
     "lint": "ng lint",
     "test": "ng test",
-    "test:ci": "ng test --browsers=ChromeHeadlessCI --no-watch --no-progress",
-    "e2e": "playwright test",
-    "e2e:ui": "playwright test --ui",
-    "e2e:headed": "playwright test --headed"
+    "test:ci": "ng test --browsers=ChromeHeadlessCI --no-watch --no-progress"
   },
   "private": true,
   "dependencies": {
@@ -57,11 +54,14 @@
     "yaml": "^1.2.1",
     "zone.js": "^0.8.28"
   },
+  "keywords": [
+    "zoonavigator",
+    "zookeeper"
+  ],
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.12.2",
     "@angular/cli": "^7.2.1",
     "@angular/compiler-cli": "^7.2.1",
-    "@playwright/test": "^1.54.2",
     "@types/jasmine": "^3.3.7",
     "@types/node": "^10.12.18",
     "@types/text-encoding-utf-8": "^1.0.1",

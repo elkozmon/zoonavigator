@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: `http://localhost:${process.env.WEB_PORT || 4200}`,
+    baseURL: process.env.ZN_BASE_URL || "http://localhost:4200",
     trace: "on-first-retry",
   },
   projects: [
@@ -17,19 +17,13 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-    {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  globalTeardown: require.resolve('./tests/teardown'),
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:4200",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+  globalTeardown: require.resolve("./global-teardown"),
+  timeout: 30000,
+  expect: {
+    timeout: 5000,
   },
 });

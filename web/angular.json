@@ -94,9 +94,7 @@
           "options": {
             "tsConfig": [
               "src/tsconfig.app.json",
-              "src/tsconfig.spec.json",
-              "pages/tsconfig.json",
-              "tests/tsconfig.json"
+              "src/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**/*"

@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures";
+import { test, expect } from "../../fixtures";
 
 test.describe("Node operations", () => {
 
@@ -7,7 +7,7 @@ test.describe("Node operations", () => {
   });
 
   test("should create a new node", async ({ editorPage, testDirectory }) => {
-    const testNodeName = `test-node`;
+    const testNodeName = "test-node";
     const testNodePath = `${testDirectory}/${testNodeName}`;
 
     await editorPage.toolbar.createNodeButton.click();
@@ -40,7 +40,7 @@ test.describe("Node operations", () => {
   });
 
   test("should open the new node after creation", async ({ editorPage, testDirectory }) => {
-    const testNodeName = `test-node`;
+    const testNodeName = "test-node";
     const testNodePath = `${testDirectory}/${testNodeName}`;
 
     await editorPage.toolbar.createNodeButton.click();

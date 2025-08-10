@@ -1,6 +1,6 @@
 import { test as base } from "@playwright/test";
 import { ConnectPage, EditorPage } from "../pages";
-import { config } from "./config";
+import { getZooKeeperConnectionString, getTestNode } from "../utils";
 import { App } from "../pages/app";
 
 interface ZooNavigatorFixtures {
@@ -13,11 +13,11 @@ interface ZooNavigatorFixtures {
 
 export const test = base.extend<ZooNavigatorFixtures>({
   testDirectory: async ({ }, use) => {
-    await use(`${config.testsNode}/${crypto.randomUUID()}`);
+    await use(`${getTestNode()}/${crypto.randomUUID()}`);
   },
 
   connectionString: async ({ }, use) => {
-    await use(config.zookeeper.connectionString);
+    await use(getZooKeeperConnectionString());
   },
 
   app: async ({ page }, use) => {
@@ -52,4 +52,3 @@ export const test = base.extend<ZooNavigatorFixtures>({
 });
 
 export { expect } from "@playwright/test";
-export { config };

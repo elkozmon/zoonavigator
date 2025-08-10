@@ -1,10 +1,10 @@
 import { request, type FullConfig } from "@playwright/test";
-import { config } from "./config";
+import { getZooKeeperConnectionString, getTestNode } from "./utils";
 
 async function globalTeardown(fullConfig: FullConfig) {
   const connectionParams = {
-    connectionString: config.zookeeper.connectionString,
-    authInfo: []
+    connectionString: getZooKeeperConnectionString(),
+    authInfo: [],
   };
 
   try {
@@ -13,16 +13,17 @@ async function globalTeardown(fullConfig: FullConfig) {
     const appContext = await request.newContext({
       baseURL,
       extraHTTPHeaders: {
-        "Zoo-Authorization": `CxnParams ${connectionParamsBase64}`
-      }
+        "Zoo-Authorization": `CxnParams ${connectionParamsBase64}`,
+      },
     });
 
-    const response = await appContext.delete(`/api/znode?path=${encodeURIComponent(config.testsNode)}&version=0`);
+    const testNode = getTestNode();
+    const response = await appContext.delete(`/api/znode?path=${encodeURIComponent(testNode)}&version=0`);
 
     if (response.ok()) {
-      console.log("Successfully deleted /tests node");
+      console.log(`Successfully deleted ${testNode} node`);
     } else {
-      console.log(`Failed to delete /tests node: ${response.status()}`);
+      console.log(`Failed to delete ${testNode} node: ${response.status()}`);
     }
   } catch (error) {
     console.log(`Error during teardown: ${error}`);

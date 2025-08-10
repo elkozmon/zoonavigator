@@ -8,6 +8,10 @@ on:
         type: boolean
         default: false
 
+env:
+  NODE_VERSION: 20
+  JAVA_VERSION: 17
+
 permissions:
   contents: read
 
@@ -59,40 +63,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        if: inputs.publish
-        with:
-          username: ${{ secrets.DOCKERIO_USERNAME }}
-          password: ${{ secrets.DOCKERIO_PASSWORD }}
-
-      - name: Build and push Docker image
+      - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: |
-            linux/amd64
-            linux/arm64
-          push: ${{ inputs.publish }}
-          outputs: type=local,dest=out
+          push: false
+          outputs: |
+            type=docker,dest=docker-image.tar
+            type=local,dest=out
           tags: ${{ needs.setup-env.outputs.docker-tags }}
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha
+          cache-to: |
+            type=gha,mode=max
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: docker-image.tar
 
       - name: Package jars
-        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib
+        run: tar -cvzf jars.tar.gz -C out/app lib
 
       - name: Upload jars
         uses: actions/upload-artifact@v4
@@ -130,13 +131,196 @@ jobs:
         with:
           path: build/
 
+      - name: Upload Snap package
+        uses: actions/upload-artifact@v4
+        with:
+          name: snap-package
+          path: ${{ steps.build-snap.outputs.snap }}
+
+  test-e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - docker
+          - snap
+        zookeeper:
+          - 3.9
+    env:
+      ZK_PORT: 2181
+      ZN_PORT: 9000
+    runs-on: ubuntu-latest
+    needs:
+      - setup-env
+      - build-docker
+      - build-snap
+    services:
+      zookeeper:
+        image: zookeeper:${{ matrix.zookeeper }}
+        ports:
+          - 2181:2181
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install e2e dependencies
+        working-directory: e2e
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        working-directory: e2e
+        run: npx playwright install --with-deps
+
+      # Docker-specific steps
+      - name: Download Docker image
+        if: matrix.platform == 'docker'
+        id: download-docker-image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker image
+        if: matrix.platform == 'docker'
+        run: |
+          docker load < ${{ steps.download-docker-image.outputs.download-path }}/docker-image.tar
+
+      - name: Start ZooNavigator Docker container
+        if: matrix.platform == 'docker'
+        env:
+          DOCKER_TAGS: ${{ needs.setup-env.outputs.docker-tags }}
+        run: |
+          docker run -d \
+            --name zoonavigator-test \
+            --network host \
+            -e HTTP_PORT=${{ env.ZN_PORT }} \
+            ${DOCKER_TAGS%%,*}
+
+      # Snap-specific steps
+      - name: Download Snap package
+        if: matrix.platform == 'snap'
+        id: download-snap
+        uses: actions/download-artifact@v4
+        with:
+          name: snap-package
+
+      - name: Install Snap daemon
+        if: matrix.platform == 'snap'
+        run: |
+          sudo apt update
+          sudo apt install -y snapd
+
+      - name: Install ZooNavigator Snap
+        if: matrix.platform == 'snap'
+        run: |
+          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/*.snap
+
+      - name: Configure ZooNavigator Snap
+        if: matrix.platform == 'snap'
+        run: |
+          sudo snap set zoonavigator zoonavigator.server.http.port=${{ env.ZN_PORT }}
+
+      - name: Start ZooNavigator Snap
+        if: matrix.platform == 'snap'
+        run: |
+          sudo snap start zoonavigator
+
+      # Common steps
+      - name: Wait for ZooNavigator to startup
+        uses: emilioschepis/wait-for-endpoint@v1.0.4
+        with:
+          url: http://localhost:${{ env.ZN_PORT }}
+          method: GET
+          expected-status: 200
+          timeout: 60000
+          interval: 1000
+
+      - name: Run e2e tests
+        working-directory: e2e
+        env:
+          CI: true
+          ZK_TEST_NODE: /test-${{ matrix.platform }}-${{ github.run_id }}
+          ZK_CONNECTION_STRING: localhost:${{ env.ZK_PORT }}
+          ZN_BASE_URL: http://localhost:${{ env.ZN_PORT }}
+        run: npm test
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.platform }}
+          path: e2e/playwright-report/
+          retention-days: 7
+
+  publish-docker:
+    runs-on: ubuntu-latest
+    if: inputs.publish
+    needs:
+      - setup-env
+      - build-docker
+      - test-e2e
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERIO_USERNAME }}
+          password: ${{ secrets.DOCKERIO_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ github.workspace }}/build/docker/Dockerfile
+          platforms: |
+            linux/amd64
+            linux/arm64
+          push: true
+          tags: ${{ needs.setup-env.outputs.docker-tags }}
+          build-args: |
+            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
+            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
+            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
+            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
+          cache-from: |
+            type=gha
+          cache-to: |
+            type=gha,mode=max
+
+  publish-snap:
+    runs-on: ubuntu-latest
+    if: inputs.publish
+    needs:
+      - setup-env
+      - build-snap
+      - test-e2e
+    steps:
+      - name: Download Snap package
+        id: download-snap
+        uses: actions/download-artifact@v4
+        with:
+          name: snap-package
+
       - name: Publish Snap
-        if: inputs.publish
         uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
         with:
-          snap: ${{ steps.build-snap.outputs.snap }}
+          snap: ${{ steps.download-snap.outputs.download-path }}/*.snap
           release: ${{ needs.setup-env.outputs.snap-channel }}
 
   cleanup:
@@ -145,8 +329,14 @@ jobs:
     needs:
       - build-docker
       - build-snap
+      - test-e2e
+      - publish-docker
+      - publish-snap
     steps:
       - name: Delete artifacts
         uses: geekyeggo/delete-artifact@v5
         with:
-          name: jars
+          name: |
+            jars
+            docker-image
+            snap-package

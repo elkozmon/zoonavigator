@@ -1,0 +1,39 @@
+{
+  "name": "zoonavigator-e2e",
+  "version": "1.0.0",
+  "license": "GNU Affero GPL V3",
+  "author": {
+    "name": "Ľuboš Kozmon",
+    "email": "contact@elkozmon.com",
+    "url": "https://www.elkozmon.com"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "lint:check": "eslint . --ext .ts --max-warnings 0"
+  },
+  "keywords": [
+    "zoonavigator",
+    "e2e",
+    "playwright",
+    "testing",
+    "zookeeper"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-playwright": "^1.5.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -13,6 +13,7 @@ in
     API_ROOT = "${config.env.DEVENV_ROOT}/api";
     WEB_ROOT = "${config.env.DEVENV_ROOT}/web";
     DOCS_ROOT = "${config.env.DEVENV_ROOT}/docs";
+    E2E_ROOT = "${config.env.DEVENV_ROOT}/e2e";
     DOCKER_TIMEOUT = lib.mkDefault 60;
 
     COLIMA_CPU = lib.mkDefault 4;
@@ -35,7 +36,6 @@ in
 
     # Tests
     act
-    firefox-bin
 
     # Formatting
     nixfmt-rfc-style
@@ -71,6 +71,11 @@ in
             icon = "🌐";
             title = "Web";
             prefix = "web:";
+          }
+          {
+            icon = "🧪";
+            title = "E2E";
+            prefix = "e2e:";
           }
           {
             icon = "📚";
