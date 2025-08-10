@@ -24,7 +24,7 @@ test.describe("Editor", () => {
     await expect(editorPage.toolbar.pathInput).toHaveValue(testDirectory);
 
     await editorPage.switchToDataTab();
-    await expect(editorPage.toolbar.pathInput).toHaveValue(testDirectory); ;
+    await expect(editorPage.toolbar.pathInput).toHaveValue(testDirectory); 
   });
 
   test("should disconnect and redirect to connect page", async ({ page, editorPage }) => {

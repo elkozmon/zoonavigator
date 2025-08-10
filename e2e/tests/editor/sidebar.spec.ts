@@ -6,7 +6,7 @@ test.describe("Sidebar", () => {
     await editorPage.navigateToPath(testDirectory);
   });
 
-  test("should navigate into child node", async ({ page, editorPage, testDirectory }) => {
+  test("should navigate into child node", async ({ editorPage, testDirectory }) => {
     const nodeName = "test-child";
     const nodePath = `${testDirectory}/${nodeName}`;
 
@@ -104,7 +104,7 @@ test.describe("Sidebar", () => {
     await editorPage.recursiveDeleteNodeDialog.confirmButton.click();
     await editorPage.recursiveDeleteNodeDialog.waitUntilHidden();
 
-    await expect(editorPage.sidebar.getNodeItem(nodeName)).not.toBeVisible();
+    await expect(editorPage.sidebar.getNodeItem(nodeName)).toBeHidden();
   });
 
   test("should export node using actions menu", async ({ page, editorPage, testDirectory }) => {
@@ -145,7 +145,7 @@ test.describe("Sidebar", () => {
     await editorPage.moveNodeDialog.waitUntilHidden();
 
     // Navigate to parent directory and verify the node was moved
-    await expect(editorPage.sidebar.getNodeItem(sourceNodeName)).not.toBeVisible();
+    await expect(editorPage.sidebar.getNodeItem(sourceNodeName)).toBeHidden();
     await expect(editorPage.sidebar.getNodeItem(targetNodeName)).toBeVisible();
   });
 

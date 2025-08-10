@@ -23,12 +23,12 @@ test.describe("Toolbar", () => {
     await editorPage.toolbar.toggleOrderingButton.click();
 
     // Verify the order has changed
-    const newFirstNodeText = await nodeItems.first().textContent();
-    const newSecondNodeText = await nodeItems.nth(1).textContent();
+    const newFirstNodeText = nodeItems.first();
+    const newSecondNodeText = nodeItems.nth(1);
 
     // The first and second nodes should have swapped positions
-    expect(newFirstNodeText).toEqual(secondNodeText);
-    expect(newSecondNodeText).toEqual(firstNodeText);
+    await expect(newFirstNodeText).toHaveText(secondNodeText);
+    await expect(newSecondNodeText).toHaveText(firstNodeText);
   });
 
   test("should import node", async ({ editorPage, testDirectory }) => {
@@ -38,7 +38,7 @@ test.describe("Toolbar", () => {
     await editorPage.importNodeDialog.waitUntilVisible();
 
     const fileChooser = await editorPage.importNodeDialog.browse();
-    fileChooser.setFiles(path.join(__dirname, "../../data/znode-export-test.gz"))
+    fileChooser.setFiles(path.join(__dirname, "../../data/znode-export-test.gz"));
     await editorPage.importNodeDialog.destinationPathInput.fill(testDirectory);
     await editorPage.importNodeDialog.openParentAfterwardsCheckbox.setChecked(true);
     await editorPage.importNodeDialog.importButton.click();
@@ -48,7 +48,7 @@ test.describe("Toolbar", () => {
   });
 
   test("should enable bulk actions when nodes selected", async ({ editorPage, testDirectory }) => {
-    const nodeName = `bulk-actions-test`;
+    const nodeName = "bulk-actions-test";
     const nodePath = `${testDirectory}/${nodeName}`;
 
     await editorPage.createNode(nodePath);
@@ -134,7 +134,7 @@ test.describe("Toolbar", () => {
 
     // Verify we were redirected to parent ndoe and that the deleted node is no longer visible
     await expect(editorPage.toolbar.pathInput).toHaveValue(testDirectory);
-    await expect(editorPage.sidebar.getNodeItem(nodeName)).not.toBeVisible();
+    await expect(editorPage.sidebar.getNodeItem(nodeName)).toBeHidden();
   });
 
   test("should move node using actions menu", async ({ editorPage, testDirectory }) => {
@@ -161,7 +161,7 @@ test.describe("Toolbar", () => {
 
     // Navigate to parent directory and verify the node was moved
     await editorPage.navigateToPath(testDirectory);
-    await expect(editorPage.sidebar.getNodeItem(sourceNodeName)).not.toBeVisible();
+    await expect(editorPage.sidebar.getNodeItem(sourceNodeName)).toBeHidden();
     await expect(editorPage.sidebar.getNodeItem(targetNodeName)).toBeVisible();
   });
 
@@ -217,8 +217,8 @@ test.describe("Toolbar", () => {
     await editorPage.recursiveDeleteNodeDialog.confirmButton.click();
     await editorPage.recursiveDeleteNodeDialog.waitUntilHidden();
 
-    await expect(editorPage.sidebar.getNodeItem(nodeNames[0])).not.toBeVisible();
-    await expect(editorPage.sidebar.getNodeItem(nodeNames[1])).not.toBeVisible();
+    await expect(editorPage.sidebar.getNodeItem(nodeNames[0])).toBeHidden();
+    await expect(editorPage.sidebar.getNodeItem(nodeNames[1])).toBeHidden();
     await expect(editorPage.sidebar.getNodeItem(nodeNames[2])).toBeVisible();
   });
 
@@ -274,7 +274,7 @@ test.describe("Toolbar", () => {
     await editorPage.recursiveDeleteNodeDialog.waitUntilHidden();
 
     for (const nodeName of nodeNames) {
-      await expect(editorPage.sidebar.getNodeItem(nodeName)).not.toBeVisible();
+      await expect(editorPage.sidebar.getNodeItem(nodeName)).toBeHidden();
     }
   });
 });

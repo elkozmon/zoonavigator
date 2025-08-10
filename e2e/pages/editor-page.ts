@@ -8,7 +8,7 @@ import {
   MoveNodeDialog,
   DuplicateNodeDialog,
   DiscardChangesDialog,
-  ConfirmRecursiveChangeDialog
+  ConfirmRecursiveChangeDialog,
 } from "./shared-components";
 
 export type AclPermission = "CREATE" | "READ" | "DELETE" | "WRITE" | "ADMIN";
@@ -29,7 +29,7 @@ export const METADATA_PROPERTIES: readonly MetadataProperty[] = [
   "ACL version",
   "Children version",
   "Children number",
-  "Ephemeral owner"
+  "Ephemeral owner",
 ];
 
 export class EditorPage {

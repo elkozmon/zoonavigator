@@ -4,7 +4,7 @@ import { getZooKeeperConnectionString, getTestNode } from "./utils";
 async function globalTeardown(fullConfig: FullConfig) {
   const connectionParams = {
     connectionString: getZooKeeperConnectionString(),
-    authInfo: []
+    authInfo: [],
   };
 
   try {
@@ -13,8 +13,8 @@ async function globalTeardown(fullConfig: FullConfig) {
     const appContext = await request.newContext({
       baseURL,
       extraHTTPHeaders: {
-        "Zoo-Authorization": `CxnParams ${connectionParamsBase64}`
-      }
+        "Zoo-Authorization": `CxnParams ${connectionParamsBase64}`,
+      },
     });
 
     const testNode = getTestNode();

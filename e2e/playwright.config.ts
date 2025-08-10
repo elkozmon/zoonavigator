@@ -21,9 +21,9 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  globalTeardown: require.resolve('./global-teardown'),
+  globalTeardown: require.resolve("./global-teardown"),
   timeout: 30000,
   expect: {
-    timeout: 5000
-  }
+    timeout: 5000,
+  },
 });
