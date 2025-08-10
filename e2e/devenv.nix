@@ -54,5 +54,9 @@
       exec = ''npm --prefix ${config.env.E2E_ROOT} run report -- $@'';
       description = "Open Playwright test report";
     };
+    "e2e:lint" = {
+      exec = ''npm --prefix ${config.env.E2E_ROOT} run lint -- $@'';
+      description = "Run e2e linting";
+    };
   };
 }

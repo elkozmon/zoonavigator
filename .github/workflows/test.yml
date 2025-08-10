@@ -11,6 +11,10 @@ on:
         required: false
         type: boolean
         default: false
+      skip-e2e:
+        required: false
+        type: boolean
+        default: false
       skip-build:
         required: false
         type: boolean
@@ -95,12 +99,36 @@ jobs:
         env:
           CHROME_BIN: "${{ steps.setup-chrome.outputs.chrome-path }}"
 
+  test-e2e:
+    runs-on: ubuntu-latest
+    if: inputs.skip-e2e != true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install dependencies
+        working-directory: e2e
+        run: |
+          npm ci
+
+      - name: Run linting
+        working-directory: e2e
+        run: |
+          npm run lint
+
   test-build:
     if: inputs.skip-build != true
     uses: ./.github/workflows/build.yml
     needs:
       - test-api
       - test-web
+      - test-e2e
 
   test-docs:
     runs-on: ubuntu-latest

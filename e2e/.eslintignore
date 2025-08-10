@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# Test outputs
+playwright-report/
+test-results/
+
+# Generated files
+*.js
+*.d.ts
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
