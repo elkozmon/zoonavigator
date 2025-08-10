@@ -219,7 +219,7 @@ jobs:
       - name: Install ZooNavigator Snap
         if: matrix.platform == 'snap'
         run: |
-          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/*.snap
+          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_amd64.snap
 
       - name: Configure ZooNavigator Snap
         if: matrix.platform == 'snap'
@@ -320,7 +320,7 @@ jobs:
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
         with:
-          snap: ${{ steps.download-snap.outputs.download-path }}/*.snap
+          snap: ${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_amd64.snap
           release: ${{ needs.setup-env.outputs.snap-channel }}
 
   cleanup:
