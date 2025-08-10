@@ -36,7 +36,6 @@ in
 
     # Tests
     act
-    firefox-bin
 
     # Formatting
     nixfmt-rfc-style
