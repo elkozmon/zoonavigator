@@ -64,7 +64,12 @@ jobs:
           echo "build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
 
   build-docker:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     needs:
       - setup-env
     steps:
@@ -79,12 +84,9 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: |
-            linux/amd64
-            linux/arm64
+          platforms: linux/${{ matrix.architecture }}
           push: false
-          outputs: |
-            type=local,dest=out
+          outputs: type=local,dest=out
           tags: ${{ needs.setup-env.outputs.docker-tags }}
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
@@ -95,9 +97,11 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Package jars
-        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib
+        if: matrix.architecture == 'amd64'
+        run: tar -cvzf jars.tar.gz -C out/app lib
 
       - name: Upload jars
+        if: matrix.architecture == 'amd64'
         uses: actions/upload-artifact@v4
         with:
           name: jars
@@ -278,7 +282,12 @@ jobs:
           retention-days: 7
 
   publish-docker:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
@@ -305,9 +314,7 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: |
-            linux/amd64
-            linux/arm64
+          platforms: linux/${{ matrix.architecture }}
           push: true
           tags: ${{ needs.setup-env.outputs.docker-tags }}
           build-args: |

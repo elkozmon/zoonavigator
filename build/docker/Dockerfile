@@ -1,23 +1,23 @@
 ARG DOCKERIZE_VERSION=0.9.5
 ARG DEBUG=0
 
-FROM ubuntu:22.04 AS dockerize
+FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS dockerize
 
 # Install dependencies
 RUN apt-get update \
   && apt-get install -y curl
 
 # Get dockerize
-ARG TARGETOS
-ARG TARGETARCH
+ARG BUILDOS
+ARG BUILDARCH
 ARG DOCKERIZE_VERSION
 RUN curl \
-    -Lo dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz \
-    https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz \
-  && tar xzvf dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
-  && rm dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz
+    -Lo dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz \
+    https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz \
+  && tar xzvf dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
+  && rm dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz
 
-FROM node:20-bookworm-slim AS npm
+FROM --platform=$BUILDPLATFORM node:20-bookworm-slim AS npm
 
 # Install required packages
 RUN apt-get update \
@@ -48,7 +48,7 @@ RUN dockerize \
 RUN npm run build:prod \
   && mv dist /app
 
-FROM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 AS sbt
+FROM --platform=$BUILDPLATFORM sbtscala/scala-sbt:eclipse-temurin-jammy-17.0.5_8_1.9.3_2.12.18 AS sbt
 
 # Install required packages
 RUN apt-get update \
@@ -72,7 +72,7 @@ RUN sbt play/dist \
   && unzip play/target/universal/zoonavigator-play-$VERSION.zip \
   && mv zoonavigator-play-$VERSION /app
 
-FROM ubuntu:22.04 AS ubuntu
+FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS ubuntu
 
 # Get dockerize
 COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
