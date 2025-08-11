@@ -333,7 +333,7 @@ jobs:
 
   cleanup:
     runs-on: ubuntu-latest
-    if: ${{ always() }}
+    if: always()
     needs:
       - build-docker
       - build-snap
