@@ -9,6 +9,7 @@
   env = {
     WEB_PORT = lib.mkDefault 4200;
     ZK_CONNECTION_STRING = lib.mkDefault "localhost:${toString config.env.ZK_CLIENT_PORT}";
+    CHROME_BIN = lib.mkDefault "${pkgs.google-chrome}/bin/google-chrome-stable";
   };
 
   packages = with pkgs; [

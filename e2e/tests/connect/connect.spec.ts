@@ -1,5 +1,8 @@
 import { test, expect } from "../../fixtures";
 
+// Reset storage state to avoid being authenticated
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe("Connect Page", () => {
 
   test("should display connection form elements", async ({ connectPage }) => {
