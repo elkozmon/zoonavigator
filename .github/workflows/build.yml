@@ -7,6 +7,14 @@ on:
         required: false
         type: boolean
         default: false
+      runner-arm64:
+        required: false
+        type: string
+        default: ubuntu-24.04-arm
+      runner-amd64:
+        required: false
+        type: string
+        default: ubuntu-latest
 
 env:
   NODE_VERSION: 20
@@ -101,7 +109,7 @@ jobs:
         architecture:
           - amd64
           - arm64
-    runs-on: ${{ matrix.architecture == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     needs:
       - setup-env
       - build-docker
@@ -148,7 +156,7 @@ jobs:
         architecture:
           - amd64
           - arm64
-    runs-on: ${{ matrix.architecture == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     env:
       ZK_PORT: 2181
       ZN_PORT: 9000
