@@ -1,20 +1,21 @@
-ARG DOCKERIZE_VERSION=0.7.0
+ARG DOCKERIZE_VERSION=0.9.5
 ARG DEBUG=0
 
 FROM ubuntu:22.04 AS dockerize
-
-ARG DOCKERIZE_VERSION
 
 # Install dependencies
 RUN apt-get update \
   && apt-get install -y curl
 
 # Get dockerize
+ARG TARGETOS
+ARG TARGETARCH
+ARG DOCKERIZE_VERSION
 RUN curl \
-    -Lo dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz \
-    https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz \
-  && tar xzvf dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
-  && rm dockerize-alpine-linux-amd64-v${DOCKERIZE_VERSION}.tar.gz
+    -Lo dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz \
+    https://github.com/jwilder/dockerize/releases/download/v${DOCKERIZE_VERSION}/dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz \
+  && tar xzvf dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
+  && rm dockerize-${TARGETOS}-${TARGETARCH}-v${DOCKERIZE_VERSION}.tar.gz
 
 FROM node:20-bookworm-slim AS npm
 
@@ -40,7 +41,6 @@ COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
 ARG APP_VERSION
 ARG DOCS_URL
 ARG DEBUG
-
 RUN dockerize \
     -template ./environment.ts.template:./src/environments/environment.prod.ts
 
@@ -110,9 +110,6 @@ ENV HTTP_PORT=9000 \
 RUN apt-get update \
   && apt-get install -y curl krb5-user \
   && rm -rf /var/lib/apt/lists/*
-
-# Get dockerize
-COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
 
 # Change working directory
 WORKDIR /app
