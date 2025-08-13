@@ -178,7 +178,7 @@ jobs:
 
       - name: Install Playwright Browsers
         working-directory: e2e
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps --only-shell
 
       # Docker-specific steps
       - name: Set up Docker Buildx
