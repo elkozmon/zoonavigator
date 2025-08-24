@@ -24,12 +24,7 @@ in
     gh
     coreutils
     zookeeper
-
-    # Docker
-    docker
-    docker-compose
-
-    # Formatting
+    docker-client
     nixfmt-rfc-style
   ];
 
