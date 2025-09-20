@@ -27,8 +27,8 @@ test.describe("Toolbar", () => {
     const newSecondNodeText = nodeItems.nth(1);
 
     // The first and second nodes should have swapped positions
-    await expect(newFirstNodeText).toHaveText(secondNodeText);
-    await expect(newSecondNodeText).toHaveText(firstNodeText);
+    await expect(newFirstNodeText).toHaveText(secondNodeText!);
+    await expect(newSecondNodeText).toHaveText(firstNodeText!);
   });
 
   test("should import node", async ({ editorPage, testDirectory }) => {
@@ -276,5 +276,70 @@ test.describe("Toolbar", () => {
     for (const nodeName of nodeNames) {
       await expect(editorPage.sidebar.getNodeItem(nodeName)).toBeHidden();
     }
+  });
+
+  test("should import raw file as child node data", async ({ editorPage, testDirectory }) => {
+    await editorPage.navigateToPath("/");
+
+    await editorPage.toolbar.importNodesButton.click();
+    await editorPage.importNodeDialog.waitUntilVisible();
+
+    const fileChooser = await editorPage.importNodeDialog.browse();
+    fileChooser.setFiles(path.join(__dirname, "../../data/raw-import.txt"));
+
+    await editorPage.importNodeDialog.destinationPathInput.fill(testDirectory);
+    await editorPage.importNodeDialog.openParentAfterwardsCheckbox.setChecked(true);
+    await editorPage.importNodeDialog.importButton.click();
+    await editorPage.importNodeDialog.waitUntilHidden();
+
+    const fileNodeName = "raw-import.txt";
+    await editorPage.sidebar.clickNode(fileNodeName);
+    await editorPage.switchToDataTab();
+
+    const data = await editorPage.dataTab.getData();
+    expect(data).toEqual("hello raw import");
+  });
+
+  test("should not overwrite existing node on raw import name conflict", async ({ page, editorPage, testDirectory }) => {
+    const fileNodeName = "raw-import.txt";
+    const targetNodePath = `${testDirectory}/${fileNodeName}`;
+
+    // Create the node with the same name as the uploaded file and set some data
+    await editorPage.createNode(targetNodePath, true);
+    await editorPage.switchToDataTab();
+    await editorPage.dataTab.setData("ORIGINAL DATA");
+
+    const saveResp = page.waitForResponse(
+      response =>
+        response.url().includes("/api/znode/data") &&
+        response.request().method() === "PUT" &&
+        response.status() === 200
+    );
+    await editorPage.dataTab.saveButton.click();
+    await saveResp;
+
+    // Attempt to import the same file into the same parent path -> should fail and not overwrite
+    await editorPage.navigateToPath("/");
+    await editorPage.toolbar.importNodesButton.click();
+    await editorPage.importNodeDialog.waitUntilVisible();
+
+    const fileChooser = await editorPage.importNodeDialog.browse();
+    fileChooser.setFiles(path.join(__dirname, "../../data/raw-import.txt"));
+
+    await editorPage.importNodeDialog.destinationPathInput.fill(testDirectory);
+    await editorPage.importNodeDialog.openParentAfterwardsCheckbox.setChecked(true);
+    await editorPage.importNodeDialog.importButton.click();
+
+    // Expect error dialog (conflict)
+    await editorPage.errorDialog.waitUntilVisible();
+    await expect(editorPage.errorDialog.message).toContainText("KeeperErrorCode = NodeExists");
+    await editorPage.errorDialog.closeButton.click();
+    await editorPage.errorDialog.waitUntilHidden();
+
+    // Verify data was not overwritten
+    await editorPage.navigateToPath(targetNodePath);
+    await editorPage.switchToDataTab();
+    const data = await editorPage.dataTab.getData();
+    expect(data).toEqual("ORIGINAL DATA");
   });
 });

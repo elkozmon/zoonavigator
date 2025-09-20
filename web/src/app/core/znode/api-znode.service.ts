@@ -355,7 +355,8 @@ export class ApiZNodeService implements ZNodeService {
     return this.withAuthToken(token => {
       const params = new HttpParams({
         fromObject: {
-          path: path
+          path: path,
+          name: file.name
         }
       });
 

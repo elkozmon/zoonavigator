@@ -18,5 +18,12 @@
 package com.elkozmon.zoonavigator.core.zookeeper.znode
 
 import com.elkozmon.zoonavigator.core.zookeeper.acl.Acl
+import org.apache.zookeeper.ZooDefs
+
+import scala.jdk.CollectionConverters._
 
 final case class ZNodeAcl(aclList: List[Acl])
+
+object ZNodeAcl {
+  val OpenAclUnsafe = ZNodeAcl(ZooDefs.Ids.OPEN_ACL_UNSAFE.asScala.map(Acl.fromZooKeeper).toList)
+}

@@ -30,6 +30,7 @@ import play.api.http.HttpErrorHandler
 import play.api.libs.json._
 import play.api.mvc._
 import utils.Gzip
+import utils.ImportParser
 import org.apache.curator.framework.CuratorFramework
 
 import cats.effect.Resource
@@ -235,39 +236,18 @@ class ApiController(
           .apply(ImportZNodesAction(path, exportZNodes).free)
           .map(ApiResponse.success(_))
 
-      val importNodesT =
-        curatorRequest.contentType match {
-          case Some("application/json") =>
-            implicitly[Reads[List[Cofree[List, ZNodeExport]]]]
-              .reads(Json.parse(curatorRequest.body.toArray))
-              .asEither
-              .left
-              .map(_ => malformedDataException)
-              .toTry
-              .traverse(applyImport)
-              .flatMap(Task.fromTry)
+      val importNodesT = {
+        val bodyBytes = curatorRequest.body.toArray
+        val nameOpt   = curatorRequest.getQueryString("name")
 
-          case Some("application/gzip") | Some("application/x-gzip") =>
-            Gzip
-              .decompress(curatorRequest.body.toArray)
-              .flatMap { byteArray =>
-                implicitly[Reads[List[Cofree[List, ZNodeExport]]]]
-                  .reads(Json.parse(byteArray))
-                  .asEither
-                  .left
-                  .map(_ => malformedDataException)
-                  .toTry
-              }
-              .traverse(applyImport)
-              .flatMap(Task.fromTry)
-
-          case _ =>
-            Task.raiseError(
-              new BadRequestException(
-                s"Unsupported content type: ${curatorRequest.contentType.getOrElse("?")}"
-              )
-            )
-        }
+        Task
+          .fromTry(ImportParser.unify(path, bodyBytes, nameOpt))
+          .flatMap { trees =>
+            curatorRequest
+              .apply(ImportZNodesAction(path, trees).free)
+              .map(ApiResponse.success(_))
+          }
+      }
 
       val futureApiResponse = importNodesT.runToFuture
 
