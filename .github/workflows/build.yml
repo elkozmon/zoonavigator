@@ -95,6 +95,8 @@ jobs:
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
 
       - name: Package jars
         if: matrix.architecture == 'amd64'
@@ -213,6 +215,8 @@ jobs:
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+        env:
+          DOCKER_BUILD_RECORD_UPLOAD: false
 
       - name: Start ZooNavigator Docker container
         if: matrix.platform == 'docker'
