@@ -127,3 +127,4 @@ target/
 /.vscode
 /.metals
 .bloop/
+/.bsp
