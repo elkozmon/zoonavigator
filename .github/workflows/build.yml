@@ -211,7 +211,6 @@ jobs:
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
         env:
           DOCKER_BUILD_RECORD_UPLOAD: false
 
@@ -319,7 +318,6 @@ jobs:
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
 
   publish-snap:
     strategy:
