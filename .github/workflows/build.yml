@@ -207,7 +207,8 @@ jobs:
           file: ${{ github.workspace }}/build/docker/Dockerfile
           platforms: linux/${{ matrix.architecture }}
           push: false
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
+          load: true
+          tags: zoonavigator:${{ github.sha }}
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
@@ -227,7 +228,7 @@ jobs:
             --name zoonavigator-test \
             --network host \
             -e HTTP_PORT=${{ env.ZN_PORT }} \
-            ${DOCKER_TAGS%%,*}
+            zoonavigator:${{ github.sha }}
 
       # Snap-specific steps
       - name: Download Snap
