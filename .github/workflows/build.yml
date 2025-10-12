@@ -19,91 +19,116 @@ on:
 env:
   NODE_VERSION: 20
   JAVA_VERSION: 17
+  DOCKER_IMAGE: elkozmon/zoonavigator
+  DOCS_URL: https://zoonavigator.elkozmon.com
 
 permissions:
   contents: read
 
 jobs:
   setup-env:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     outputs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
-      docker-tags: ${{ steps.set-vars.outputs.docker-tags }}
       snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
       docs-url: ${{ steps.set-vars.outputs.docs-url }}
-      vcs-ref: ${{ steps.set-vars.outputs.vcs-ref }}
-      build-date: ${{ steps.set-vars.outputs.build-date }}
     steps:
       - name: Set variables
         id: set-vars
         run: |
           ref="${GITHUB_REF_NAME#v}"
 
-          # set image name
-          docker_image="elkozmon/zoonavigator"
-
           # is this a semver release?
           if [[ "${ref}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
           then
               app_version="${ref}"
               snap_channel="stable"
-              docker_tags="${docker_image}:${ref},${docker_image}:latest"
-              docs_url="https://zoonavigator.elkozmon.com/en/${ref}"
+              docs_url="${{ env.DOCS_URL }}/en/${ref}"
           else
               app_version="latest-${GITHUB_SHA::12}"
               snap_channel="beta"
-              docker_tags="${docker_image}:unstable"
-              docs_url="https://zoonavigator.elkozmon.com/en/latest"
+              docs_url="${{ env.DOCS_URL }}/en/latest"
           fi
 
           echo "app-version=${app_version}" >> "$GITHUB_OUTPUT"
-          echo "docker-tags=${docker_tags}" >> "$GITHUB_OUTPUT"
           echo "snap-channel=${snap_channel}" >> "$GITHUB_OUTPUT"
           echo "docs-url=${docs_url}" >> "$GITHUB_OUTPUT"
-          echo "vcs-ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
-          echo "build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
 
   build-docker:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     needs:
       - setup-env
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERIO_USERNAME }}
+          password: ${{ secrets.DOCKERIO_PASSWORD }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+          labels: |
+            org.opencontainers.image.documentation=${{ needs.setup-env.outputs.docs-url }}
+
       - name: Build Docker image
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.architecture }}
           push: false
-          outputs: type=local,dest=out
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
+          outputs: |
+            type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true
+            type=local,dest=out
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-        env:
-          DOCKER_BUILD_RECORD_UPLOAD: false
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=buildkit-${{ matrix.architecture }}
+          cache-to: type=gha,mode=max,scope=buildkit-${{ matrix.architecture }}
 
       - name: Package jars
-        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib
+        if: matrix.architecture == 'amd64'
+        run: |
+          mkdir -p ${{ runner.temp }}/jars
+          tar -cvzf ${{ runner.temp }}/jars/jars.tar.gz -C out/app lib
 
       - name: Upload jars
+        if: matrix.architecture == 'amd64'
         uses: actions/upload-artifact@v4
         with:
           name: jars
-          path: jars.tar.gz
+          path: ${{ runner.temp }}/jars/jars.tar.gz
+          if-no-files-found: error
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.architecture }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
 
   build-snap:
     strategy:
@@ -191,39 +216,22 @@ jobs:
         run: npx playwright install --with-deps --only-shell
 
       # Docker-specific steps
-      - name: Set up Docker Buildx
+      - name: Download digest
         if: matrix.platform == 'docker'
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        if: matrix.platform == 'docker'
-        uses: docker/build-push-action@v6
+        id: download-digest
+        uses: actions/download-artifact@v4
         with:
-          context: .
-          file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/${{ matrix.architecture }}
-          push: false
-          load: true
-          tags: zoonavigator:${{ github.sha }}
-          build-args: |
-            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
-            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
-        env:
-          DOCKER_BUILD_RECORD_UPLOAD: false
+          name: digests-${{ matrix.architecture }}
 
       - name: Start ZooNavigator Docker container
         if: matrix.platform == 'docker'
-        env:
-          DOCKER_TAGS: ${{ needs.setup-env.outputs.docker-tags }}
+        working-directory: ${{ steps.download-digest.outputs.download-path }}
         run: |
           docker run -d \
             --name zoonavigator-test \
             --network host \
             -e HTTP_PORT=${{ env.ZN_PORT }} \
-            zoonavigator:${{ github.sha }}
+            ${{ env.DOCKER_IMAGE }}@sha256:$(ls | head -n1)
 
       # Snap-specific steps
       - name: Download Snap
@@ -282,18 +290,19 @@ jobs:
           retention-days: 7
 
   publish-docker:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
       - build-docker
       - test-e2e
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Download digests
+        id: download-digests
+        uses: actions/download-artifact@v4
+        with:
+          pattern: digests-*
+          merge-multiple: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -304,20 +313,24 @@ jobs:
           username: ${{ secrets.DOCKERIO_USERNAME }}
           password: ${{ secrets.DOCKERIO_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          context: .
-          file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
-          build-args: |
-            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
-            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+          flavor: |
+            latest=auto
+          tags: |
+            type=pep440,pattern={{version}}
+            type=raw,value=unstable
+
+      - name: Create manifest list and push
+        working-directory: ${{ steps.download-digests.outputs.download-path }}
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s ' *)
 
   publish-snap:
     strategy:
@@ -325,7 +338,7 @@ jobs:
         architecture:
           - amd64
           - arm64
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
@@ -347,7 +360,7 @@ jobs:
           release: ${{ needs.setup-env.outputs.snap-channel }}
 
   cleanup:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: always()
     needs:
       - build-docker
@@ -363,3 +376,5 @@ jobs:
             jars
             snap-amd64
             snap-arm64
+            digests-amd64
+            digests-arm64

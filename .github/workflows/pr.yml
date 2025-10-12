@@ -45,3 +45,4 @@ jobs:
       skip-e2e: ${{ needs.detect-changes.outputs.e2e != 'true' }}
       skip-build: ${{ needs.detect-changes.outputs.build != 'true' && needs.detect-changes.outputs.api != 'true' && needs.detect-changes.outputs.web != 'true' && needs.detect-changes.outputs.e2e != 'true' }}
       skip-docs: ${{ needs.detect-changes.outputs.docs != 'true' }}
+    secrets: inherit
