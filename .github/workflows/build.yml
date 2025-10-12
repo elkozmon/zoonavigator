@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   setup-env:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     outputs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
       snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
@@ -290,7 +290,7 @@ jobs:
           retention-days: 7
 
   publish-docker:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
@@ -338,7 +338,7 @@ jobs:
         architecture:
           - amd64
           - arm64
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
@@ -360,7 +360,7 @@ jobs:
           release: ${{ needs.setup-env.outputs.snap-channel }}
 
   cleanup:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: always()
     needs:
       - build-docker
