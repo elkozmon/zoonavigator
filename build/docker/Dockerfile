@@ -130,20 +130,3 @@ EXPOSE 9000
 
 ENTRYPOINT ["./run.sh"]
 USER 1000
-
-ARG APP_VERSION
-ARG DOCS_URL
-ARG VCS_URL="https://github.com/elkozmon/zoonavigator"
-ARG VCS_REF
-ARG BUILD_DATE
-
-LABEL \
-  maintainer="Lubos Kozmon <contact@elkozmon.com>" \
-  org.label-schema.name="ZooNavigator" \
-  org.label-schema.description="Web-based ZooKeeper UI" \
-  org.label-schema.url=${DOCS_URL} \
-  org.label-schema.vcs-url=${VCS_URL} \
-  org.label-schema.vcs-ref=${VCS_REF} \
-  org.label-schema.version=${APP_VERSION} \
-  org.label-schema.build-date=${BUILD_DATE} \
-  org.label-schema.docker.cmd="docker run -d -p 9000:9000 -e HTTP_PORT=9000 --name zoonavigator --restart unless-stopped elkozmon/zoonavigator"

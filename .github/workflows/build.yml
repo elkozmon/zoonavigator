@@ -32,8 +32,6 @@ jobs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
       snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
       docs-url: ${{ steps.set-vars.outputs.docs-url }}
-      vcs-ref: ${{ steps.set-vars.outputs.vcs-ref }}
-      build-date: ${{ steps.set-vars.outputs.build-date }}
     steps:
       - name: Set variables
         id: set-vars
@@ -55,8 +53,6 @@ jobs:
           echo "app-version=${app_version}" >> "$GITHUB_OUTPUT"
           echo "snap-channel=${snap_channel}" >> "$GITHUB_OUTPUT"
           echo "docs-url=${docs_url}" >> "$GITHUB_OUTPUT"
-          echo "vcs-ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
-          echo "build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
 
   build-docker:
     strategy:
@@ -86,6 +82,8 @@ jobs:
         with:
           images: |
             ${{ env.DOCKER_IMAGE }}
+          labels: |
+            org.opencontainers.image.documentation=${{ needs.setup-env.outputs.docs-url }}
 
       - name: Build Docker image
         id: build
@@ -101,8 +99,6 @@ jobs:
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

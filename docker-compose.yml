@@ -7,8 +7,6 @@ services:
       dockerfile: build/docker/Dockerfile
       args:
         - APP_VERSION=development
-        - VCS_REF=development
-        - BUILD_DATE=${BUILD_DATE:-$(date -u +'%Y-%m-%dT%H:%M:%SZ')}
     ports:
       - "9000:9000"
     environment:
