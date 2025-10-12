@@ -30,7 +30,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
-      docker-tags: ${{ steps.set-vars.outputs.docker-tags }}
       snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
       docs-url: ${{ steps.set-vars.outputs.docs-url }}
       vcs-ref: ${{ steps.set-vars.outputs.vcs-ref }}
@@ -46,17 +45,14 @@ jobs:
           then
               app_version="${ref}"
               snap_channel="stable"
-              docker_tags="${{ env.DOCKER_IMAGE }}:${ref},${{ env.DOCKER_IMAGE }}:latest"
               docs_url="${{ env.DOCS_URL }}/en/${ref}"
           else
               app_version="latest-${GITHUB_SHA::12}"
               snap_channel="beta"
-              docker_tags="${{ env.DOCKER_IMAGE }}:unstable"
               docs_url="${{ env.DOCS_URL }}/en/latest"
           fi
 
           echo "app-version=${app_version}" >> "$GITHUB_OUTPUT"
-          echo "docker-tags=${docker_tags}" >> "$GITHUB_OUTPUT"
           echo "snap-channel=${snap_channel}" >> "$GITHUB_OUTPUT"
           echo "docs-url=${docs_url}" >> "$GITHUB_OUTPUT"
           echo "vcs-ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
@@ -313,11 +309,23 @@ jobs:
           username: ${{ secrets.DOCKERIO_USERNAME }}
           password: ${{ secrets.DOCKERIO_PASSWORD }}
 
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+          flavor: |
+            latest=auto
+          tags: |
+            type=pep440,pattern={{version}}
+            type=raw,value=unstable
+
       - name: Create manifest list and push
         working-directory: ${{ steps.download-digests.outputs.download-path }}
         run: |
           docker buildx imagetools create \
-            $(echo "${{ needs.setup-env.outputs.docker-tags }}" | sed 's/,/ -t /g; s/^/-t /') \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s ' *)
 
   publish-snap:
