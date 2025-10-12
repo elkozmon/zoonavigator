@@ -19,6 +19,8 @@ on:
 env:
   NODE_VERSION: 20
   JAVA_VERSION: 17
+  DOCKER_IMAGE: elkozmon/zoonavigator
+  DOCS_URL: https://zoonavigator.elkozmon.com
 
 permissions:
   contents: read
@@ -39,21 +41,18 @@ jobs:
         run: |
           ref="${GITHUB_REF_NAME#v}"
 
-          # set image name
-          docker_image="elkozmon/zoonavigator"
-
           # is this a semver release?
           if [[ "${ref}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
           then
               app_version="${ref}"
               snap_channel="stable"
-              docker_tags="${docker_image}:${ref},${docker_image}:latest"
-              docs_url="https://zoonavigator.elkozmon.com/en/${ref}"
+              docker_tags="${{ env.DOCKER_IMAGE }}:${ref},${{ env.DOCKER_IMAGE }}:latest"
+              docs_url="${{ env.DOCS_URL }}/en/${ref}"
           else
               app_version="latest-${GITHUB_SHA::12}"
               snap_channel="beta"
-              docker_tags="${docker_image}:unstable"
-              docs_url="https://zoonavigator.elkozmon.com/en/latest"
+              docker_tags="${{ env.DOCKER_IMAGE }}:unstable"
+              docs_url="${{ env.DOCS_URL }}/en/latest"
           fi
 
           echo "app-version=${app_version}" >> "$GITHUB_OUTPUT"
