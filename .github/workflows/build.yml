@@ -231,7 +231,7 @@ jobs:
             --name zoonavigator-test \
             --network host \
             -e HTTP_PORT=${{ env.ZN_PORT }} \
-            $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s' "$(ls | head -n1)")
+            ${{ env.DOCKER_IMAGE }}@sha256:$(ls | head -n1)
 
       # Snap-specific steps
       - name: Download Snap
