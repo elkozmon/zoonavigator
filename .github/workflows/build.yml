@@ -94,19 +94,20 @@ jobs:
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-        env:
-          DOCKER_BUILD_RECORD_UPLOAD: false
 
       - name: Package jars
         if: matrix.architecture == 'amd64'
-        run: tar -cvzf jars.tar.gz -C out/app lib
+        run: |
+          mkdir -p ${{ runner.temp }}/jars
+          tar -cvzf ${{ runner.temp }}/jars/jars.tar.gz -C out/app lib
 
       - name: Upload jars
         if: matrix.architecture == 'amd64'
         uses: actions/upload-artifact@v4
         with:
           name: jars
-          path: jars.tar.gz
+          path: ${{ runner.temp }}/jars/jars.tar.gz
+          if-no-files-found: error
 
   build-snap:
     strategy:
