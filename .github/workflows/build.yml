@@ -100,8 +100,8 @@ jobs:
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=buildkit-${{ matrix.architecture }}
+          cache-to: type=gha,mode=max,scope=buildkit-${{ matrix.architecture }}
 
       - name: Package jars
         if: matrix.architecture == 'amd64'
