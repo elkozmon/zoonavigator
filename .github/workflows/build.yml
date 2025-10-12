@@ -78,15 +78,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERIO_USERNAME }}
+          password: ${{ secrets.DOCKERIO_PASSWORD }}
+
       - name: Build Docker image
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
           platforms: linux/${{ matrix.architecture }}
           push: false
-          outputs: type=local,dest=out
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
+          outputs: |
+            type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true
+            type=local,dest=out
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
@@ -107,6 +115,19 @@ jobs:
         with:
           name: jars
           path: ${{ runner.temp }}/jars/jars.tar.gz
+          if-no-files-found: error
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.architecture }}
+          path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
 
   build-snap:
@@ -195,40 +216,22 @@ jobs:
         run: npx playwright install --with-deps --only-shell
 
       # Docker-specific steps
-      - name: Set up Docker Buildx
+      - name: Download digest
         if: matrix.platform == 'docker'
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        if: matrix.platform == 'docker'
-        uses: docker/build-push-action@v6
+        id: download-digest
+        uses: actions/download-artifact@v4
         with:
-          context: .
-          file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/${{ matrix.architecture }}
-          push: false
-          load: true
-          tags: zoonavigator:${{ github.sha }}
-          build-args: |
-            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
-            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-        env:
-          DOCKER_BUILD_RECORD_UPLOAD: false
+          name: digests-${{ matrix.architecture }}
 
       - name: Start ZooNavigator Docker container
         if: matrix.platform == 'docker'
-        env:
-          DOCKER_TAGS: ${{ needs.setup-env.outputs.docker-tags }}
+        working-directory: ${{ steps.download-digest.outputs.download-path }}
         run: |
           docker run -d \
             --name zoonavigator-test \
             --network host \
             -e HTTP_PORT=${{ env.ZN_PORT }} \
-            zoonavigator:${{ github.sha }}
+            $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s' "$(ls | head -n1)")
 
       # Snap-specific steps
       - name: Download Snap
@@ -287,23 +290,19 @@ jobs:
           retention-days: 7
 
   publish-docker:
-    strategy:
-      matrix:
-        architecture:
-          - amd64
-          - arm64
-    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
+    runs-on: ubuntu-latest
     if: inputs.publish
     needs:
       - setup-env
       - build-docker
       - test-e2e
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Download digests
+        id: download-digests
+        uses: actions/download-artifact@v4
+        with:
+          pattern: digests-*
+          merge-multiple: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -314,21 +313,12 @@ jobs:
           username: ${{ secrets.DOCKERIO_USERNAME }}
           password: ${{ secrets.DOCKERIO_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/${{ matrix.architecture }}
-          push: true
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
-          build-args: |
-            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
-            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Create manifest list and push
+        working-directory: ${{ steps.download-digests.outputs.download-path }}
+        run: |
+          docker buildx imagetools create \
+            $(echo "${{ needs.setup-env.outputs.docker-tags }}" | sed 's/,/ -t /g; s/^/-t /') \
+            $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s ' *)
 
   publish-snap:
     strategy:
@@ -374,3 +364,5 @@ jobs:
             jars
             snap-amd64
             snap-arm64
+            digests-amd64
+            digests-arm64

@@ -131,6 +131,7 @@ jobs:
       - test-api
       - test-web
       - test-e2e
+    secrets: inherit
 
   test-docs:
     runs-on: ubuntu-latest
