@@ -64,15 +64,17 @@ jobs:
           echo "build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
 
   build-docker:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     needs:
       - setup-env
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -82,7 +84,7 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.architecture }}
           push: false
           outputs: type=local,dest=out
           tags: ${{ needs.setup-env.outputs.docker-tags }}
@@ -97,9 +99,11 @@ jobs:
           DOCKER_BUILD_RECORD_UPLOAD: false
 
       - name: Package jars
-        run: tar -cvzf jars.tar.gz -C out/linux_amd64/app lib
+        if: matrix.architecture == 'amd64'
+        run: tar -cvzf jars.tar.gz -C out/app lib
 
       - name: Upload jars
+        if: matrix.architecture == 'amd64'
         uses: actions/upload-artifact@v4
         with:
           name: jars
@@ -211,6 +215,7 @@ jobs:
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
+          cache-to: type=gha,mode=max
         env:
           DOCKER_BUILD_RECORD_UPLOAD: false
 
@@ -282,7 +287,12 @@ jobs:
           retention-days: 7
 
   publish-docker:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
@@ -309,7 +319,7 @@ jobs:
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.architecture }}
           push: true
           tags: ${{ needs.setup-env.outputs.docker-tags }}
           build-args: |
@@ -318,6 +328,7 @@ jobs:
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
           cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   publish-snap:
     strategy:
