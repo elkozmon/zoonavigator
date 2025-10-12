@@ -80,6 +80,13 @@ jobs:
           username: ${{ secrets.DOCKERIO_USERNAME }}
           password: ${{ secrets.DOCKERIO_PASSWORD }}
 
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+
       - name: Build Docker image
         id: build
         uses: docker/build-push-action@v6
@@ -96,6 +103,7 @@ jobs:
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
             VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
             BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
