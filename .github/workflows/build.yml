@@ -293,7 +293,6 @@ jobs:
     runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
-      - setup-env
       - build-docker
       - test-e2e
     steps:
