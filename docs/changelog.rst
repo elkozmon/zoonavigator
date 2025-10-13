@@ -2,6 +2,18 @@
 Change Log
 ==========
 
+2.0.0
+-----
+
+*October 13, 2025*
+
+
+**Changes:**
+
+* Update dependencies
+* Drop support for ZooKeeper 3.4.x
+* Order connection presets by name or id
+
 1.1.3
 -----
 
