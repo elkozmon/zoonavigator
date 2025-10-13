@@ -126,7 +126,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests-${{ matrix.architecture }}
+          name: digest-${{ matrix.architecture }}
           path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
 
@@ -221,7 +221,7 @@ jobs:
         id: download-digest
         uses: actions/download-artifact@v4
         with:
-          name: digests-${{ matrix.architecture }}
+          name: digest-${{ matrix.architecture }}
 
       - name: Start ZooNavigator Docker container
         if: matrix.platform == 'docker'
@@ -301,7 +301,7 @@ jobs:
         id: download-digests
         uses: actions/download-artifact@v4
         with:
-          pattern: digests-*
+          pattern: digest-*
           merge-multiple: true
 
       - name: Set up Docker Buildx
@@ -376,5 +376,5 @@ jobs:
             jars
             snap-amd64
             snap-arm64
-            digests-amd64
-            digests-arm64
+            digest-amd64
+            digest-arm64
