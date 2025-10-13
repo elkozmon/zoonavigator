@@ -227,11 +227,16 @@ jobs:
         if: matrix.platform == 'docker'
         working-directory: ${{ steps.download-digest.outputs.download-path }}
         run: |
+          set -euo pipefail
+
+          image="${{ env.DOCKER_IMAGE }}@sha256:$(ls | head -n1)"
+          echo "Using image '${image}'"
+
           docker run -d \
             --name zoonavigator-test \
             --network host \
             -e HTTP_PORT=${{ env.ZN_PORT }} \
-            ${{ env.DOCKER_IMAGE }}@sha256:$(ls | head -n1)
+            "${image}"
 
       # Snap-specific steps
       - name: Download Snap
