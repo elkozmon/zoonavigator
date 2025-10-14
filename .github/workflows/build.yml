@@ -198,24 +198,6 @@ jobs:
         ports:
           - 2181:2181
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: e2e/package-lock.json
-
-      - name: Install e2e dependencies
-        working-directory: e2e
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        working-directory: e2e
-        run: npx playwright install --with-deps --only-shell
-
       # Docker-specific steps
       - name: Download digest
         if: matrix.platform == 'docker'
@@ -270,6 +252,24 @@ jobs:
           sudo snap start zoonavigator
 
       # Common steps
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: e2e/package-lock.json
+
+      - name: Install e2e dependencies
+        working-directory: e2e
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        working-directory: e2e
+        run: npx playwright install --with-deps --only-shell
+
       - name: Wait for ZooNavigator to startup
         uses: emilioschepis/wait-for-endpoint@v1.0.4
         with:
