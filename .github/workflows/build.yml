@@ -148,6 +148,7 @@ jobs:
         id: download-jars
         uses: actions/download-artifact@v4
         with:
+          path: ${{ runner.temp }}/jars
           name: jars
 
       - name: Prepare Snap files
@@ -221,6 +222,7 @@ jobs:
         id: download-digest
         uses: actions/download-artifact@v4
         with:
+          path: ${{ runner.temp }}/digest
           name: digest-${{ matrix.architecture }}
 
       - name: Start ZooNavigator Docker container
@@ -305,6 +307,7 @@ jobs:
         id: download-digests
         uses: actions/download-artifact@v4
         with:
+          path: ${{ runner.temp }}/digests
           pattern: digest-*
           merge-multiple: true
 
@@ -353,6 +356,7 @@ jobs:
         id: download-snap
         uses: actions/download-artifact@v4
         with:
+          path: ${{ runner.temp }}/snap
           name: snap-${{ matrix.architecture }}
 
       - name: Publish Snap
