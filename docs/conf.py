@@ -24,9 +24,9 @@ copyright = u'2025, Lubos Kozmon'
 author = u'Lubos Kozmon'
 
 # The short X.Y version
-version = u''
+version = u'2.0'
 # The full version, including alpha/beta/rc tags
-release = u'1.0.0'
+release = u'2.0.0'
 
 
 # -- General configuration ---------------------------------------------------
