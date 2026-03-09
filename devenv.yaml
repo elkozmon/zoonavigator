@@ -3,7 +3,7 @@ inputs:
   nixpkgs:
     url: github:cachix/devenv-nixpkgs/rolling
 
-allowUnfree: false
+allowUnfree: true
 
 imports:
   - ./api

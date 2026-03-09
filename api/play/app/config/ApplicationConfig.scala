@@ -73,6 +73,7 @@ object ApplicationConfig {
 
             Connection(id, maybeName, ConnectionString(c.getString("conn")), authList)
           }
+          .sortBy(b => b.name.getOrElse(b.id).toLowerCase())
       )
     }
 
