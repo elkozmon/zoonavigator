@@ -7,56 +7,60 @@ on:
         required: false
         type: boolean
         default: false
+      runner-arm64:
+        required: false
+        type: string
+        default: ubuntu-24.04-arm
+      runner-amd64:
+        required: false
+        type: string
+        default: ubuntu-latest
 
 env:
   NODE_VERSION: 20
   JAVA_VERSION: 17
+  DOCKER_IMAGE: elkozmon/zoonavigator
+  DOCS_URL: https://zoonavigator.elkozmon.com
 
 permissions:
   contents: read
 
 jobs:
   setup-env:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     outputs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
-      docker-tags: ${{ steps.set-vars.outputs.docker-tags }}
       snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
       docs-url: ${{ steps.set-vars.outputs.docs-url }}
-      vcs-ref: ${{ steps.set-vars.outputs.vcs-ref }}
-      build-date: ${{ steps.set-vars.outputs.build-date }}
     steps:
       - name: Set variables
         id: set-vars
         run: |
           ref="${GITHUB_REF_NAME#v}"
 
-          # set image name
-          docker_image="elkozmon/zoonavigator"
-
           # is this a semver release?
           if [[ "${ref}" =~ ^[0-9]+(\.[0-9]+){2,3}$ ]];
           then
               app_version="${ref}"
               snap_channel="stable"
-              docker_tags="${docker_image}:${ref},${docker_image}:latest"
-              docs_url="https://zoonavigator.elkozmon.com/en/${ref}"
+              docs_url="${{ env.DOCS_URL }}/en/${ref}"
           else
               app_version="latest-${GITHUB_SHA::12}"
               snap_channel="beta"
-              docker_tags="${docker_image}:unstable"
-              docs_url="https://zoonavigator.elkozmon.com/en/latest"
+              docs_url="${{ env.DOCS_URL }}/en/latest"
           fi
 
           echo "app-version=${app_version}" >> "$GITHUB_OUTPUT"
-          echo "docker-tags=${docker_tags}" >> "$GITHUB_OUTPUT"
           echo "snap-channel=${snap_channel}" >> "$GITHUB_OUTPUT"
           echo "docs-url=${docs_url}" >> "$GITHUB_OUTPUT"
-          echo "vcs-ref=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
-          echo "build-date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
 
   build-docker:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     needs:
       - setup-env
     steps:
@@ -66,43 +70,73 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERIO_USERNAME }}
+          password: ${{ secrets.DOCKERIO_PASSWORD }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+          labels: |
+            org.opencontainers.image.documentation=${{ needs.setup-env.outputs.docs-url }}
+
       - name: Build Docker image
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
+          platforms: linux/${{ matrix.architecture }}
           push: false
           outputs: |
-            type=docker,dest=docker-image.tar
+            type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true
             type=local,dest=out
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: |
-            type=gha
-          cache-to: |
-            type=gha,mode=max
-
-      - name: Upload Docker image
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-image
-          path: docker-image.tar
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=buildkit-${{ matrix.architecture }}
+          cache-to: type=gha,mode=max,scope=buildkit-${{ matrix.architecture }}
 
       - name: Package jars
-        run: tar -cvzf jars.tar.gz -C out/app lib
+        if: matrix.architecture == 'amd64'
+        run: |
+          mkdir -p ${{ runner.temp }}/jars
+          tar -cvzf ${{ runner.temp }}/jars/jars.tar.gz -C out/app lib
 
       - name: Upload jars
+        if: matrix.architecture == 'amd64'
         uses: actions/upload-artifact@v4
         with:
           name: jars
-          path: jars.tar.gz
+          path: ${{ runner.temp }}/jars/jars.tar.gz
+          if-no-files-found: error
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ matrix.architecture }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
 
   build-snap:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     needs:
       - setup-env
       - build-docker
@@ -114,9 +148,10 @@ jobs:
         id: download-jars
         uses: actions/download-artifact@v4
         with:
+          path: ${{ runner.temp }}/jars
           name: jars
 
-      - name: Prepare source
+      - name: Prepare Snap files
         run: |
           echo "${{ needs.setup-env.outputs.app-version }}" \
             > ${GITHUB_WORKSPACE}/build/snap/local/version
@@ -131,10 +166,10 @@ jobs:
         with:
           path: build/
 
-      - name: Upload Snap package
+      - name: Upload Snap
         uses: actions/upload-artifact@v4
         with:
-          name: snap-package
+          name: snap-${{ matrix.architecture }}
           path: ${{ steps.build-snap.outputs.snap }}
 
   test-e2e:
@@ -146,10 +181,13 @@ jobs:
           - snap
         zookeeper:
           - 3.9
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
     env:
       ZK_PORT: 2181
       ZN_PORT: 9000
-    runs-on: ubuntu-latest
     needs:
       - setup-env
       - build-docker
@@ -160,6 +198,60 @@ jobs:
         ports:
           - 2181:2181
     steps:
+      # Docker-specific steps
+      - name: Download digest
+        if: matrix.platform == 'docker'
+        id: download-digest
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digest
+          name: digest-${{ matrix.architecture }}
+
+      - name: Start ZooNavigator Docker container
+        if: matrix.platform == 'docker'
+        working-directory: ${{ steps.download-digest.outputs.download-path }}
+        run: |
+          set -euo pipefail
+
+          image="${{ env.DOCKER_IMAGE }}@sha256:$(ls | head -n1)"
+          echo "Using image '${image}'"
+
+          docker run -d \
+            --name zoonavigator-test \
+            --network host \
+            -e HTTP_PORT=${{ env.ZN_PORT }} \
+            "${image}"
+
+      # Snap-specific steps
+      - name: Download Snap
+        if: matrix.platform == 'snap'
+        id: download-snap
+        uses: actions/download-artifact@v4
+        with:
+          name: snap-${{ matrix.architecture }}
+
+      - name: Install Snap daemon
+        if: matrix.platform == 'snap'
+        run: |
+          sudo apt update
+          sudo apt install -y snapd
+
+      - name: Install ZooNavigator Snap
+        if: matrix.platform == 'snap'
+        run: |
+          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_${{ matrix.architecture }}.snap
+
+      - name: Configure ZooNavigator Snap
+        if: matrix.platform == 'snap'
+        run: |
+          sudo snap set zoonavigator zoonavigator.server.http.port=${{ env.ZN_PORT }}
+
+      - name: Start ZooNavigator Snap
+        if: matrix.platform == 'snap'
+        run: |
+          sudo snap start zoonavigator
+
+      # Common steps
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -176,62 +268,8 @@ jobs:
 
       - name: Install Playwright Browsers
         working-directory: e2e
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps --only-shell
 
-      # Docker-specific steps
-      - name: Download Docker image
-        if: matrix.platform == 'docker'
-        id: download-docker-image
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image
-
-      - name: Load Docker image
-        if: matrix.platform == 'docker'
-        run: |
-          docker load < ${{ steps.download-docker-image.outputs.download-path }}/docker-image.tar
-
-      - name: Start ZooNavigator Docker container
-        if: matrix.platform == 'docker'
-        env:
-          DOCKER_TAGS: ${{ needs.setup-env.outputs.docker-tags }}
-        run: |
-          docker run -d \
-            --name zoonavigator-test \
-            --network host \
-            -e HTTP_PORT=${{ env.ZN_PORT }} \
-            ${DOCKER_TAGS%%,*}
-
-      # Snap-specific steps
-      - name: Download Snap package
-        if: matrix.platform == 'snap'
-        id: download-snap
-        uses: actions/download-artifact@v4
-        with:
-          name: snap-package
-
-      - name: Install Snap daemon
-        if: matrix.platform == 'snap'
-        run: |
-          sudo apt update
-          sudo apt install -y snapd
-
-      - name: Install ZooNavigator Snap
-        if: matrix.platform == 'snap'
-        run: |
-          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/*.snap
-
-      - name: Configure ZooNavigator Snap
-        if: matrix.platform == 'snap'
-        run: |
-          sudo snap set zoonavigator zoonavigator.server.http.port=${{ env.ZN_PORT }}
-
-      - name: Start ZooNavigator Snap
-        if: matrix.platform == 'snap'
-        run: |
-          sudo snap start zoonavigator
-
-      # Common steps
       - name: Wait for ZooNavigator to startup
         uses: emilioschepis/wait-for-endpoint@v1.0.4
         with:
@@ -254,23 +292,24 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report-${{ matrix.platform }}
+          name: playwright-report-${{ matrix.platform }}-${{ matrix.architecture }}
           path: e2e/playwright-report/
           retention-days: 7
 
   publish-docker:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
-      - setup-env
       - build-docker
       - test-e2e
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Download digests
+        id: download-digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digest-*
+          merge-multiple: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -281,51 +320,56 @@ jobs:
           username: ${{ secrets.DOCKERIO_USERNAME }}
           password: ${{ secrets.DOCKERIO_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          context: .
-          file: ${{ github.workspace }}/build/docker/Dockerfile
-          platforms: |
-            linux/amd64
-            linux/arm64
-          push: true
-          tags: ${{ needs.setup-env.outputs.docker-tags }}
-          build-args: |
-            APP_VERSION=${{ needs.setup-env.outputs.app-version }}
-            DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
-            VCS_REF=${{ needs.setup-env.outputs.vcs-ref }}
-            BUILD_DATE=${{ needs.setup-env.outputs.build-date }}
-          cache-from: |
-            type=gha
-          cache-to: |
-            type=gha,mode=max
+          images: |
+            ${{ env.DOCKER_IMAGE }}
+          flavor: |
+            latest=auto
+          tags: |
+            type=pep440,pattern={{version}}
+            type=raw,value=unstable
+
+      - name: Create manifest list and push
+        working-directory: ${{ steps.download-digests.outputs.download-path }}
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.DOCKER_IMAGE }}@sha256:%s ' *)
 
   publish-snap:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture:
+          - amd64
+          - arm64
+    runs-on: ${{ inputs.runner-amd64 }}
     if: inputs.publish
     needs:
       - setup-env
       - build-snap
       - test-e2e
     steps:
-      - name: Download Snap package
+      - name: Download Snap
         id: download-snap
         uses: actions/download-artifact@v4
         with:
-          name: snap-package
+          path: ${{ runner.temp }}/snap
+          name: snap-${{ matrix.architecture }}
 
       - name: Publish Snap
         uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
         with:
-          snap: ${{ steps.download-snap.outputs.download-path }}/*.snap
+          snap: ${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_${{ matrix.architecture }}.snap
           release: ${{ needs.setup-env.outputs.snap-channel }}
 
   cleanup:
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
+    runs-on: ${{ inputs.runner-amd64 }}
+    if: always()
     needs:
       - build-docker
       - build-snap
@@ -338,5 +382,7 @@ jobs:
         with:
           name: |
             jars
-            docker-image
-            snap-package
+            snap-amd64
+            snap-arm64
+            digest-amd64
+            digest-arm64
