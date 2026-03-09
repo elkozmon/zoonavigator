@@ -14,6 +14,12 @@ grade: stable
 confinement: strict
 adopt-info: zoonavigator
 
+architectures:
+  - build-on: amd64
+    build-for: amd64
+  - build-on: arm64
+    build-for: arm64
+
 apps:
   zoonavigator:
     command: bin/zoonavigator

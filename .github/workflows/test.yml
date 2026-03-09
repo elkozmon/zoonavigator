@@ -123,12 +123,15 @@ jobs:
           npm run lint
 
   test-build:
-    if: inputs.skip-build != true
+    if: |
+      !cancelled() &&
+      inputs.skip-build != true
     uses: ./.github/workflows/build.yml
     needs:
       - test-api
       - test-web
       - test-e2e
+    secrets: inherit
 
   test-docs:
     runs-on: ubuntu-latest
