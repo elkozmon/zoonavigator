@@ -51,7 +51,7 @@
     "tslib": "^1.9.0",
     "tsmonad": "^0.8.0",
     "underscore": "^1.12.1",
-    "yaml": "^1.2.1",
+    "yaml": "^1.10.3",
     "zone.js": "^0.8.28"
   },
   "keywords": [
