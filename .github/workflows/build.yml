@@ -239,7 +239,33 @@ jobs:
       - name: Install ZooNavigator Snap
         if: matrix.platform == 'snap'
         run: |
-          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_${{ matrix.architecture }}.snap
+          snap_path="${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_${{ matrix.architecture }}.snap"
+
+          if ! sudo snap install --dangerous "$snap_path"; then
+            echo "::group::Snap changes"
+            sudo snap changes || true
+            sudo snap tasks --last=install || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator snap services"
+            sudo snap services zoonavigator || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator snap logs"
+            sudo snap logs zoonavigator -n=200 || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator systemd journal"
+            sudo journalctl -u snap.zoonavigator.zoonavigator.service -n=200 --no-pager || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator snap data"
+            sudo ls -la /var/snap/zoonavigator || true
+            sudo ls -la /var/snap/zoonavigator/current || true
+            echo "::endgroup::"
+
+            exit 1
+          fi
 
       - name: Configure ZooNavigator Snap
         if: matrix.platform == 'snap'
