@@ -286,7 +286,8 @@ jobs:
           ZK_TEST_NODE: /test-${{ matrix.platform }}-${{ github.run_id }}
           ZK_CONNECTION_STRING: localhost:${{ env.ZK_PORT }}
           ZN_BASE_URL: http://localhost:${{ env.ZN_PORT }}
-        run: npm test
+        run: |
+          npm test
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
