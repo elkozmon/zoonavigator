@@ -39,25 +39,52 @@ jobs:
             --channel=stable \
             --basename=zoonavigator-stable-${{ matrix.architecture }}
 
+      - name: Download Ubuntu Security Notices database
+        run: |
+          set -euo pipefail
+
+          usn_db="${RUNNER_TEMP}/usn-database.json"
+          usn_db_hash="${usn_db}.sha256"
+
+          for attempt in 1 2 3 4 5; do
+            rm -f "${usn_db}" "${usn_db_hash}"
+
+            curl --fail --silent --show-error --location \
+              --retry 3 \
+              --retry-delay 5 \
+              --output "${usn_db_hash}" \
+              https://usn.ubuntu.com/usn-db/database.json.sha256
+
+            curl --fail --silent --show-error --location \
+              --retry 3 \
+              --retry-delay 5 \
+              --output "${usn_db}" \
+              https://usn.ubuntu.com/usn-db/database.json
+
+            expected_hash="$(awk '{ print $1 }' "${usn_db_hash}")"
+            actual_hash="$(sha256sum "${usn_db}" | awk '{ print $1 }')"
+
+            if [[ "${actual_hash}" == "${expected_hash}" ]]; then
+              echo "USNDB=${usn_db}" >> "$GITHUB_ENV"
+              exit 0
+            fi
+
+            if (( attempt == 5 )); then
+              echo "USN database hash mismatch after ${attempt} attempt(s)." >&2
+              exit 1
+            fi
+
+            echo "USN database hash mismatch; retrying in 30 seconds."
+            sleep 30
+          done
+
       - name: Check Ubuntu Security Notices
         run: |
           set -euo pipefail
 
-          for attempt in 1 2 3; do
-            if /snap/bin/review-tools.check-notices \
-              zoonavigator-stable-${{ matrix.architecture }}.snap \
-              | tee notices-${{ matrix.architecture }}.json
-            then
-              break
-            fi
-
-            if (( attempt == 3 )); then
-              exit 1
-            fi
-
-            echo "check-notices failed; retrying in 30 seconds."
-            sleep 30
-          done
+          /snap/bin/review-tools.check-notices \
+            zoonavigator-stable-${{ matrix.architecture }}.snap \
+            | tee notices-${{ matrix.architecture }}.json
 
           package_count="$(
             jq '[.[][] | keys | length] | add // 0' \
