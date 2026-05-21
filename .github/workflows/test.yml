@@ -124,6 +124,7 @@ jobs:
 
   test-build:
     if: |
+      !failure() &&
       !cancelled() &&
       inputs.skip-build != true
     uses: ./.github/workflows/build.yml
