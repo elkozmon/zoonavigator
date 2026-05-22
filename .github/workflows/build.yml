@@ -71,6 +71,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
+        if: inputs.publish
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERIO_USERNAME }}
@@ -85,6 +86,21 @@ jobs:
           labels: |
             org.opencontainers.image.documentation=${{ needs.setup-env.outputs.docs-url }}
 
+      - name: Configure Docker build output
+        id: docker-output
+        run: |
+          mkdir -p "${{ runner.temp }}/docker-image"
+
+          {
+            echo "outputs<<EOF"
+            echo 'type=docker,dest=${{ runner.temp }}/docker-image/image.tar'
+            if [[ "${{ inputs.publish }}" == "true" ]]; then
+              echo 'type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true'
+            fi
+            echo 'type=local,dest=out'
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Build Docker image
         id: build
         uses: docker/build-push-action@v6
@@ -92,10 +108,9 @@ jobs:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
           platforms: linux/${{ matrix.architecture }}
+          tags: ${{ env.DOCKER_IMAGE }}:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}
           push: false
-          outputs: |
-            type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true
-            type=local,dest=out
+          outputs: ${{ steps.docker-output.outputs.outputs }}
           build-args: |
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
@@ -117,13 +132,22 @@ jobs:
           path: ${{ runner.temp }}/jars/jars.tar.gz
           if-no-files-found: error
 
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-${{ matrix.architecture }}
+          path: ${{ runner.temp }}/docker-image/image.tar
+          if-no-files-found: error
+
       - name: Export digest
+        if: inputs.publish
         run: |
           mkdir -p ${{ runner.temp }}/digests
           digest="${{ steps.build.outputs.digest }}"
           touch "${{ runner.temp }}/digests/${digest#sha256:}"
 
       - name: Upload digest
+        if: inputs.publish
         uses: actions/upload-artifact@v4
         with:
           name: digest-${{ matrix.architecture }}
@@ -199,21 +223,25 @@ jobs:
           - 2181:2181
     steps:
       # Docker-specific steps
-      - name: Download digest
+      - name: Download Docker image
         if: matrix.platform == 'docker'
-        id: download-digest
+        id: download-docker-image
         uses: actions/download-artifact@v4
         with:
-          path: ${{ runner.temp }}/digest
-          name: digest-${{ matrix.architecture }}
+          path: ${{ runner.temp }}/docker-image
+          name: docker-image-${{ matrix.architecture }}
+
+      - name: Load ZooNavigator Docker image
+        if: matrix.platform == 'docker'
+        run: |
+          docker load --input "${{ steps.download-docker-image.outputs.download-path }}/image.tar"
 
       - name: Start ZooNavigator Docker container
         if: matrix.platform == 'docker'
-        working-directory: ${{ steps.download-digest.outputs.download-path }}
         run: |
           set -euo pipefail
 
-          image="${{ env.DOCKER_IMAGE }}@sha256:$(ls | head -n1)"
+          image="${{ env.DOCKER_IMAGE }}:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}"
           echo "Using image '${image}'"
 
           docker run -d \
@@ -387,3 +415,5 @@ jobs:
             snap-arm64
             digest-amd64
             digest-arm64
+            docker-image-amd64
+            docker-image-arm64
