@@ -18,7 +18,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, of, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
-import YAML from "yaml";
+import * as YAML from "yaml";
 import {Formatter} from "./formatter";
 import {ModeId} from "../../content/data/mode";
 
