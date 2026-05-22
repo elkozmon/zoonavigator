@@ -161,3 +161,20 @@ jobs:
         working-directory: docs
         run: |
           sphinx-build -b linkcheck . _build/linkcheck
+
+  test-required:
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - test-api
+      - test-web
+      - test-e2e
+      - test-build
+      - test-docs
+    steps:
+      - name: Check required test results
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
+
+      - name: Required tests passed
+        run: echo "Required tests passed"
