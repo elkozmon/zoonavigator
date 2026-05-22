@@ -1,4 +1,4 @@
-sphinx~=8.2
-sphinx-rtd-theme~=3.0
-sphinx-autobuild==2024.10.3
-docutils<0.21
+sphinx~=9.1
+sphinx-rtd-theme~=3.1
+sphinx-autobuild==2025.8.25
+docutils<0.23
