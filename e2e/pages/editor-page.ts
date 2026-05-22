@@ -329,7 +329,7 @@ export class AclTab {
   }
 
   async getTableHeader(headerName: string): Promise<Locator> {
-    return this.page.getByRole("cell", { name: headerName, exact: true });
+    return this.page.getByRole("columnheader", { name: headerName, exact: true });
   }
 
   async getPermissionCheckbox(permission: string, row: number = 0): Promise<Locator> {

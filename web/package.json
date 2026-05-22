@@ -51,7 +51,7 @@
     "tslib": "^1.9.0",
     "tsmonad": "^0.8.0",
     "underscore": "^1.12.1",
-    "yaml": "^1.2.1",
+    "yaml": "^1.10.3",
     "zone.js": "^0.8.28"
   },
   "keywords": [
@@ -68,7 +68,7 @@
     "@types/underscore": "^1.9.4",
     "codelyzer": "^4.5.0",
     "http-proxy-middleware": "^0.19.1",
-    "jasmine-core": "^3.3.0",
+    "jasmine-core": "^6.2.0",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "3.1.4",
     "karma-chrome-launcher": "3.1.0",
