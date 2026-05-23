@@ -16,6 +16,7 @@
  */
 
 import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
 import {DomSanitizer} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
@@ -27,12 +28,10 @@ import {MatListModule} from "@angular/material/list";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
+import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import {CovalentCommonModule} from "@covalent/core/common";
-import {CovalentDialogsModule} from "@covalent/core/dialogs";
-import {CovalentLayoutModule} from "@covalent/core/layout";
 import {AceModule} from "ngx-ace-wrapper";
 import {
   ActionbarComponent, CanDeactivateZNodeAclComponent, CanDeactivateZNodeDataComponent,
@@ -59,11 +58,9 @@ import {DefaultFormatterProvider, FormatterProvider} from "./formatter";
 
 @NgModule({
   imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    CovalentCommonModule,
-    CovalentLayoutModule,
-    CovalentDialogsModule,
     AceModule,
     EditorRoutingModule,
     SharedModule,
@@ -78,7 +75,8 @@ import {DefaultFormatterProvider, FormatterProvider} from "./formatter";
     MatToolbarModule,
     MatTooltipModule,
     MatTabsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSidenavModule
   ],
   providers: [
     AclFormFactory,

@@ -16,7 +16,6 @@
  */
 
 import {Injectable, ViewContainerRef} from "@angular/core";
-import {TdDialogService} from "@covalent/core/dialogs";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Observable, of, Subject, Subscription} from "rxjs";
@@ -55,7 +54,6 @@ export class DefaultDialogService extends DialogService {
   private showSnackbarOutput: Subject<string> = new Subject<string>();
 
   constructor(
-    private dialogService: TdDialogService,
     private matDialog: MatDialog,
     private snackBar: MatSnackBar
   ) {

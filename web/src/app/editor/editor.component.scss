@@ -19,6 +19,31 @@ zoo-toolbar {
   width: 100%;
 }
 
+.zoo-editor-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.zoo-editor-titlebar {
+  flex: 0 0 auto;
+}
+
+.zoo-editor-logo {
+  margin-right: 10px;
+}
+
+.zoo-editor-container {
+  flex: 1;
+  min-height: 0;
+}
+
+.zoo-editor-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 mat-nav-list {
   div.zoo-nav-info {
     font-size: 80%;

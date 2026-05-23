@@ -23,7 +23,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
-import {CovalentFileModule} from "@covalent/core/file";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApiRequestFactory, ApiService, DefaultApiRequestFactory, DefaultApiService} from "./api";
 import {DefaultConnectionManager, ConnectionManager} from "./connection";
 import {
@@ -52,7 +52,7 @@ import {PathSanitizingZNodeService} from "./znode/path-sanitizing-znode.service"
     MatInputModule,
     MatIconModule,
     MatCheckboxModule,
-    CovalentFileModule
+    MatSnackBarModule
   ],
   providers: [
     {provide: ApiService, useClass: DefaultApiService},

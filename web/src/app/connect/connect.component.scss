@@ -19,6 +19,14 @@ div.zoo-header {
   padding: 30px 0;
 }
 
+.zoo-connect-loader {
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 mat-card {
   padding: 10px;
   min-width: 410px;

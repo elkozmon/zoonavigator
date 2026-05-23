@@ -40,4 +40,21 @@ export class ImportZNodesDialogComponent {
       this.submitButton._elementRef.nativeElement.click();
     }
   }
+
+  onFileInputChange(event: Event): void {
+    const input = <HTMLInputElement>event.target;
+    this.data.file = input.files && input.files.length > 0 ? input.files[0] : null;
+  }
+
+  onFileDrop(event: DragEvent): void {
+    event.preventDefault();
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      this.data.file = event.dataTransfer.files[0];
+    }
+  }
+
+  preventDefault(event: DragEvent): void {
+    event.preventDefault();
+  }
 }

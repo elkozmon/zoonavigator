@@ -21,7 +21,6 @@ import {BrowserModule, Title} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {CovalentCommonModule} from "@covalent/core/common";
 import {MAT_ICON_DEFAULT_OPTIONS} from "@angular/material/icon";
 import {ConfigService, getConfigLoader} from "./config";
 import {AppComponent} from "./app.component";
@@ -36,7 +35,6 @@ import {EditorModule} from "./editor";
     ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,
-    CovalentCommonModule,
     CoreModule,
     ConnectModule,
     EditorModule,

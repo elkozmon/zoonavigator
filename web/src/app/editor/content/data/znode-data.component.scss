@@ -15,6 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+:host {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 zoo-editor-data-editor {
+  display: flex;
   flex: 1;
+  min-height: 0;
 }
