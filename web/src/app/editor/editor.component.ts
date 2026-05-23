@@ -95,7 +95,11 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.zNode = (<Observable<Either<Error, ZNodeWithChildren>>>this.route.data)
       .pipe(
         pluck("zNodeWithChildren"),
-        tap(() => this.childrenFilter.clear()),
+        tap(() => {
+          if (this.childrenFilter) {
+            this.childrenFilter.clear();
+          }
+        }),
         switchMap((either: Either<Error, ZNodeWithChildren>) =>
           either.caseOf<Observable<Maybe<ZNodeWithChildren>>>({
             left: error =>
@@ -105,7 +109,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
             right: node =>
               of(Maybe.just(node))
           })
-        )
+        ),
+        shareReplay({bufferSize: 1, refCount: true})
       );
 
     this.subscription = new Subscription(() => {});

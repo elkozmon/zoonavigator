@@ -22,6 +22,7 @@
     #regexpFilter
     placeholder=""
     [value]="value"
+    (input)="onChange(regexpFilter.value)"
     (change)="onChange(regexpFilter.value)"
     (keyup)="onChange(regexpFilter.value)"/>
   <span matPrefix>

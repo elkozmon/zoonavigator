@@ -32,7 +32,7 @@ export class CreateNodeDialog extends BaseDialog {
     this.nodePathInput = this.dialog.getByRole("textbox", { name: "Enter new path" });
     this.createButton = this.dialog.getByRole("button", { name: "Create" });
     this.cancelButton = this.dialog.getByRole("button", { name: "Cancel" });
-    this.openNodeAfterwardsCheckbox = this.dialog.getByText("Open the new node");
+    this.openNodeAfterwardsCheckbox = this.dialog.getByRole("checkbox", { name: "Open the new node" });
   }
 }
 
@@ -74,7 +74,7 @@ export class ImportNodeDialog extends BaseDialog {
     this.browseButton = this.dialog.getByRole("button", { name: "Browse" });
     this.importButton = this.dialog.getByRole("button", { name: "Import" });
     this.cancelButton = this.dialog.getByRole("button", { name: "Cancel" });
-    this.openParentAfterwardsCheckbox = this.dialog.getByText("Open the parent node");
+    this.openParentAfterwardsCheckbox = this.dialog.getByRole("checkbox", { name: "Open the parent node" });
   }
 
   async browse(): Promise<FileChooser> {
@@ -108,7 +108,7 @@ export class DuplicateNodeDialog extends BaseDialog {
     this.pathInput = this.dialog.getByRole("textbox");
     this.duplicateButton = this.dialog.getByRole("button", { name: "Duplicate" });
     this.cancelButton = this.dialog.getByRole("button", { name: "Cancel" });
-    this.openNodeAfterwardsCheckbox = this.dialog.getByText("Open the new node");
+    this.openNodeAfterwardsCheckbox = this.dialog.getByRole("checkbox", { name: "Open the new node" });
   }
 }
 
@@ -118,7 +118,7 @@ export class ErrorDialog extends BaseDialog {
 
   constructor(page: Page) {
     super(page, page.getByRole("dialog", { name: "Error" }));
-    this.message = this.dialog.locator(".dialog-content, .mat-dialog-content");
+    this.message = this.dialog.locator(".dialog-content, .mat-dialog-content, .mat-mdc-dialog-content");
     this.closeButton = this.dialog.getByRole("button", { name: "Close" });
   }
 }

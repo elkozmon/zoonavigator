@@ -47,13 +47,15 @@ div.zoo-error-bar {
   line-height: 24px;
 }
 
-.mat-dialog-container > * {
+.mat-dialog-container > *,
+.mat-mdc-dialog-container > * {
   display: flex !important;
   flex-direction: column;
   height: 100%;
 }
 
-.mat-dialog-content {
+.mat-dialog-content,
+.mat-mdc-dialog-content {
   max-height: inherit !important;
   flex: 1;
 }
@@ -78,10 +80,12 @@ button {
   text-transform: uppercase;
 }
 
-button.mat-menu-item {
+button.mat-menu-item,
+button.mat-mdc-menu-item {
   text-transform: none;
 }
 
-mat-checkbox.zoo-nolabel .mat-checkbox-label {
+mat-checkbox.zoo-nolabel .mat-checkbox-label,
+mat-checkbox.zoo-nolabel .mdc-label {
   display: none;
 }

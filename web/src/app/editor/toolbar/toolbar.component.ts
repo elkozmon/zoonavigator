@@ -92,7 +92,14 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   isZNodeEmpty(zNode: Maybe<ZNodeWithChildren>): boolean {
-    return zNode == null || Maybe.isNothing(zNode);
+    if (zNode == null) {
+      return true;
+    }
+
+    return zNode.caseOf({
+      just: () => false,
+      nothing: () => true
+    });
   }
 
   constructor(
