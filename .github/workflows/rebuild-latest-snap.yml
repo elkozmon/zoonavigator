@@ -98,7 +98,7 @@ jobs:
           fi
 
       - name: Upload notices
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: notices-${{ matrix.architecture }}
           path: notices-${{ matrix.architecture }}.json
@@ -110,7 +110,7 @@ jobs:
       - check-stable-snap
     steps:
       - name: Download notices
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: notices
           pattern: notices-*
