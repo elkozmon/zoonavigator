@@ -68,7 +68,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let acl of aclForm.aclFormArray.controls; let i = index" [formGroup]="acl">
+          <tr *ngFor="let acl of aclForm.aclFormArray.controls; let i = index" [formGroup]="$any(acl)">
             <td>
               <mat-form-field class="zoo-input-scheme">
                 <input
@@ -91,7 +91,7 @@
             </td>
             <td>
               <mat-checkbox
-                [formControl]="acl.get('permissions').get('canCreate')"
+                [formControl]="$any(acl.get('permissions').get('canCreate'))"
                 matTooltip="Create"
                 matTooltipPosition="below"
                 class="zoo-nolabel"
@@ -100,7 +100,7 @@
             </td>
             <td>
               <mat-checkbox
-                [formControl]="acl.get('permissions').get('canRead')"
+                [formControl]="$any(acl.get('permissions').get('canRead'))"
                 matTooltip="Read"
                 matTooltipPosition="below"
                 class="zoo-nolabel"
@@ -109,7 +109,7 @@
             </td>
             <td>
               <mat-checkbox
-                [formControl]="acl.get('permissions').get('canDelete')"
+                [formControl]="$any(acl.get('permissions').get('canDelete'))"
                 matTooltip="Delete"
                 matTooltipPosition="below"
                 class="zoo-nolabel"
@@ -118,7 +118,7 @@
             </td>
             <td>
               <mat-checkbox
-                [formControl]="acl.get('permissions').get('canWrite')"
+                [formControl]="$any(acl.get('permissions').get('canWrite'))"
                 matTooltip="Write"
                 matTooltipPosition="below"
                 class="zoo-nolabel"
@@ -127,7 +127,7 @@
             </td>
             <td>
               <mat-checkbox
-                [formControl]="acl.get('permissions').get('canAdmin')"
+                [formControl]="$any(acl.get('permissions').get('canAdmin'))"
                 matTooltip="Admin"
                 matTooltipPosition="below"
                 class="zoo-nolabel"

@@ -15,4 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '~@covalent/core/theming/prebuilt/blue-grey-deep-orange';
+@import "../../node_modules/@covalent/core/common/styles/styles";
+
+@include covalent-material-icons();
+@include covalent-core();
+@include covalent-layout();
+@include covalent-colors();
+@include covalent-utilities();

@@ -25,6 +25,7 @@ import {switchMap} from "rxjs/operators";
 import {ConnectionPreset} from "./core/connection/connection-preset";
 
 @Component({
+  standalone: false,
   selector: "zoo-app",
   template: `<router-outlet></router-outlet>`
 })

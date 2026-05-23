@@ -21,7 +21,7 @@
     mat-icon-button
     matTooltip="Current node actions ..."
     [matMenuTriggerFor]="nodeMenu"
-    [disabled]="zNode == null || zNode.isNothing">
+    [disabled]="isZNodeEmpty(zNode)">
     <mat-icon class="mat-24">more_vert</mat-icon>
   </button>
 

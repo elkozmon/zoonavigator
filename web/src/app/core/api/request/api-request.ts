@@ -16,8 +16,7 @@
  */
 
 import {RequestContent} from "./request-content";
-import {HttpParams} from "@angular/common/http";
-import {HttpHeaders} from "@angular/common/http/src/headers";
+import {HttpHeaders, HttpParams} from "@angular/common/http";
 
 export class ApiRequest<T> {
 

@@ -18,7 +18,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {state, style, trigger} from "@angular/animations";
-import {EMPTY} from "rxjs";
+import {EMPTY, Subscription} from "rxjs";
 import {catchError, mapTo, switchMap} from "rxjs/operators";
 import {
   CreateZNodeData,
@@ -32,9 +32,9 @@ import {
 } from "../../core";
 import {EDITOR_QUERY_NODE_PATH} from "../editor-routing.constants";
 import {Ordering} from "../ordering";
-import {Subscription} from "rxjs/Rx";
 
 @Component({
+  standalone: false,
   selector: "zoo-editor-nav-actions",
   templateUrl: "nav-actions.component.html",
   styleUrls: ["nav-actions.component.scss"],

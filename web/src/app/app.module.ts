@@ -21,8 +21,7 @@ import {BrowserModule, Title} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {CovalentCommonModule} from "@covalent/core";
-import {AngularFontAwesomeModule} from "angular-font-awesome";
+import {CovalentCommonModule} from "@covalent/core/common";
 import {ConfigService, getConfigLoader} from "./config";
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
@@ -33,7 +32,6 @@ import {EditorModule} from "./editor";
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    AngularFontAwesomeModule,
     ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,

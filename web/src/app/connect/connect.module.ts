@@ -17,15 +17,18 @@
 
 import {NgModule} from "@angular/core";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatButtonModule, MatCardModule, MatInputModule, MatSelectModule, MatSnackBarModule} from "@angular/material";
-import {CovalentCommonModule, CovalentLoadingModule} from "@covalent/core";
-import {AngularFontAwesomeModule} from "angular-font-awesome";
+import {MatButtonModule} from "@angular/material/button";
+import {MatCardModule} from "@angular/material/card";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {CovalentCommonModule} from "@covalent/core/common";
+import {CovalentLoadingModule} from "@covalent/core/loading";
 import {ConnectRoutingModule} from "./connect-routing.module";
 import {ConnectComponent} from "./connect.component";
 
 @NgModule({
   imports: [
-    AngularFontAwesomeModule,
     ReactiveFormsModule,
     CovalentCommonModule,
     CovalentLoadingModule,

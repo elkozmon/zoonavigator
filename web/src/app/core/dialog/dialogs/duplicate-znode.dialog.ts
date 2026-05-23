@@ -16,10 +16,12 @@
  */
 
 import {Component, Inject, ViewChild} from "@angular/core";
-import {MAT_DIALOG_DATA, MatButton} from "@angular/material"
+import {MatButton} from "@angular/material/button";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {DuplicateZNodeData} from "./duplicate-znode.data";
 
 @Component({
+  standalone: false,
   selector: "zoo-duplicate-znode.dialog",
   templateUrl: "duplicate-znode.dialog.html",
   styleUrls: ["dialog.scss"]

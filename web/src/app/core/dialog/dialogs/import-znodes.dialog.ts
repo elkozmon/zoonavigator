@@ -16,10 +16,12 @@
  */
 
 import {Component, Inject, ViewChild} from "@angular/core";
-import {MAT_DIALOG_DATA, MatButton} from "@angular/material"
+import {MatButton} from "@angular/material/button";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {ImportZNodesData} from "./import-znodes.data";
 
 @Component({
+  standalone: false,
   selector: "zoo-import-znodes.dialog",
   templateUrl: "import-znodes.dialog.html",
   styleUrls: ["dialog.scss"]

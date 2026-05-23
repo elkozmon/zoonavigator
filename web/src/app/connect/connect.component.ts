@@ -19,15 +19,16 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, PRIMARY_OUTLET, Router} from "@angular/router";
 import {catchError, finalize, switchMap} from "rxjs/operators";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {LoadingMode, LoadingType, TdLoadingService} from "@covalent/core";
+import {LoadingMode, LoadingType, TdLoadingService} from "@covalent/core/loading";
 import {AuthInfo, Scheme, ConnectionManager} from "../core";
 import {CONNECT_QUERY_ERROR_MSG, CONNECT_QUERY_RETURN_URL} from "./connect-routing.constants";
-import {Subscription} from "rxjs/Rx";
+import {Subscription} from "rxjs";
 import {ConnectionPreset} from "../core/connection/connection-preset";
 import {ConfigService} from "../config";
 import {environment} from "../../environments/environment";
 
 @Component({
+  standalone: false,
   templateUrl: "./connect.component.html",
   styleUrls: ["./connect.component.scss"]
 })

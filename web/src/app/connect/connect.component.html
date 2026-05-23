@@ -19,7 +19,7 @@
 <div layout="column" layout-align="start center" layout-fill>
   <div layout="column" layout-align="center center" class="zoo-header">
     <span layout-margin class="mat-display-1 tc-blue-grey-600">
-      <fa name="paw"></fa>
+      <i class="fa fa-paw" aria-hidden="true"></i>
     </span>
     <p layout-margin class="mat-subhead">
       <span class="tc-blue-grey-600 zoo-bold">
@@ -52,7 +52,7 @@
         <div formArrayName="credentialsArray">
           <div layout="row"
                *ngFor="let credentials of cxnParamsCredentialsFormArray.controls; let i = index"
-               [formGroup]="credentials">
+               [formGroup]="$any(credentials)">
             <mat-form-field>
               <input matInput
                      type="text"

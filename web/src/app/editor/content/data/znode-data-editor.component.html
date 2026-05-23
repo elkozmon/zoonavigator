@@ -16,15 +16,16 @@
   -->
 
 <!--suppress HtmlUnknownAttribute, HtmlFormInputWithoutLabel, HtmlUnknownTag -->
-<ace-editor
-  ace-editor
+<ace
   flex
   #dataEditor
   (keydown)="onKeyDown($event)"
-  theme="chrome"
-  (textChange)="onDataChange($event)"
-  [options]="editorOpts"
-  [readOnly]="false"
-  [autoUpdateContent]="true"
+  [theme]="'chrome'"
+  [mode]="editorMode"
+  (valueChange)="onDataChange($event)"
+  [config]="editorOpts"
+  [value]="editorData"
+  [disabled]="false"
+  [useAceClass]="true"
   style="height: 100%; overflow: auto;">
-</ace-editor>
+</ace>

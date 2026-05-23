@@ -17,7 +17,7 @@
 
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EMPTY, of} from "rxjs";
+import {EMPTY, of, Subscription} from "rxjs";
 import {catchError, map, mapTo, switchMap, switchMapTo} from "rxjs/operators";
 import {difference} from "underscore";
 import {Ordering} from "../ordering";
@@ -25,9 +25,9 @@ import {DialogService, FileSaverService, ZNodeExport, ZNodePath, ZNodeService, Z
 import {EDITOR_QUERY_NODE_PATH} from "../editor-routing.constants";
 import {DuplicateZNodeData, MoveZNodeData} from "../../core/dialog/dialogs";
 import {CreateZNodeData} from "../../core/dialog";
-import {Subscription} from "rxjs/Rx";
 
 @Component({
+  standalone: false,
   selector: "zoo-editor-nav-list",
   templateUrl: "nav-list.component.html",
   styleUrls: ["nav-list.component.scss"]

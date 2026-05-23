@@ -17,9 +17,9 @@
 
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TdMediaService} from "@covalent/core";
+import {BreakpointObserver} from "@angular/cdk/layout";
 import {Observable, of, Subject, Subscription, throwError} from "rxjs";
-import {catchError, debounceTime, map, mapTo, pluck, switchMap, tap} from "rxjs/operators";
+import {catchError, debounceTime, map, mapTo, pluck, shareReplay, switchMap, tap} from "rxjs/operators";
 import {Either, Maybe} from "tsmonad";
 import {Ordering} from "./ordering";
 import {EDITOR_QUERY_NODE_PATH} from "./editor-routing.constants";
@@ -28,6 +28,7 @@ import {RegexpFilterComponent} from "../shared";
 import {environment} from "../../environments/environment";
 
 @Component({
+  standalone: false,
   templateUrl: "editor.component.html",
   styleUrls: ["editor.component.scss"]
 })
@@ -40,6 +41,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   zPath: Observable<ZPath>;
   zNode: Observable<Maybe<ZNodeWithChildren>>;
+  isGtSm: Observable<boolean>;
+  isGtXs: Observable<boolean>;
 
   childrenOrdering: Ordering = Ordering.Ascending;
   childrenFilterRegexp: RegExp = null;
@@ -54,7 +57,7 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
-    public mediaService: TdMediaService,
+    private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router,
     private zPathService: ZPathService,
@@ -63,6 +66,8 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
     private viewContainerRef: ViewContainerRef,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
+    this.isGtSm = this.observeBreakpoint("(min-width: 960px)");
+    this.isGtXs = this.observeBreakpoint("(min-width: 600px)");
   }
 
   get selectedFilteredNodes(): ZPath[] {
@@ -122,7 +127,6 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.mediaService.broadcast();
     this.changeDetectorRef.detectChanges();
   }
 
@@ -167,6 +171,12 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.reloadSubject.next();
   }
 
+  closeManageListForSmallScreens(manageList: { close: () => void }): void {
+    if (!this.breakpointObserver.isMatched("(min-width: 960px)")) {
+      manageList.close();
+    }
+  }
+
   private performReload(): void {
     this.router
       .navigate([], {
@@ -202,5 +212,14 @@ export class EditorComponent implements OnInit, OnDestroy, AfterViewInit {
   private updateSelectedChildren(): void {
     // Remove non-existing selected nodes
     this.selectedZNodes = this.selectedZNodes.filter(node => this.childrenZNodes.indexOf(node) >= 0);
+  }
+
+  private observeBreakpoint(query: string): Observable<boolean> {
+    return this.breakpointObserver
+      .observe(query)
+      .pipe(
+        map(state => state.matches),
+        shareReplay({bufferSize: 1, refCount: true})
+      );
   }
 }

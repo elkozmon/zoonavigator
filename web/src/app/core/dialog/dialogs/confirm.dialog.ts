@@ -16,10 +16,11 @@
  */
 
 import {Component, Inject} from "@angular/core";
-import {MAT_DIALOG_DATA} from "@angular/material";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {ConfirmData} from "./confirm.data";
 
 @Component({
+  standalone: false,
   selector: "zoo-confirm.dialog",
   templateUrl: "confirm.dialog.html",
   styleUrls: ["dialog.scss"]

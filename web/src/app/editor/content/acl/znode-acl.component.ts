@@ -17,7 +17,7 @@
 
 import {Component, OnDestroy, OnInit, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router, UrlTree} from "@angular/router";
-import {from, Observable, Subscription, of} from "rxjs";
+import {EMPTY, from, Observable, Subscription, of} from "rxjs";
 import {catchError, mapTo, pluck, switchMap, tap} from "rxjs/operators";
 import {Either} from "tsmonad";
 import {DialogService, ZNodeAcl, ZNodeService, ZNodeWithChildren} from "../../../core";
@@ -25,9 +25,9 @@ import {ZPathService} from "../../../core/zpath";
 import {AclFormFactory} from "./acl-form.factory";
 import {AclForm} from "./acl-form";
 import {EDITOR_QUERY_NODE_PATH} from "../../editor-routing.constants";
-import {EMPTY} from "rxjs/internal/observable/empty";
 
 @Component({
+  standalone: false,
   templateUrl: "znode-acl.component.html",
   styleUrls: ["znode-acl.component.scss"]
 })
@@ -57,7 +57,7 @@ export class ZNodeAclComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       (<Observable<Either<Error, ZNodeWithChildren>>>this.route.parent.data.pipe(pluck("zNodeWithChildren")))
-        .switchMap((either, index) =>
+        .pipe(switchMap((either, index) =>
           either.caseOf({
             left: error =>
               this.dialogService
@@ -66,7 +66,7 @@ export class ZNodeAclComponent implements OnInit, OnDestroy {
             right: node =>
               of(this.aclFormFactory.newForm(node.acl, node.meta))
           })
-        )
+        ))
         .subscribe((form) => this.aclForm = form)
     );
   }

@@ -17,7 +17,7 @@
 
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {combineLatest, EMPTY, from, Observable, of, Subject, throwError, zip} from "rxjs";
+import {BehaviorSubject, combineLatest, EMPTY, from, Observable, of, Subject, Subscription, throwError, zip} from "rxjs";
 import {bufferCount, catchError, filter, finalize, map, mapTo, pluck, switchMap, take, tap} from "rxjs/operators";
 import {Either, Maybe} from "tsmonad";
 import {Buffer} from "buffer";
@@ -26,10 +26,9 @@ import {PreferencesService} from "../../preferences";
 import {Mode, ModeId, ModeProvider} from "./mode";
 import {Formatter, FormatterProvider} from "../../formatter";
 import {Compression, CompressionId, CompressionProvider} from "./compression";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Subscription} from "rxjs/Subscription";
 
 @Component({
+  standalone: false,
   templateUrl: "znode-data.component.html",
   styleUrls: ["znode-data.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush

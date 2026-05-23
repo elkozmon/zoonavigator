@@ -24,7 +24,7 @@
 <mat-dialog-content
   tdFileDrop
   [multiple]="false"
-  (fileDrop)="data.file = $event">
+  (fileDrop)="data.file = $any($event)">
   <div layout="row" layout-align="start center" flex>
     <mat-form-field
       class="zoo-full-width"

@@ -16,8 +16,9 @@
  */
 
 import {NgModule} from "@angular/core";
-import {MatIconModule, MatInputModule} from "@angular/material";
-import {CovalentCommonModule} from "@covalent/core";
+import {MatIconModule} from "@angular/material/icon";
+import {MatInputModule} from "@angular/material/input";
+import {CovalentCommonModule} from "@covalent/core/common";
 import {RegexpFilterComponent} from "./regexp/regexp-filter.component";
 
 @NgModule({

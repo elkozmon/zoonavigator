@@ -27,7 +27,7 @@
         target="_blank"
         matTooltip="Donate"
         matTooltipPosition="below">
-        <fa name="heart" class="mat-24"></fa>
+        <i class="fa fa-heart mat-24" aria-hidden="true"></i>
       </a>
       <a
         mat-icon-button
@@ -35,7 +35,7 @@
         target="_blank"
         matTooltip="Documentation"
         matTooltipPosition="below">
-        <fa name="book" class="mat-24"></fa>
+        <i class="fa fa-book mat-24" aria-hidden="true"></i>
       </a>
       <a
         mat-icon-button
@@ -43,22 +43,22 @@
         target="_blank"
         matTooltip="GitHub"
         matTooltipPosition="below">
-        <fa name="github" class="mat-24"></fa>
+        <i class="fa fa-github mat-24" aria-hidden="true"></i>
       </a>
       <a
         mat-icon-button
         matTooltip="Disconnect"
         matTooltipPosition="below"
         (click)="disconnect()">
-        <fa name="sign-out" class="mat-24"></fa>
+        <i class="fa fa-sign-out mat-24" aria-hidden="true"></i>
       </a>
     </div>
 
     <td-layout-manage-list
       #manageList
-      [opened]="mediaService.registerQuery('gt-sm') | async"
-      [mode]="(mediaService.registerQuery('gt-sm') | async) ? 'side' :  'over'"
-      [sidenavWidth]="(mediaService.registerQuery('gt-xs') | async) ? '309px' : '100%'">
+      [opened]="isGtSm | async"
+      [mode]="(isGtSm | async) ? 'side' :  'over'"
+      [sidenavWidth]="(isGtXs | async) ? '309px' : '100%'">
 
       <mat-toolbar td-sidenav-content>
         <zoo-editor-nav-actions
@@ -72,7 +72,7 @@
 
       <mat-nav-list
         td-sidenav-content
-        (click)="!mediaService.query('gt-sm') && manageList.close()">
+        (click)="closeManageListForSmallScreens(manageList)">
         <div class="zoo-list-actions">
           <zoo-regexp-filter
             #childrenFilter

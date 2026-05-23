@@ -16,9 +16,10 @@
  */
 
 import {Injectable, ViewContainerRef} from "@angular/core";
-import {TdDialogService} from "@covalent/core";
-import {MatDialog, MatSnackBar} from "@angular/material";
-import {Observable, of, Subject} from "rxjs";
+import {TdDialogService} from "@covalent/core/dialogs";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Observable, of, Subject, Subscription} from "rxjs";
 import {debounceTime, groupBy, map, mapTo, mergeMap, zip} from "rxjs/operators";
 import {DialogService} from "./dialog.service";
 import {
@@ -35,7 +36,6 @@ import {
   MoveZNodeData,
   MoveZNodeDialogComponent
 } from "./dialogs";
-import {Subscription} from "rxjs/Rx";
 import {Maybe} from "tsmonad";
 
 @Injectable()

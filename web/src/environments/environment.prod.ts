@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+ * Copyright (C) 2019  Lubos Kozmon <https://www.elkozmon.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,16 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {Component, Input} from "@angular/core";
-
-@Component({
-  standalone: false,
-  selector: "zoo-editor-content",
-  templateUrl: "content.component.html",
-  styleUrls: ["content.component.scss"]
-})
-export class ContentComponent {
-
-  @Input() flex: any;
-
-}
+export const environment = {
+  production: true,
+  docsUrl: "https://zoonavigator.elkozmon.com/en/latest",
+  docsFaqsAuthUrl: "https://zoonavigator.elkozmon.com/en/latest/faqs.html#what-should-i-fill-in-for-auth-username-and-auth-password",
+  appVersion: "dev",
+  apiHref: "/api",
+};
