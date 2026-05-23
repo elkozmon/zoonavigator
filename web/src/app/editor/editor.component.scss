@@ -39,9 +39,16 @@ zoo-toolbar {
 }
 
 .zoo-editor-main {
+  background: #eeeeee;
   display: flex;
   flex-direction: column;
   min-height: 0;
+}
+
+mat-sidenav > mat-toolbar,
+.zoo-editor-main > mat-toolbar {
+  background: #f5f5f5;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 mat-nav-list {

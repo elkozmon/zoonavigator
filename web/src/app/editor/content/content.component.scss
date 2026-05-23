@@ -20,9 +20,12 @@ a.active {
 }
 
 :host {
+  box-sizing: border-box;
   display: flex;
   flex: 1 1 auto;
   min-height: 0;
+  padding: 8px;
+  width: 100%;
 }
 
 //.mat-tab-nav-bar {
@@ -35,6 +38,8 @@ mat-card {
   align-items: stretch;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
+  padding: 0;
 }
 
 mat-card-content {
@@ -43,4 +48,14 @@ mat-card-content {
   flex: 1;
   min-height: 0;
   padding: 0 !important;
+}
+
+:host ::ng-deep .mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+  flex: 0 0 160px !important;
+  max-width: 160px;
+  min-width: 160px;
+}
+
+:host ::ng-deep .mat-mdc-tab-links {
+  flex: 0 0 auto;
 }

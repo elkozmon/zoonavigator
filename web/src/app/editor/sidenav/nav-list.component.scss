@@ -78,16 +78,19 @@
 
 .zoo-node-name {
   flex: 1;
-  display: block;
+  align-items: center;
+  display: flex;
+  height: 48px;
   margin-left: 8px;
   width: 150px;
-  line-height: 48px;
+  line-height: 20px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .zoo-node-actions {
-  float: right;
+  align-items: center;
+  display: flex;
   margin-left: auto;
 }
