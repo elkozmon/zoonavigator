@@ -33,6 +33,38 @@
   box-sizing: border-box;
   height: 48px;
 
+  ::ng-deep .mdc-list-item__content,
+  ::ng-deep .mat-mdc-list-item-unscoped-content {
+    align-items: center;
+    display: flex;
+    height: 48px;
+    width: 100%;
+  }
+
+  mat-checkbox {
+    flex: 0 0 16px;
+    height: 18px;
+    width: 16px;
+  }
+
+  ::ng-deep .mdc-form-field,
+  ::ng-deep .mdc-checkbox {
+    height: 18px;
+    width: 16px;
+  }
+
+  ::ng-deep .mdc-checkbox {
+    flex: 0 0 16px;
+    padding: 0;
+  }
+
+  ::ng-deep .mdc-checkbox__background {
+    height: 16px;
+    left: 0;
+    top: 1px;
+    width: 16px;
+  }
+
   .zoo-node-actions button {
     opacity: 0.3;
   }
@@ -55,4 +87,5 @@
 
 .zoo-node-actions {
   float: right;
+  margin-left: auto;
 }

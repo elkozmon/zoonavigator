@@ -21,6 +21,7 @@
 
 html, body {
   background: #eeeeee !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 div.zoo-error-bar {
@@ -32,12 +33,27 @@ div.zoo-error-bar {
 }
 
 .mat-icon {
-  .mat-18 {
-    @include mat-icon-size(18px);
-  }
-  .mat-16 {
-    @include mat-icon-size(16px);
-  }
+  font-family: "Material Icons";
+  font-feature-settings: "liga";
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  word-wrap: normal;
+  white-space: nowrap;
+}
+
+mat-icon.material-icons,
+mat-icon.material-icons.mat-icon {
+  vertical-align: middle;
+}
+
+.mat-icon.mat-18 {
+  @include mat-icon-size(18px);
+}
+
+.mat-icon.mat-16 {
+  @include mat-icon-size(16px);
 }
 
 .fa.mat-24 {
@@ -74,6 +90,28 @@ div.zoo-error-bar {
 
 mat-toolbar mat-icon {
   width: 40px !important;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  height: 40px;
+  line-height: 40px;
+  padding: 0;
+  width: 40px;
+}
+
+.mat-mdc-icon-button .mat-mdc-button-touch-target {
+  height: 40px;
+  width: 40px;
+}
+
+.td-layout-toolbar.mat-toolbar {
+  background-color: #455a64;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.td-layout-toolbar.mat-toolbar a,
+.td-layout-toolbar.mat-toolbar mat-icon {
+  color: inherit;
 }
 
 button {

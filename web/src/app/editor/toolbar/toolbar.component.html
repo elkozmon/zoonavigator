@@ -73,7 +73,7 @@
     <mat-icon class="mat-24">home</mat-icon>
   </button>
 
-  <mat-form-field>
+  <mat-form-field appearance="fill" subscriptSizing="dynamic">
     <mat-select
       [required]="true"
       (selectionChange)="onConnectionOptionChange($event)"
@@ -91,7 +91,7 @@
     @
   </span>
 
-  <mat-form-field style="flex-grow: 5">
+  <mat-form-field appearance="fill" subscriptSizing="dynamic" style="flex-grow: 5">
     <input
       matInput
       #pathInput="matInput"
