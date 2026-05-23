@@ -93,7 +93,7 @@ jobs:
 
           {
             echo "outputs<<EOF"
-            echo 'type=docker,dest=${{ runner.temp }}/docker-image/image.tar'
+            echo 'type=docker,dest=${{ runner.temp }}/docker-image/image.tar,name=zoonavigator-test:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}'
             if [[ "${{ inputs.publish }}" == "true" ]]; then
               echo 'type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true'
             fi
@@ -108,7 +108,6 @@ jobs:
           context: .
           file: ${{ github.workspace }}/build/docker/Dockerfile
           platforms: linux/${{ matrix.architecture }}
-          tags: ${{ env.DOCKER_IMAGE }}:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}
           push: false
           outputs: ${{ steps.docker-output.outputs.outputs }}
           build-args: |
@@ -241,7 +240,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          image="${{ env.DOCKER_IMAGE }}:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}"
+          image="zoonavigator-test:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}"
           echo "Using image '${image}'"
 
           docker run -d \
