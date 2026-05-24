@@ -48,7 +48,10 @@ zoo-toolbar {
 mat-sidenav > mat-toolbar,
 .zoo-editor-main > mat-toolbar {
   background: #f5f5f5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
   color: rgba(0, 0, 0, 0.87);
+  z-index: 1;
 }
 
 mat-nav-list {

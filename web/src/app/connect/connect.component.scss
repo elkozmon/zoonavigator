@@ -28,12 +28,19 @@ div.zoo-header {
 }
 
 mat-card {
+  display: block;
   padding: 10px;
   min-width: 410px;
   max-width: 30%;
 
   mat-form-field {
     margin: 0 0 10px;
+    --mat-form-field-container-text-line-height: 15.75px;
+    --mat-form-field-container-text-size: 14px;
+    --mat-form-field-filled-container-color: transparent;
+    --mat-form-field-subscript-text-line-height: 11.8125px;
+    --mat-form-field-subscript-text-size: 10.5px;
+    --mdc-filled-text-field-container-color: transparent;
   }
 
   mat-form-field, div {
@@ -41,15 +48,67 @@ mat-card {
   }
 
   form > div {
+    box-sizing: border-box;
     padding: 0 5px;
   }
 
   button {
     margin-top: 15px;
+    min-width: 96px;
+    text-transform: uppercase;
+    width: 96px;
   }
+}
+
+div[formArrayName="credentialsArray"] > div mat-form-field {
+  flex: 0 0 180px;
+  width: 180px;
 }
 
 mat-hint a {
   color: #53728b;
   text-decoration: none;
+}
+
+:host ::ng-deep mat-card .mat-mdc-text-field-wrapper {
+  background-color: transparent;
+  height: 39px;
+  padding: 0;
+}
+
+:host ::ng-deep mat-card .mat-mdc-form-field-focus-overlay {
+  background-color: transparent;
+  opacity: 0;
+}
+
+:host ::ng-deep mat-card .mat-mdc-form-field-flex {
+  height: 39px;
+}
+
+:host ::ng-deep mat-card .mat-mdc-form-field-infix {
+  min-height: 39px;
+  padding: 17px 0 6px;
+}
+
+:host ::ng-deep mat-card .mat-mdc-input-element {
+  height: 15.75px;
+}
+
+:host ::ng-deep mat-card .mat-mdc-form-field-subscript-wrapper {
+  height: 11.8125px;
+  letter-spacing: normal;
+  margin-top: 5.6875px;
+}
+
+:host ::ng-deep mat-card .mat-mdc-form-field-hint-wrapper {
+  height: 11.8125px;
+  letter-spacing: normal;
+  line-height: 11.8125px;
+  padding: 0;
+}
+
+:host ::ng-deep mat-card mat-hint {
+  color: rgba(0, 0, 0, 0.54);
+  letter-spacing: normal;
+  line-height: 11.8125px;
 }

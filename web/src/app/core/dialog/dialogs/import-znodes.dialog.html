@@ -29,10 +29,10 @@
       class="zoo-full-width"
       flex
       (click)="fileInput.click()">
+      <mat-label>Select or drop file to import</mat-label>
       <input
         matInput
         [value]="data.file?.name"
-        placeholder="Select or drop file to import"
         readonly/>
       <input
         #fileInput
@@ -43,9 +43,9 @@
     <button mat-button (click)="fileInput.click()" style="margin-left: 5px">Browse</button>
   </div>
   <mat-form-field class="zoo-full-width">
+    <mat-label>Enter destination path</mat-label>
     <input
       matInput
-      placeholder="Enter destination path"
       (keypress)="onKeyPress($event)"
       [(ngModel)]="data.path"/>
   </mat-form-field>

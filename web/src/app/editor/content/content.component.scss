@@ -36,10 +36,16 @@ mat-card {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
+  max-width: 100%;
   overflow: hidden;
   padding: 0;
+}
+
+mat-card[flex] {
+  align-self: stretch;
+  flex: 1 1 auto;
 }
 
 mat-card-content {

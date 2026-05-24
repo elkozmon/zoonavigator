@@ -23,9 +23,9 @@
 </h3>
 <mat-dialog-content>
   <mat-form-field class="zoo-full-width">
+    <mat-label>Enter new path</mat-label>
     <input
       matInput
-      placeholder="Enter new path"
       (keypress)="onKeyPress($event)"
       [(ngModel)]="data.path"/>
   </mat-form-field>
