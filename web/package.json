@@ -25,7 +25,7 @@
     "@angular/compiler": "^7.2.1",
     "@angular/core": "^7.2.1",
     "@angular/forms": "^7.2.1",
-    "@angular/http": "^7.2.1",
+    "@angular/http": "^7.2.16",
     "@angular/material": "^7.2.1",
     "@angular/platform-browser": "^7.2.1",
     "@angular/platform-browser-dynamic": "^7.2.1",
