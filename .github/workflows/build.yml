@@ -266,7 +266,46 @@ jobs:
       - name: Install ZooNavigator Snap
         if: matrix.platform == 'snap'
         run: |
-          sudo snap install --dangerous ${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_${{ matrix.architecture }}.snap
+          snap_path="${{ steps.download-snap.outputs.download-path }}/zoonavigator_${{ needs.setup-env.outputs.app-version }}_${{ matrix.architecture }}.snap"
+
+          if ! sudo snap install --dangerous "${snap_path}"
+          then
+            echo "::group::Snap state"
+            sudo snap list || true
+            sudo snap info zoonavigator || true
+            sudo snap services zoonavigator || true
+            sudo snap changes || true
+            echo "::endgroup::"
+
+            echo "::group::Snap install tasks"
+            change_id="$(sudo snap changes | awk '/Install .*zoonavigator/ { id=$1 } END { print id }')"
+            if [ -n "${change_id}" ]
+            then
+              sudo snap tasks "${change_id}" || true
+            fi
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator service status"
+            sudo systemctl status snap.zoonavigator.zoonavigator.service --no-pager || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator journal"
+            sudo journalctl -u snap.zoonavigator.zoonavigator.service --no-pager -n 300 || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator snap logs"
+            sudo snap logs zoonavigator -n=200 || true
+            echo "::endgroup::"
+
+            echo "::group::ZooNavigator snap data"
+            sudo ls -la /var/snap/zoonavigator || true
+            sudo find /var/snap/zoonavigator -maxdepth 3 -type f -print || true
+            sudo cat /var/snap/zoonavigator/current/.javaopts || true
+            sudo cat /var/snap/zoonavigator/current/application.conf || true
+            echo "::endgroup::"
+
+            exit 1
+          fi
 
       - name: Configure ZooNavigator Snap
         if: matrix.platform == 'snap'

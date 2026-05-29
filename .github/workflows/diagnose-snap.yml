@@ -1,0 +1,16 @@
+name: Diagnose Snap
+
+on:
+  push:
+    branches: [ codex/diagnose-snap-amd64 ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      publish: false
+    secrets: inherit
