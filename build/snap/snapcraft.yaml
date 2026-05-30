@@ -24,6 +24,7 @@ apps:
   zoonavigator:
     command: bin/zoonavigator
     daemon: simple
+    install-mode: disable
     environment:
       JAVA_HOME: $SNAP/usr/lib/jvm/java-17-openjdk-$SNAP_ARCH
       PATH: $JAVA_HOME/bin:$PATH

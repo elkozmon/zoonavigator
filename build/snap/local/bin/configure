@@ -174,4 +174,12 @@ then
   echo "$SECRET_KEY" > "$SNAP_DATA/.secret"
 fi
 
-snapctl restart zoonavigator
+# The daemon has install-mode disabled, so configuration must exist before first start.
+SERVICE_CURRENT="$(snapctl services zoonavigator | awk 'NR == 2 { print $3 }')"
+
+if [ "$SERVICE_CURRENT" = "active" ]
+then
+  snapctl stop zoonavigator
+fi
+
+snapctl start --enable zoonavigator
