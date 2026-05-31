@@ -18,6 +18,7 @@
 import {Component, Input} from "@angular/core";
 
 @Component({
+  standalone: false,
   selector: "zoo-editor-content",
   templateUrl: "content.component.html",
   styleUrls: ["content.component.scss"]

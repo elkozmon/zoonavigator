@@ -29,7 +29,6 @@ import {ApiRequest} from "../request";
 import {ApiService} from "./api.service";
 import {APP_BASE_HREF} from "@angular/common";
 import {environment} from "../../../../environments/environment";
-import {HttpObserve} from "@angular/common/http/src/client";
 
 @Injectable()
 export class DefaultApiService implements ApiService {
@@ -60,7 +59,7 @@ export class DefaultApiService implements ApiService {
     const options = {
       body: null,
       url: url,
-      observe: "response" as HttpObserve,
+      observe: "response" as const,
       params: apiRequest.params,
       headers: apiRequest.headers || new HttpHeaders()
     };

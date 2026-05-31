@@ -6,22 +6,18 @@
     "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
-    "target": "es5",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
-    ],
-    "lib": [
-      "es2016",
-      "dom"
     ],
     "module": "es2015",
     "types": [
       "node"
-    ],
+    ]
   },
   "angularCompilerOptions": {
     "strictTemplates": true,

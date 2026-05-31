@@ -21,8 +21,7 @@ import {BrowserModule, Title} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
-import {CovalentCommonModule} from "@covalent/core";
-import {AngularFontAwesomeModule} from "angular-font-awesome";
+import {MAT_ICON_DEFAULT_OPTIONS} from "@angular/material/icon";
 import {ConfigService, getConfigLoader} from "./config";
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from "./app-routing.module";
@@ -33,11 +32,9 @@ import {EditorModule} from "./editor";
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    AngularFontAwesomeModule,
     ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,
-    CovalentCommonModule,
     CoreModule,
     ConnectModule,
     EditorModule,
@@ -60,6 +57,10 @@ import {EditorModule} from "./editor";
     {
       provide: APP_BASE_HREF,
       useValue: window["base-href"]
+    },
+    {
+      provide: MAT_ICON_DEFAULT_OPTIONS,
+      useValue: {fontSet: "material-icons"}
     }
   ],
   declarations: [

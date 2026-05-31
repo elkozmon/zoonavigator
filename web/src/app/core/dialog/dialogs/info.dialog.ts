@@ -16,10 +16,11 @@
  */
 
 import {Component, Inject} from "@angular/core";
-import {MAT_DIALOG_DATA} from "@angular/material";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {InfoData} from "./info.data";
 
 @Component({
+  standalone: false,
   selector: "zoo-info.dialog",
   templateUrl: "info.dialog.html",
   styleUrls: ["dialog.scss"]

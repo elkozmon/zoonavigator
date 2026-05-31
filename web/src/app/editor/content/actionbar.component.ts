@@ -18,6 +18,7 @@
 import {Component} from "@angular/core";
 
 @Component({
+  standalone: false,
   selector: "zoo-editor-actionbar",
   templateUrl: "actionbar.component.html",
   styleUrls: ["actionbar.component.scss"]

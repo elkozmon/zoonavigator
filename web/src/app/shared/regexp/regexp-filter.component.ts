@@ -18,6 +18,7 @@
 import {Component, EventEmitter, Output} from "@angular/core";
 
 @Component({
+  standalone: false,
   selector: "zoo-regexp-filter",
   templateUrl: "regexp-filter.component.html",
   styleUrls: ["regexp-filter.component.scss"]

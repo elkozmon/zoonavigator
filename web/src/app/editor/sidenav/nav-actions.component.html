@@ -1,19 +1,19 @@
 <!--
-  ~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as
-  ~ published by the Free Software Foundation, either version 3 of the
-  ~ License, or (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+~ Copyright (C) 2019  Ľuboš Kozmon <https://www.elkozmon.com>
+~
+~ This program is free software: you can redistribute it and/or modify
+~ it under the terms of the GNU Affero General Public License as
+~ published by the Free Software Foundation, either version 3 of the
+~ License, or (at your option) any later version.
+~
+~ This program is distributed in the hope that it will be useful,
+~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+~ GNU Affero General Public License for more details.
+~
+~ You should have received a copy of the GNU Affero General Public License
+~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 
 <!--suppress HtmlUnknownTag, HtmlUnknownAttribute -->
 <button
@@ -55,18 +55,42 @@
   matTooltipPosition="below"
   [matMenuTriggerFor]="selectedNodesMenu"
   [disabled]="zNodes.length === 0"
-  [ngSwitch]="zNodes.length">
-  <mat-icon class="mat-24" *ngSwitchCase="0">filter_none</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="1">filter_1</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="2">filter_2</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="3">filter_3</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="4">filter_4</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="5">filter_5</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="6">filter_6</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="7">filter_7</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="8">filter_8</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchCase="9">filter_9</mat-icon>
-  <mat-icon class="mat-24 active-selected" *ngSwitchDefault>filter_9_plus</mat-icon>
+  >
+  @switch (zNodes.length) {
+    @case (0) {
+      <mat-icon class="mat-24">filter_none</mat-icon>
+    }
+    @case (1) {
+      <mat-icon class="mat-24 active-selected">filter_1</mat-icon>
+    }
+    @case (2) {
+      <mat-icon class="mat-24 active-selected">filter_2</mat-icon>
+    }
+    @case (3) {
+      <mat-icon class="mat-24 active-selected">filter_3</mat-icon>
+    }
+    @case (4) {
+      <mat-icon class="mat-24 active-selected">filter_4</mat-icon>
+    }
+    @case (5) {
+      <mat-icon class="mat-24 active-selected">filter_5</mat-icon>
+    }
+    @case (6) {
+      <mat-icon class="mat-24 active-selected">filter_6</mat-icon>
+    }
+    @case (7) {
+      <mat-icon class="mat-24 active-selected">filter_7</mat-icon>
+    }
+    @case (8) {
+      <mat-icon class="mat-24 active-selected">filter_8</mat-icon>
+    }
+    @case (9) {
+      <mat-icon class="mat-24 active-selected">filter_9</mat-icon>
+    }
+    @default {
+      <mat-icon class="mat-24 active-selected">filter_9_plus</mat-icon>
+    }
+  }
 </button>
 <mat-menu #selectedNodesMenu="matMenu">
   <button

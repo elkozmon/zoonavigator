@@ -27,6 +27,7 @@ export class XmlMode implements Mode {
   }
 
   encodeData(data: string): ArrayBuffer {
-    return TextEncoder("utf-8").encode(data).buffer;
+    const bytes = TextEncoder("utf-8").encode(data);
+    return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
   }
 }

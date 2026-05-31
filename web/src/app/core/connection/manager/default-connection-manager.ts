@@ -16,7 +16,7 @@
  */
 
 import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {map} from "rxjs/operators";
 import {Maybe} from "tsmonad";
 import {ConnectionManager} from "./connection-manager";
@@ -24,7 +24,6 @@ import {StorageService} from "../../storage";
 import {ConnectionPreset} from "../connection-preset";
 import {ConnectionParams} from "../connection-params";
 import {ConfigService} from "../../../config";
-import {of} from "rxjs/internal/observable/of";
 
 @Injectable()
 export class DefaultConnectionManager implements ConnectionManager {

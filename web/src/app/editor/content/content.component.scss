@@ -19,6 +19,15 @@ a.active {
   border-bottom: 2px solid #f4511e;
 }
 
+:host {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 8px;
+  width: 100%;
+}
+
 //.mat-tab-nav-bar {
 //  border-bottom: 0;
 //}
@@ -27,11 +36,32 @@ mat-card {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  flex: 0 0 auto;
+  min-height: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+mat-card[flex] {
+  align-self: stretch;
+  flex: 1 1 auto;
 }
 
 mat-card-content {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
   padding: 0 !important;
+}
+
+:host ::ng-deep .mat-mdc-tab-nav-bar-stretch-tabs .mat-mdc-tab-link {
+  flex: 0 0 160px !important;
+  max-width: 160px;
+  min-width: 160px;
+}
+
+:host ::ng-deep .mat-mdc-tab-links {
+  flex: 0 0 auto;
 }

@@ -16,22 +16,25 @@
  */
 
 import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatButtonModule, MatCardModule, MatInputModule, MatSelectModule, MatSnackBarModule} from "@angular/material";
-import {CovalentCommonModule, CovalentLoadingModule} from "@covalent/core";
-import {AngularFontAwesomeModule} from "angular-font-awesome";
+import {MatButtonModule} from "@angular/material/button";
+import {MatCardModule} from "@angular/material/card";
+import {MatInputModule} from "@angular/material/input";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatSelectModule} from "@angular/material/select";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ConnectRoutingModule} from "./connect-routing.module";
 import {ConnectComponent} from "./connect.component";
 
 @NgModule({
   imports: [
-    AngularFontAwesomeModule,
+    CommonModule,
     ReactiveFormsModule,
-    CovalentCommonModule,
-    CovalentLoadingModule,
     ConnectRoutingModule,
     MatCardModule,
     MatInputModule,
+    MatProgressBarModule,
     MatSelectModule,
     MatButtonModule,
     MatSnackBarModule

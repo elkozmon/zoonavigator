@@ -21,6 +21,7 @@ import {CompressionId} from "./compression";
 import {Maybe} from "tsmonad";
 
 @Component({
+  standalone: false,
   selector: "zoo-editor-data-toolbar",
   templateUrl: "znode-data-toolbar.component.html",
   styleUrls: ["znode-data-toolbar.component.scss"],

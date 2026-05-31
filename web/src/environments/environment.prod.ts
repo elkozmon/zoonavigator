@@ -1,5 +1,5 @@
-/*!
- * Copyright (C) 2018  Ľuboš Kozmon
+/*
+ * Copyright (C) 2019  Lubos Kozmon <https://www.elkozmon.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,22 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@use "@angular/material" as mat;
-
-$zoo-primary: mat.m2-define-palette(mat.$m2-blue-grey-palette, 700, 500, 900);
-$zoo-accent: mat.m2-define-palette(mat.$m2-deep-orange-palette, 500, 300, 700);
-$zoo-warn: mat.m2-define-palette(mat.$m2-red-palette);
-$zoo-typography: mat.m2-define-typography-config(
-  $font-family: 'Roboto, "Helvetica Neue", sans-serif'
-);
-$zoo-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $zoo-primary,
-    accent: $zoo-accent,
-    warn: $zoo-warn,
-  ),
-  typography: $zoo-typography,
-));
-
-@include mat.core();
-@include mat.all-component-themes($zoo-theme);
+export const environment = {
+  production: true,
+  docsUrl: "https://zoonavigator.elkozmon.com/en/latest",
+  docsFaqsAuthUrl: "https://zoonavigator.elkozmon.com/en/latest/faqs.html#what-should-i-fill-in-for-auth-username-and-auth-password",
+  appVersion: "dev",
+  apiHref: "/api",
+};

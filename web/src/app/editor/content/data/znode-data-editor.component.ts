@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
+import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild} from "@angular/core";
 import "brace";
 import "brace/ext/searchbox";
 import "brace/mode/text";
@@ -23,50 +23,32 @@ import "brace/mode/json";
 import "brace/mode/yaml";
 import "brace/mode/xml";
 import "brace/theme/chrome";
-import {AceEditorComponent} from "ng2-ace-editor";
+import {AceComponent, AceConfigInterface} from "ngx-ace-wrapper";
 import {ModeId} from "./mode";
 
 @Component({
+  standalone: false,
   selector: "zoo-editor-data-editor",
   templateUrl: "znode-data-editor.component.html",
   styleUrls: ["znode-data-editor.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ZNodeDataEditorComponent {
+export class ZNodeDataEditorComponent implements AfterViewInit {
 
-  @ViewChild("dataEditor") set dataEditor(comp: AceEditorComponent) {
-    if (comp) {
-      this._dataEditor = comp;
-
-      // Disable Ace editors search box
-      this._dataEditor._editor.commands.removeCommand("find");
-    }
-  }
+  @ViewChild("dataEditor") dataEditor: AceComponent;
 
   @Output() submit: EventEmitter<any> = new EventEmitter();
 
   @Output() dataChange: EventEmitter<string> = new EventEmitter<string>();
 
-  @Input("mode") set mode(id: ModeId) {
-    this._dataEditor.setMode(this.modeIdToEditorMode.get(id));
-  }
-
-  @Input("wrapEnabled") set wrap(enabled: boolean) {
-    this.editorOpts.wrap = enabled;
-    this._dataEditor.setOptions(this.editorOpts);
-  }
-
-  @Input("data") set data(data: string) {
-    this._dataEditor.setText(data);
-  }
-
-  editorOpts: any = {
+  editorOpts: AceConfigInterface = {
     fontFamily: "\"Fira Code Retina\", monospace",
     fontSize: "10pt",
     wrap: true
   };
 
-  private _dataEditor: AceEditorComponent;
+  editorData = "";
+  editorMode = "text";
 
   private modeIdToEditorMode: Map<ModeId, string> = new Map([
     [ModeId.Text, "text"],
@@ -75,6 +57,29 @@ export class ZNodeDataEditorComponent {
     [ModeId.Yaml, "yaml"],
     [ModeId.Xml, "xml"],
   ]);
+
+  @Input("mode") set mode(id: ModeId) {
+    this.editorMode = this.modeIdToEditorMode.get(id) || "text";
+  }
+
+  @Input("wrapEnabled") set wrap(enabled: boolean) {
+    this.editorOpts = {
+      ...this.editorOpts,
+      wrap: enabled
+    };
+  }
+
+  @Input("data") set data(data: string) {
+    this.editorData = data;
+  }
+
+  ngAfterViewInit(): void {
+    const editor = this.dataEditor.directiveRef && this.dataEditor.directiveRef.ace();
+
+    if (editor) {
+      (editor.commands as any).removeCommand("find");
+    }
+  }
 
   onDataChange(data: string): void {
     this.dataChange.emit(data);

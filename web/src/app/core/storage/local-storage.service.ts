@@ -17,11 +17,9 @@
 
 import {Injectable} from "@angular/core";
 import {StorageService} from "./storage.service";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of, Subject, Subscription} from "rxjs";
 import {map} from "rxjs/operators";
-import {Subject, Subscription} from "rxjs/Rx";
 import {Maybe} from "tsmonad";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class LocalStorageService implements StorageService {

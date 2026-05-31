@@ -16,10 +16,12 @@
  */
 
 import {Component, Inject, ViewChild} from "@angular/core";
-import {MAT_DIALOG_DATA, MatButton} from "@angular/material"
+import {MatButton} from "@angular/material/button";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {ImportZNodesData} from "./import-znodes.data";
 
 @Component({
+  standalone: false,
   selector: "zoo-import-znodes.dialog",
   templateUrl: "import-znodes.dialog.html",
   styleUrls: ["dialog.scss"]
@@ -37,5 +39,22 @@ export class ImportZNodesDialogComponent {
     if (code === 13) {
       this.submitButton._elementRef.nativeElement.click();
     }
+  }
+
+  onFileInputChange(event: Event): void {
+    const input = <HTMLInputElement>event.target;
+    this.data.file = input.files && input.files.length > 0 ? input.files[0] : null;
+  }
+
+  onFileDrop(event: DragEvent): void {
+    event.preventDefault();
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      this.data.file = event.dataTransfer.files[0];
+    }
+  }
+
+  preventDefault(event: DragEvent): void {
+    event.preventDefault();
   }
 }

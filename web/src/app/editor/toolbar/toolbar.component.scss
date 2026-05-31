@@ -17,4 +17,36 @@
 mat-form-field {
   margin-left: 12px;
   flex: 1;
+  align-self: center;
+  height: 34px;
+  --mat-form-field-filled-container-color: transparent;
+  --mdc-filled-text-field-container-color: transparent;
+  --mat-form-field-container-height: 34px;
+  --mat-form-field-container-vertical-padding: 5px;
+}
+
+mat-form-field:first-of-type {
+  flex: 0 0 180px;
+}
+
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+:host ::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: transparent;
+  flex: 0 0 34px;
+  height: 34px;
+  padding: 0;
+}
+
+:host ::ng-deep .mat-mdc-form-field-flex {
+  align-items: center;
+  height: 34px;
+}
+
+:host ::ng-deep .mat-mdc-form-field-infix {
+  min-height: 34px;
+  padding-bottom: 5px;
+  padding-top: 5px;
 }

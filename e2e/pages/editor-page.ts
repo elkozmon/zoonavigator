@@ -77,6 +77,11 @@ export class EditorPage {
   }
 
   async createNode(nodePath: string, openAfterwards: boolean = false) {
+    const currentPath = await this.toolbar.pathInput.inputValue();
+    const nodeNameStart = nodePath.lastIndexOf("/");
+    const parentPath = nodeNameStart <= 0 ? "/" : nodePath.slice(0, nodeNameStart);
+    const nodeName = nodePath.slice(nodeNameStart + 1);
+
     await this.toolbar.createNodeButton.click();
     await this.createNodeDialog.waitUntilVisible();
     await this.createNodeDialog.nodePathInput.fill(nodePath);
@@ -92,6 +97,15 @@ export class EditorPage {
     await this.createNodeDialog.waitUntilHidden();
 
     await responsePromise;
+
+    if (openAfterwards) {
+      await expect(this.toolbar.pathInput).toHaveValue(nodePath);
+      return;
+    }
+
+    if (currentPath === parentPath && nodeName) {
+      await expect(this.sidebar.getNodeItem(nodeName)).toBeVisible();
+    }
   }
 
   async navigateToPath(path: string) {
@@ -175,7 +189,7 @@ export class SideBar {
   }
 
   getNodeCheckbox(nodeName: string) {
-    return this.getNodeItem(nodeName).getByRole("checkbox").locator("..");
+    return this.getNodeItem(nodeName).getByRole("checkbox");
   }
 
   async getNodeActionsMenuButton(nodeName: string) {
@@ -188,7 +202,7 @@ export class SideBar {
   }
 
   async checkNode(nodeName: string) {
-    await this.getNodeCheckbox(nodeName).click();
+    await this.getNodeCheckbox(nodeName).setChecked(true);
   }
 
   async clickNode(nodeName: string) {
@@ -329,7 +343,7 @@ export class AclTab {
   }
 
   async getTableHeader(headerName: string): Promise<Locator> {
-    return this.page.getByRole("columnheader", { name: headerName, exact: true });
+    return this.aclTable.locator("th").filter({ hasText: new RegExp(`^${headerName}$`) }).first();
   }
 
   async getPermissionCheckbox(permission: string, row: number = 0): Promise<Locator> {
@@ -374,7 +388,7 @@ export class AclTab {
 
   private getPermissionCheckboxWrapperByRow(rowIndex: number, permission: AclPermission) {
     const columnIndex = ACL_PERMISSIONS.indexOf(permission);
-    return this.getAclRow(rowIndex).getByRole("checkbox").nth(columnIndex).locator("..");
+    return this.getAclRow(rowIndex).getByRole("checkbox").nth(columnIndex);
   }
 }
 
@@ -409,7 +423,7 @@ export class NodeActionsMenu {
   readonly moveButton: Locator;
 
   constructor(page: Page) {
-    this.menu = page.locator(".mat-menu-content").filter({ has: page.getByRole("menuitem", { name: "Duplicate" }) });
+    this.menu = page.locator(".mat-menu-content, .mat-mdc-menu-content").filter({ has: page.getByRole("menuitem", { name: "Duplicate" }) });
     this.deleteButton = this.menu.getByRole("menuitem", { name: "Delete" });
     this.exportButton = this.menu.getByRole("menuitem", { name: "Export" });
     this.duplicateButton = this.menu.getByRole("menuitem", { name: "Duplicate" });
@@ -431,7 +445,7 @@ export class BulkNodeActionsMenu {
   readonly exportButton: Locator;
 
   constructor(page: Page) {
-    this.menu = page.locator(".mat-menu-content").filter({ hasNot: page.getByRole("menuitem", { name: "Duplicate" }) });
+    this.menu = page.locator(".mat-menu-content, .mat-mdc-menu-content").filter({ hasNot: page.getByRole("menuitem", { name: "Duplicate" }) });
     this.deleteButton = this.menu.getByRole("menuitem", { name: "Delete" });
     this.exportButton = this.menu.getByRole("menuitem", { name: "Export" });
   }
@@ -449,7 +463,7 @@ export class ModeMenu {
   readonly menu: Locator;
 
   constructor(page: Page) {
-    this.menu = page.locator(".mat-menu-content").filter({ has: page.getByRole("menuitem", { name: "json" }) });
+    this.menu = page.locator(".mat-menu-content, .mat-mdc-menu-content").filter({ has: page.getByRole("menuitem", { name: "json" }) });
   }
 
   async selectMode(mode: Mode) {
@@ -469,7 +483,7 @@ export class CompressionMenu {
   readonly menu: Locator;
 
   constructor(page: Page) {
-    this.menu = page.locator(".mat-menu-content").filter({ has: page.getByRole("menuitem", { name: "gzip" }) });
+    this.menu = page.locator(".mat-menu-content, .mat-mdc-menu-content").filter({ has: page.getByRole("menuitem", { name: "gzip" }) });
   }
 
   async selectCompression(compression: CompressionType) {

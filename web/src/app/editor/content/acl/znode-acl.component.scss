@@ -19,6 +19,24 @@
   padding: 16px;
 }
 
+table {
+  border-spacing: 2px;
+  table-layout: fixed;
+  width: auto;
+}
+
+.zoo-acl-col-text {
+  width: 180px;
+}
+
+.zoo-acl-col-permission {
+  width: 18px;
+}
+
+.zoo-acl-col-remove {
+  width: 42px;
+}
+
 .zoo-form-controls {
   button {
     margin-right: 10px;
@@ -27,10 +45,10 @@
 
 th {
   font-weight: 400;
-  font-size: .9em;
+  font-size: 12.6px;
   text-transform: uppercase;
   vertical-align: bottom;
-  padding: .2em;
+  padding: 2.52px;
 }
 
 th {
@@ -40,6 +58,91 @@ th {
 
 .zoo-input-id {
   margin-right: 20px;
+}
+
+.zoo-input-scheme,
+.zoo-input-id {
+  width: 180px;
+  --mat-form-field-filled-container-color: transparent;
+  --mdc-filled-text-field-container-color: transparent;
+}
+
+:host ::ng-deep .zoo-input-scheme .mat-mdc-text-field-wrapper,
+:host ::ng-deep .zoo-input-id .mat-mdc-text-field-wrapper {
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+:host ::ng-deep .zoo-input-scheme .mat-mdc-form-field-focus-overlay,
+:host ::ng-deep .zoo-input-id .mat-mdc-form-field-focus-overlay {
+  background-color: transparent;
+  opacity: 0;
+}
+
+:host ::ng-deep .zoo-input-scheme .mat-mdc-form-field-infix,
+:host ::ng-deep .zoo-input-id .mat-mdc-form-field-infix {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+:host ::ng-deep .zoo-input-scheme .mat-mdc-form-field-subscript-wrapper,
+:host ::ng-deep .zoo-input-id .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+thead tr:nth-child(2) th,
+tbody td:nth-child(n + 3):nth-child(-n + 7) {
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+  width: 18px;
+}
+
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) mat-checkbox,
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) .mdc-form-field,
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) .mdc-checkbox {
+  height: 16px;
+  width: 16px;
+}
+
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) .mdc-checkbox {
+  padding: 0;
+}
+
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) .mat-mdc-checkbox-touch-target {
+  height: 18px;
+  width: 18px;
+}
+
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) .mdc-checkbox__background {
+  height: 16px;
+  left: 0;
+  top: 0;
+  width: 16px;
+}
+
+:host ::ng-deep tbody td:nth-child(n + 3):nth-child(-n + 7) .mdc-checkbox__native-control {
+  bottom: auto;
+  height: 16px;
+  right: auto;
+  width: 16px;
+}
+
+tbody td:nth-child(8) {
+  padding-left: 0;
+}
+
+tbody td:nth-child(8) .mat-mdc-icon-button {
+  --mdc-icon-button-state-layer-size: 40px;
+  align-items: center;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  line-height: 40px;
+  margin: 0;
+  padding: 8px;
+  width: 40px;
 }
 
 .zoo-input-remove {

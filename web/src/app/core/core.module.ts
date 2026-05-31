@@ -18,8 +18,12 @@
 import {NgModule} from "@angular/core";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
-import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule} from "@angular/material";
-import {CovalentFileModule} from "@covalent/core";
+import {MatButtonModule} from "@angular/material/button";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatIconModule} from "@angular/material/icon";
+import {MatInputModule} from "@angular/material/input";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApiRequestFactory, ApiService, DefaultApiRequestFactory, DefaultApiService} from "./api";
 import {DefaultConnectionManager, ConnectionManager} from "./connection";
 import {
@@ -48,7 +52,7 @@ import {PathSanitizingZNodeService} from "./znode/path-sanitizing-znode.service"
     MatInputModule,
     MatIconModule,
     MatCheckboxModule,
-    CovalentFileModule
+    MatSnackBarModule
   ],
   providers: [
     {provide: ApiService, useClass: DefaultApiService},
@@ -61,14 +65,6 @@ import {PathSanitizingZNodeService} from "./znode/path-sanitizing-znode.service"
     {provide: ZPathService, useClass: DefaultZPathService},
     {provide: ConnectionManager, useClass: DefaultConnectionManager},
     {provide: DialogService, useClass: DefaultDialogService}
-  ],
-  entryComponents: [
-    MoveZNodeDialogComponent,
-    CreateZNodeDialogComponent,
-    ImportZNodesDialogComponent,
-    DuplicateZNodeDialogComponent,
-    ConfirmDialogComponent,
-    InfoDialogComponent
   ],
   declarations: [
     MoveZNodeDialogComponent,

@@ -16,13 +16,14 @@
  */
 
 import {NgModule} from "@angular/core";
-import {MatIconModule, MatInputModule} from "@angular/material";
-import {CovalentCommonModule} from "@covalent/core";
+import {CommonModule} from "@angular/common";
+import {MatIconModule} from "@angular/material/icon";
+import {MatInputModule} from "@angular/material/input";
 import {RegexpFilterComponent} from "./regexp/regexp-filter.component";
 
 @NgModule({
   imports: [
-    CovalentCommonModule,
+    CommonModule,
     MatIconModule,
     MatInputModule
   ],

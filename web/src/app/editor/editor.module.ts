@@ -16,26 +16,23 @@
  */
 
 import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
 import {DomSanitizer} from "@angular/platform-browser";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatIconRegistry,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatOptionModule,
-  MatSelectModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule
-} from "@angular/material";
-import {CovalentCommonModule, CovalentDialogsModule, CovalentLayoutModule, CovalentMediaModule} from "@covalent/core";
-import {AngularFontAwesomeModule} from "angular-font-awesome";
-import {AceEditorModule} from "ng2-ace-editor";
+import {MatButtonModule} from "@angular/material/button";
+import {MatCardModule} from "@angular/material/card";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
+import {MatInputModule} from "@angular/material/input";
+import {MatListModule} from "@angular/material/list";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {AceModule} from "ngx-ace-wrapper";
 import {
   ActionbarComponent, CanDeactivateZNodeAclComponent, CanDeactivateZNodeDataComponent,
   CompressionProvider,
@@ -61,14 +58,10 @@ import {DefaultFormatterProvider, FormatterProvider} from "./formatter";
 
 @NgModule({
   imports: [
-    AngularFontAwesomeModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    CovalentCommonModule,
-    CovalentLayoutModule,
-    CovalentDialogsModule,
-    CovalentMediaModule,
-    AceEditorModule,
+    AceModule,
     EditorRoutingModule,
     SharedModule,
     MatSelectModule,
@@ -82,7 +75,8 @@ import {DefaultFormatterProvider, FormatterProvider} from "./formatter";
     MatToolbarModule,
     MatTooltipModule,
     MatTabsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSidenavModule
   ],
   providers: [
     AclFormFactory,

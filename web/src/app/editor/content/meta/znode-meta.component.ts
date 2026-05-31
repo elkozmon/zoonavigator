@@ -18,11 +18,12 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {Subscription, Observable, of, zip} from "rxjs";
-import {mapTo, pluck} from "rxjs/operators";
+import {mapTo, pluck, switchMap} from "rxjs/operators";
 import {Either} from "tsmonad";
 import {DialogService, ZNodeMeta, ZNodeWithChildren} from "../../../core";
 
 @Component({
+  standalone: false,
   templateUrl: "znode-meta.component.html",
   styleUrls: ["znode-meta.component.scss"]
 })
@@ -48,7 +49,7 @@ export class ZNodeMetaComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       (<Observable<Either<Error, ZNodeWithChildren>>> this.route.parent.data.pipe(pluck("zNodeWithChildren")))
-        .switchMap(either =>
+        .pipe(switchMap(either =>
           either.caseOf({
             left: error =>
               this.dialogService
@@ -57,9 +58,8 @@ export class ZNodeMetaComponent implements OnInit, OnDestroy {
             right: node =>
               of(node.meta)
           })
-        )
+        ))
         .subscribe((meta) => this.meta = meta)
     );
   }
 }
-

@@ -17,9 +17,10 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef} from "@angular/core";
 import {animate, state, style, transition, trigger} from "@angular/animations";
-import {MatInput, MatSelectChange} from "@angular/material";
+import {MatInput} from "@angular/material/input";
+import {MatSelectChange} from "@angular/material/select";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EMPTY, of} from "rxjs";
+import {EMPTY, Observable, of, Subscription} from "rxjs";
 import {catchError, map, mapTo, switchMap, take} from "rxjs/operators";
 import {Maybe} from "tsmonad";
 import {
@@ -35,10 +36,8 @@ import {
 } from "../../core";
 import {EDITOR_QUERY_NODE_CONNECTION, EDITOR_QUERY_NODE_PATH} from "../editor-routing.constants";
 import {CreateZNodeData} from "../../core/dialog";
-import {Subscription} from "rxjs/Rx";
 import {ConfigService} from "../../config";
 import {ConnectionPreset} from "../../core/connection/connection-preset";
-import {Observable} from "rxjs/Observable";
 
 interface ConnectionOption {
   label: string;
@@ -46,6 +45,7 @@ interface ConnectionOption {
 }
 
 @Component({
+  standalone: false,
   selector: "zoo-toolbar",
   templateUrl: "toolbar.component.html",
   styleUrls: ["toolbar.component.scss"],
@@ -89,6 +89,17 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
 
     return this.isConnectionPreset(c1.value) === this.isConnectionPreset(c2.value);
+  }
+
+  isZNodeEmpty(zNode: Maybe<ZNodeWithChildren>): boolean {
+    if (zNode == null) {
+      return true;
+    }
+
+    return zNode.caseOf({
+      just: () => false,
+      nothing: () => true
+    });
   }
 
   constructor(

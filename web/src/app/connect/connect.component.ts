@@ -19,15 +19,15 @@ import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, PRIMARY_OUTLET, Router} from "@angular/router";
 import {catchError, finalize, switchMap} from "rxjs/operators";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {LoadingMode, LoadingType, TdLoadingService} from "@covalent/core";
 import {AuthInfo, Scheme, ConnectionManager} from "../core";
 import {CONNECT_QUERY_ERROR_MSG, CONNECT_QUERY_RETURN_URL} from "./connect-routing.constants";
-import {Subscription} from "rxjs/Rx";
+import {Subscription} from "rxjs";
 import {ConnectionPreset} from "../core/connection/connection-preset";
 import {ConfigService} from "../config";
 import {environment} from "../../environments/environment";
 
 @Component({
+  standalone: false,
   templateUrl: "./connect.component.html",
   styleUrls: ["./connect.component.scss"]
 })
@@ -37,9 +37,9 @@ export class ConnectComponent implements OnInit, OnDestroy {
 
   private redirectUrl: string;
 
-  private loadingFullscreenKey = "loadingFullscreen";
-
   errorMessage: any = null;
+
+  isLoading = false;
 
   cxnParamsForm: FormGroup;
 
@@ -54,8 +54,7 @@ export class ConnectComponent implements OnInit, OnDestroy {
     private router: Router,
     private formBuilder: FormBuilder,
     private configService: ConfigService,
-    private connectionManager: ConnectionManager,
-    private loadingService: TdLoadingService
+    private connectionManager: ConnectionManager
   ) {
   }
 
@@ -64,13 +63,6 @@ export class ConnectComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadingService.create({
-      name: this.loadingFullscreenKey,
-      mode: LoadingMode.Indeterminate,
-      type: LoadingType.Linear,
-      color: "accent",
-    });
-
     this.subscription = new Subscription(() => {});
 
     this.subscription.add(
@@ -220,10 +212,10 @@ export class ConnectComponent implements OnInit, OnDestroy {
   }
 
   private startLoader(): void {
-    this.loadingService.register(this.loadingFullscreenKey);
+    this.isLoading = true;
   }
 
   private stopLoader(): void {
-    this.loadingService.resolve(this.loadingFullscreenKey);
+    this.isLoading = false;
   }
 }

@@ -53,7 +53,7 @@ test.describe("Toolbar", () => {
 
     await editorPage.createNode(nodePath);
     await editorPage.navigateToPath(testDirectory);
-    await editorPage.sidebar.getNodeCheckbox(nodeName).setChecked(true, { force: true });
+    await editorPage.sidebar.getNodeCheckbox(nodeName).setChecked(true);
     await expect(editorPage.toolbar.bulkNodeActionsButton).toBeEnabled();
   });
 
