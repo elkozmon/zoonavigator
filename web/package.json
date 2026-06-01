@@ -62,7 +62,7 @@
     "@types/node": "^20.19.0",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
-    "http-proxy-middleware": "^0.19.1",
+    "http-proxy-middleware": "^4.0.0",
     "jasmine-core": "^6.2.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "^6.4.4",
