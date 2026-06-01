@@ -59,7 +59,7 @@
     "@angular/cli": "^21.2.12",
     "@angular/compiler-cli": "^21.2.14",
     "@types/jasmine": "^5.1.12",
-    "@types/node": "^20.19.0",
+    "@types/node": "^25.9.1",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
     "http-proxy-middleware": "^4.0.0",
