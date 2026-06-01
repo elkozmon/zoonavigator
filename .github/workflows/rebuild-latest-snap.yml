@@ -22,6 +22,7 @@ jobs:
           - amd64
           - arm64
     runs-on: ${{ matrix.architecture == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    timeout-minutes: 45
     steps:
       - name: Install review tools
         run: |
@@ -106,6 +107,7 @@ jobs:
 
   dispatch-publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs:
       - check-stable-snap
     steps:
