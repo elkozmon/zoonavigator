@@ -28,6 +28,7 @@ permissions:
 jobs:
   setup-env:
     runs-on: ${{ inputs.runner-amd64 }}
+    timeout-minutes: 5
     outputs:
       app-version: ${{ steps.set-vars.outputs.app-version }}
       snap-channel: ${{ steps.set-vars.outputs.snap-channel }}
@@ -61,6 +62,7 @@ jobs:
           - amd64
           - arm64
     runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
+    timeout-minutes: 90
     needs:
       - setup-env
     steps:
@@ -160,6 +162,7 @@ jobs:
           - amd64
           - arm64
     runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
+    timeout-minutes: 60
     needs:
       - setup-env
       - build-docker
@@ -208,6 +211,7 @@ jobs:
           - amd64
           - arm64
     runs-on: ${{ matrix.architecture == 'arm64' && inputs.runner-arm64 || inputs.runner-amd64 }}
+    timeout-minutes: 30
     env:
       ZK_PORT: 2181
       ZN_PORT: 9000
@@ -326,6 +330,7 @@ jobs:
 
   publish-docker:
     runs-on: ${{ inputs.runner-amd64 }}
+    timeout-minutes: 15
     if: inputs.publish
     needs:
       - build-docker
@@ -374,6 +379,7 @@ jobs:
           - amd64
           - arm64
     runs-on: ${{ inputs.runner-amd64 }}
+    timeout-minutes: 15
     if: inputs.publish
     needs:
       - setup-env
@@ -397,6 +403,7 @@ jobs:
 
   cleanup:
     runs-on: ${{ inputs.runner-amd64 }}
+    timeout-minutes: 10
     if: always()
     needs:
       - build-docker
