@@ -2,6 +2,21 @@
 Change Log
 ==========
 
+2.1.0
+-----
+
+*June 1, 2026*
+
+
+**Changes:**
+
+* Upgrade the web frontend to Angular 21
+* Update Angular Material components and related frontend build tooling
+
+**Fixes:**
+
+* Fix Snap startup so the service starts after the configure hook applies settings
+
 2.0.0
 -----
 
