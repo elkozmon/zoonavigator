@@ -177,5 +177,8 @@ epub_title = project
 epub_exclude_files = ['search.html']
 
 # Linkcheck configuration
-linkcheck_ignore = [r'https?://localhost']
+linkcheck_ignore = [
+    r'https?://localhost',
+    r'https?://www\.your-domain\.com(?:/.*)?',
+]
 linkcheck_anchors_ignore = [r'issue-\d+']
