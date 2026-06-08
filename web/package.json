@@ -41,7 +41,7 @@
     "pako": "^1.0.8",
     "roboto-fontface": "^0.10.0",
     "rxjs": "^7.8.2",
-    "spinkit": "^1.2.5",
+    "spinkit": "^2.0.1",
     "text-encoding-utf-8": "^1.0.2",
     "tslib": "^2.8.1",
     "tsmonad": "^0.8.0",
