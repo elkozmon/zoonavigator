@@ -17,7 +17,7 @@ RUN curl \
   && tar xzvf dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
   && rm dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz
 
-FROM --platform=$BUILDPLATFORM node:20-bookworm-slim AS npm
+FROM --platform=$BUILDPLATFORM node:22-bookworm-slim AS npm
 
 # Install required packages
 RUN apt-get update \
