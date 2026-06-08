@@ -19,7 +19,7 @@
   languages = {
     javascript = {
       enable = true;
-      package = pkgs.nodejs_20;
+      package = pkgs.nodejs_22;
       directory = config.env.WEB_ROOT;
       npm = {
         enable = true;
@@ -39,15 +39,15 @@
       description = "Start web dev server";
     };
     "web:build" = {
-      exec = ''npm --prefix ${config.env.WEB_ROOT} run build -- $@'';
+      exec = "npm --prefix ${config.env.WEB_ROOT} run build -- $@";
       description = "Build web app";
     };
     "web:lint" = {
-      exec = ''npm --prefix ${config.env.WEB_ROOT} run lint -- $@'';
+      exec = "npm --prefix ${config.env.WEB_ROOT} run lint -- $@";
       description = "Run web linting";
     };
     "web:test" = {
-      exec = ''npm --prefix ${config.env.WEB_ROOT} run test -- $@'';
+      exec = "npm --prefix ${config.env.WEB_ROOT} run test -- $@";
       description = "Run web tests";
     };
   };

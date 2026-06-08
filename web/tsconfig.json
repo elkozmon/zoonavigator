@@ -6,6 +6,8 @@
     "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
+    "ignoreDeprecations": "6.0",
+    "strict": false,
     "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
