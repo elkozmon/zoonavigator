@@ -30,6 +30,6 @@ describe("Default zPath service tests", () => {
   });
 
   it("one level deep path has a name", () => {
-    expect(service.parse("/test").name.valueOr(null)).toBe("test");
+    expect(service.parse("/test").name.valueOr("")).toBe("test");
   });
 });
