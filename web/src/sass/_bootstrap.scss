@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../node_modules/spinkit/scss/spinners/11-folding-cube";
+@import "../../node_modules/spinkit/spinkit.css";
 
 div.zoo-bootstrap {
   display: table;
@@ -23,13 +23,10 @@ div.zoo-bootstrap {
   width: 100%;
   height: 100%;
   background-color: #eee;
+  --sk-color: #455a64;
 
   .zoo-center {
     display: table-cell;
     vertical-align: middle;
   }
-}
-
-.sk-folding-cube .sk-cube:before {
-  background-color: #455a64;
 }
