@@ -17,9 +17,9 @@
 
 package api.formats.json.api
 
-import akka.http.scaladsl.model.MediaTypes
-import akka.util.ByteString
 import api.ApiResponse
+import org.apache.pekko.http.scaladsl.model.MediaTypes
+import org.apache.pekko.util.ByteString
 import play.api.http.Writeable
 import play.api.libs.json._
 

@@ -132,7 +132,7 @@ class AppComponents(context: Context)
     wire[ApplicationRouter]
   }
 
-  lazy val akkaScheduler: Scheduler =
+  lazy val pekkoScheduler: Scheduler =
     Scheduler(actorSystem.dispatcher)
 
   lazy val curatorCacheMaxAge: CuratorCacheMaxAge =

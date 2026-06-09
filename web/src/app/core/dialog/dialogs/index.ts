@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./create-znode.data"
-export * from "./create-znode.dialog"
-export * from "./import-znodes.data"
-export * from "./import-znodes.dialog"
-export * from "./confirm.data"
-export * from "./confirm.dialog"
-export * from "./info.data"
-export * from "./info.dialog"
-export * from "./duplicate-znode.data"
-export * from "./duplicate-znode.dialog"
-export * from "./move-znode.data"
-export * from "./move-znode.dialog"
+export * from "./create-znode.data";
+export * from "./create-znode.dialog";
+export * from "./import-znodes.data";
+export * from "./import-znodes.dialog";
+export * from "./confirm.data";
+export * from "./confirm.dialog";
+export * from "./info.data";
+export * from "./info.dialog";
+export * from "./duplicate-znode.data";
+export * from "./duplicate-znode.dialog";
+export * from "./move-znode.data";
+export * from "./move-znode.dialog";

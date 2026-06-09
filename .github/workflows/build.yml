@@ -17,7 +17,7 @@ on:
         default: ubuntu-latest
 
 env:
-  NODE_VERSION: 22
+  NODE_VERSION: 24
   JAVA_VERSION: 17
   DOCKER_IMAGE: elkozmon/zoonavigator
   DOCS_URL: https://zoonavigator.elkozmon.com

@@ -15,5 +15,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./shared.module"
-export * from "./regexp/regexp-filter.component"
+export * from "./shared.module";
+export * from "./regexp/regexp-filter.component";

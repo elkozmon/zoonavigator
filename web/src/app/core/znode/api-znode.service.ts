@@ -342,7 +342,7 @@ export class ApiZNodeService implements ZNodeService {
             return {
               blob: new Blob([gzipData], {type: "application/octet-stream"}),
               name: "znode-export-" + new Date().toISOString() + ".gz"
-            }
+            };
           })
         );
     });

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./api-request"
-export * from "./api-request.factory"
-export * from "./default-api-request.factory"
-export * from "./request-content"
+export * from "./api-request";
+export * from "./api-request.factory";
+export * from "./default-api-request.factory";
+export * from "./request-content";
