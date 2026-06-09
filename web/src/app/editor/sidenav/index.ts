@@ -15,5 +15,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./nav-list.component"
-export * from "./nav-actions.component"
+export * from "./nav-list.component";
+export * from "./nav-actions.component";
