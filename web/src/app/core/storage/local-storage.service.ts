@@ -46,7 +46,7 @@ export class LocalStorageService implements StorageService {
       maybeValue.caseOf({
         just: value => localStorage.setItem(key, value),
         nothing: () => localStorage.removeItem(key)
-      })
+      });
     }));
 
     return newSub;
@@ -62,7 +62,7 @@ export class LocalStorageService implements StorageService {
         return maybeValue.caseOf({
           just: value => value,
           nothing: () => null
-        })
+        });
       })
     );
   }

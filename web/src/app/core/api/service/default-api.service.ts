@@ -80,7 +80,7 @@ export class DefaultApiService implements ApiService {
       .request(apiRequest.method, url, options)
       .pipe(
         timeoutWith(config.requestTimeoutMillis, defer(() => throwError("Request timed out"))),
-        map((t: HttpResponse<Object>) => {
+        map((t: HttpResponse<object>) => {
           if (t.headers.has("Content-Type") && t.headers.get("Content-Type").startsWith("application/json")) {
             return DefaultApiService.extractResponse<T>(t.body);
           } else {

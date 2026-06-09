@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./actionbar.component"
-export * from "./content.component"
-export * from "./data"
-export * from "./acl"
-export * from "./meta"
+export * from "./actionbar.component";
+export * from "./content.component";
+export * from "./data";
+export * from "./acl";
+export * from "./meta";
