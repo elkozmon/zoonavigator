@@ -13,7 +13,7 @@
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.js --aot",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
-    "lint": "tslint --project src/tsconfig.app.json && tslint --project src/tsconfig.spec.json",
+    "lint": "eslint \"src/**/*.ts\"",
     "test": "ng test",
     "test:ci": "ng test --browsers=ChromeHeadlessCI --no-watch --no-progress"
   },
@@ -55,12 +55,17 @@
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "^22.0.0",
+    "@angular-eslint/eslint-plugin": "^22.0.0",
     "@angular/cli": "^22.0.0",
     "@angular/compiler-cli": "^22.0.0",
     "@types/jasmine": "^6.0.0",
     "@types/node": "^25.9.2",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
+    "@typescript-eslint/eslint-plugin": "^8.61.0",
+    "@typescript-eslint/parser": "^8.61.0",
+    "eslint": "^10.4.1",
+    "globals": "^17.6.0",
     "http-proxy-middleware": "^4.1.0",
     "jasmine-core": "^6.3.0",
     "jasmine-spec-reporter": "7.0.0",
@@ -71,7 +76,6 @@
     "karma-jasmine-html-reporter": "^2.1.0",
     "sass": "^1.77.8",
     "ts-node": "^10.9.2",
-    "tslint": "^6.1.3",
     "typescript": "~6.0.3"
   },
   "overrides": {

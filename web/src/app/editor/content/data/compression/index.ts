@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./compression"
-export * from "./compression-id"
-export * from "./compression.provider"
-export * from "./default-compression.provider"
-export * from "./gzip-compression"
+export * from "./compression";
+export * from "./compression-id";
+export * from "./compression.provider";
+export * from "./default-compression.provider";
+export * from "./gzip-compression";

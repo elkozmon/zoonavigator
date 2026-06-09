@@ -15,6 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./config"
-export * from "./config.loader"
-export * from "./config.service"
+export * from "./config";
+export * from "./config.loader";
+export * from "./config.service";

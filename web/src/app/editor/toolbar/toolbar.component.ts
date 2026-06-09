@@ -89,7 +89,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
 
     return this.isConnectionPreset(c1.value) === this.isConnectionPreset(c2.value);
-  }
+  };
 
   isZNodeEmpty(zNode: Maybe<ZNodeWithChildren>): boolean {
     if (zNode == null) {
@@ -200,7 +200,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
                 },
                 queryParamsHandling: "merge"
               }
-            )
+            );
           })
       );
       return;
@@ -216,7 +216,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
               },
               queryParamsHandling: "merge"
             }
-          )
+          );
         })
     );
   }
