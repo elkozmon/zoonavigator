@@ -19,7 +19,7 @@
   languages = {
     javascript = {
       enable = true;
-      package = pkgs.nodejs_22;
+      package = pkgs.nodejs_24;
       directory = config.env.WEB_ROOT;
       npm = {
         enable = true;

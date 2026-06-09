@@ -53,6 +53,9 @@
     "zoonavigator",
     "zookeeper"
   ],
+  "engines": {
+    "node": "^24.15.0 || ^26.0.0"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "^22.0.0",
     "@angular-eslint/eslint-plugin": "^22.0.0",
