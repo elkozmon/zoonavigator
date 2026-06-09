@@ -18,7 +18,6 @@
 package api.controllers
 
 import _root_.curator.action.CuratorRequest
-import akka.util.ByteString
 import api.ApiResponse
 import api.exceptions.BadRequestException
 import api.exceptions.HttpException
@@ -26,6 +25,7 @@ import api.formats.Json._
 import config.ApplicationConfig
 import curator.action.CuratorAction
 import monix.eval.Task
+import org.apache.pekko.util.ByteString
 import play.api.http.HttpErrorHandler
 import play.api.libs.json._
 import play.api.mvc._
