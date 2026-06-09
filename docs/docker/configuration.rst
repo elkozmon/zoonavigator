@@ -170,7 +170,7 @@ ZK_SASL_CLIENT_USERNAME
 -----------------------
 *default*: :code:`zookeeper`
 
-Specifies the primary part of the server principal. `Learn more here <https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html#client-configuration-parameters>`_.
+Specifies the primary part of the server principal. `Learn more here <https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html>`_.
 
 
 ZK_SERVER_REALM
