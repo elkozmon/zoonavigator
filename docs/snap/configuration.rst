@@ -148,7 +148,7 @@ zookeeper.sasl.client.username
 ------------------------------
 *default*: :code:`zookeeper`
 
-Specifies the primary part of the server principal. `Learn more here <https://zookeeper.apache.org/doc/r3.5.2-alpha/zookeeperProgrammers.html#sc_java_client_configuration>`_.
+Specifies the primary part of the server principal. `Learn more here <https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html>`_.
 
 
 zookeeper.server.realm
