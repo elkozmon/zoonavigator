@@ -3,17 +3,17 @@ import sbt._
 object Dependencies {
   private[Dependencies] object V {
     val cats      = "2.10.0"
-    val curator   = "5.8.0"
-    val curatorTest = "5.8.0"
+    val curator   = "5.9.0"
+    val curatorTest = "5.9.0"
     val macwire   = "2.5.9"
     val log4j     = "2.22.1"
-    val slf4j     = "2.0.9"
-    val shapeless = "2.3.10"
+    val slf4j     = "2.0.18"
+    val shapeless = "2.3.13"
     val monix     = "3.4.1"
-    val commonsIo = "2.15.1"
-    val logback   = "1.4.14"
-    val jsoup     = "1.17.2"
-    val scalaTest = "3.2.17"
+    val commonsIo = "2.22.0"
+    val logback   = "1.5.34"
+    val jsoup     = "1.22.2"
+    val scalaTest = "3.2.20"
     val scalafixOrganizeImports = "0.6.0"
   }
 
