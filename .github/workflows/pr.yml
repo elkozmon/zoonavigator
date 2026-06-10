@@ -32,9 +32,11 @@ jobs:
               - 'e2e/**'
             docs:
               - 'docs/**'
+              - '.readthedocs.yml'
             build:
               - 'build/**'
-              - '.github/workflows/**'
+              - '.dockerignore'
+              - '.github/**'
 
   test:
     needs:
