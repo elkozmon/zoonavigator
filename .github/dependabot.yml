@@ -79,6 +79,10 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "org.scala-lang:scala-library"
+        update-types:
+          - "version-update:semver-major"
     groups:
       api-sbt-minor-patch:
         patterns:
