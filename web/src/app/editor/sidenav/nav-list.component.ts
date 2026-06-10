@@ -248,6 +248,6 @@ export class NavListComponent implements OnInit, OnDestroy, OnChanges {
       compareFun = NavListComponent.compareZNodesAscending;
     }
 
-    this.zNodesSorted = zNodesFiltered.sort(compareFun).concat(zNodesUnfiltered.sort(compareFun))
+    this.zNodesSorted = zNodesFiltered.sort(compareFun).concat(zNodesUnfiltered.sort(compareFun));
   }
 }

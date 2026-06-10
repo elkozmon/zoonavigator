@@ -27,7 +27,7 @@ import {ConnectionPreset} from "./core/connection/connection-preset";
 @Component({
   standalone: false,
   selector: "zoo-app",
-  template: `<router-outlet></router-outlet>`
+  template: "<router-outlet></router-outlet>"
 })
 export class AppComponent implements OnInit, OnDestroy {
 
@@ -71,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
             });
 
             if (map.has(EDITOR_QUERY_NODE_PATH) && map.get(EDITOR_QUERY_NODE_PATH).length > 1) {
-              title += " – " + decodeURI(map.get(EDITOR_QUERY_NODE_PATH))
+              title += " – " + decodeURI(map.get(EDITOR_QUERY_NODE_PATH));
             }
 
             this.titleService.setTitle(title);

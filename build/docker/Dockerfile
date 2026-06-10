@@ -1,7 +1,7 @@
 ARG DOCKERIZE_VERSION=0.9.5
 ARG DEBUG=0
 
-FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS dockerize
+FROM --platform=$BUILDPLATFORM ubuntu:26.04 AS dockerize
 
 # Install dependencies
 RUN apt-get update \
@@ -17,7 +17,7 @@ RUN curl \
   && tar xzvf dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz -C /usr/local/bin \
   && rm dockerize-${BUILDOS}-${BUILDARCH}-v${DOCKERIZE_VERSION}.tar.gz
 
-FROM --platform=$BUILDPLATFORM node:22-bookworm-slim AS npm
+FROM --platform=$BUILDPLATFORM node:26-trixie-slim AS npm
 
 # Install required packages
 RUN apt-get update \
@@ -72,7 +72,7 @@ RUN sbt play/dist \
   && unzip play/target/universal/zoonavigator-play-$VERSION.zip \
   && mv zoonavigator-play-$VERSION /app
 
-FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS ubuntu
+FROM --platform=$BUILDPLATFORM ubuntu:26.04 AS ubuntu
 
 # Get dockerize
 COPY --from=dockerize /usr/local/bin/dockerize /usr/local/bin/dockerize
@@ -97,7 +97,7 @@ RUN dockerize \
 RUN chgrp -R 0 . \
   && chmod -R g=u .
 
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:25-jdk-jammy
 
 # Default config
 ENV HTTP_PORT=9000 \

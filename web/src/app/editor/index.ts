@@ -15,5 +15,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export * from "./editor.module"
-export * from "./editor-routing.constants"
+export * from "./editor.module";
+export * from "./editor-routing.constants";

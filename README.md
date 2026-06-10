@@ -11,7 +11,8 @@
 ZooNavigator is a **feature-rich web interface for ZooKeeper**.
 
 
-ZooKeeper versions 3.5.x to 3.9.x are currently supported.
+ZooNavigator supports the maintained Apache ZooKeeper 3.8.x and 3.9.x release lines.
+Older ZooKeeper releases may work, but they are outside the supported compatibility matrix.
 
 
 [**📘 Read official docs for more info, screenshots 📷 and instructions how to use ZooNavigator. 🔥**](https://zoonavigator.elkozmon.com)
