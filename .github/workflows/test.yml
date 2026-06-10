@@ -25,7 +25,7 @@ on:
         default: false
 
 env:
-  NODE_VERSION: 24
+  NODE_VERSION: 26
   JAVA_VERSION: 17
   PYTHON_VERSION: 3.13
 
