@@ -116,6 +116,8 @@ jobs:
             APP_VERSION=${{ needs.setup-env.outputs.app-version }}
             DOCS_URL=${{ needs.setup-env.outputs.docs-url }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: ${{ inputs.publish && 'mode=max' || 'false' }}
+          sbom: ${{ inputs.publish }}
           cache-from: type=gha,scope=buildkit-${{ matrix.architecture }}
           cache-to: type=gha,mode=max,scope=buildkit-${{ matrix.architecture }}
 
