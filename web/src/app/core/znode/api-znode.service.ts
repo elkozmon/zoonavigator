@@ -57,11 +57,11 @@ export class ApiZNodeService implements ZNodeService {
   private connectionToToken(cxn: any): string {
     if (cxn.id) {
       const cxnPreset = cxn as ConnectionPreset;
-      return "CxnPreset " + new Buffer(cxnPreset.id).toString("base64");
+      return "CxnPreset " + Buffer.from(cxnPreset.id).toString("base64");
     }
 
     const cxnParams = cxn as ConnectionParams;
-    return "CxnParams " + new Buffer(JSON.stringify(cxnParams)).toString("base64");
+    return "CxnParams " + Buffer.from(JSON.stringify(cxnParams)).toString("base64");
   }
 
   getNode(path: string): Observable<ZNodeWithChildren> {
