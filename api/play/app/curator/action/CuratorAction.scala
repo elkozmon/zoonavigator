@@ -36,6 +36,7 @@ import org.apache.curator.framework.CuratorFramework
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 import scala.concurrent.Future
+import scala.util.Try
 
 class CuratorAction(
   httpErrorHandler: HttpErrorHandler,
@@ -57,6 +58,9 @@ class CuratorAction(
   private def invalidCxnNameHeaderResult[A](request: Request[A]): Future[Result] =
     httpErrorHandler.onClientError(request, 401, "Invalid connection name")
 
+  private def decodeHeader[A, T](request: Request[A])(decode: => T): Either[Future[Result], T] =
+    Try(decode).toEither.left.map(_ => malformedAuthHeaderResult(request))
+
   override protected implicit def executionContext: Scheduler = Scheduler.global
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, CuratorRequest[A]]] =
@@ -66,28 +70,30 @@ class CuratorAction(
       .map(_.trim)
       .flatMap[Future[Result], Task[Either[Result, CuratorFramework]]] {
         case x if x.startsWith(cxnPresetHeaderPrefix) =>
-          val b64  = x.stripPrefix(cxnPresetHeaderPrefix).trim
-          val json = JsString(new String(Base64.getDecoder.decode(b64), StandardCharsets.UTF_8))
+          val b64 = x.stripPrefix(cxnPresetHeaderPrefix).trim
 
-          json
-            .asOpt[ConnectionId]
-            .toRight(malformedAuthHeaderResult(request))
-            .map(
-              curatorFrameworkProvider
-                .getCuratorInstance(_)
-                .flatMap(
-                  _.toRight(Task.fromFuture(invalidCxnNameHeaderResult(request))).leftSequence
-                )
-            )
+          decodeHeader(request) {
+            JsString(new String(Base64.getDecoder.decode(b64), StandardCharsets.UTF_8))
+          }.flatMap(
+            _.asOpt[ConnectionId]
+              .toRight(malformedAuthHeaderResult(request))
+          ).map(
+            curatorFrameworkProvider
+              .getCuratorInstance(_)
+              .flatMap(
+                _.toRight(Task.fromFuture(invalidCxnNameHeaderResult(request))).leftSequence
+              )
+          )
 
         case x if x.startsWith(cxnParamsHeaderPrefix) =>
-          val b64  = x.stripPrefix(cxnParamsHeaderPrefix).trim
-          val json = Json.parse(Base64.getDecoder.decode(b64))
+          val b64 = x.stripPrefix(cxnParamsHeaderPrefix).trim
 
-          json
-            .asOpt[ConnectionParams]
-            .toRight(malformedAuthHeaderResult(request))
-            .map(curatorFrameworkProvider.getCuratorInstance(_).map(Right(_)))
+          decodeHeader(request) {
+            Json.parse(Base64.getDecoder.decode(b64))
+          }.flatMap(
+            _.asOpt[ConnectionParams]
+              .toRight(malformedAuthHeaderResult(request))
+          ).map(curatorFrameworkProvider.getCuratorInstance(_).map(Right(_)))
 
         case _ =>
           Left(malformedAuthHeaderResult(request))
