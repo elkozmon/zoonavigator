@@ -24,15 +24,15 @@ import {Maybe} from "tsmonad";
 @Injectable()
 export class LocalStorageService implements StorageService {
 
-  private subjects: Map<string, Subject<any>>;
+  private subjects: Map<string, Subject<Maybe<string>>>;
   private subscription: Subscription;
 
   constructor() {
-    this.subjects = new Map<string, Subject<Maybe<any>>>();
+    this.subjects = new Map<string, Subject<Maybe<string>>>();
     this.subscription = new Subscription(() => {});
   }
 
-  private getSubject(key: string): Subject<any> {
+  private getSubject(key: string): Subject<Maybe<string>> {
     const sub = this.subjects.get(key);
 
     if (sub) {
@@ -52,15 +52,15 @@ export class LocalStorageService implements StorageService {
     return newSub;
   }
 
-  set(key: string, value: any): Observable<void> {
+  set(key: string, value: string): Observable<void> {
     return of(this.getSubject(key).next(Maybe.just(value)));
   }
 
-  observe(key: string): Observable<any> {
+  observe<T extends string = string>(key: string): Observable<T | null> {
     return this.getSubject(key).pipe(
       map(maybeValue => {
         return maybeValue.caseOf({
-          just: value => value,
+          just: value => value as T,
           nothing: () => null
         });
       })

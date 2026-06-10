@@ -16,29 +16,61 @@
  */
 
 import {Injectable} from "@angular/core";
-import {Observable, of} from "rxjs";
+import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {Maybe} from "tsmonad";
 import {ConnectionManager} from "./connection-manager";
 import {StorageService} from "../../storage";
 import {ConnectionPreset} from "../connection-preset";
 import {ConnectionParams} from "../connection-params";
-import {ConfigService} from "../../../config";
 
 @Injectable()
 export class DefaultConnectionManager implements ConnectionManager {
 
   private connectionKey = "DefaultConnectionManager.connection";
 
-  constructor(private storageService: StorageService, private configService: ConfigService) {
+  private static isRecord(value: unknown): value is {[key: string]: unknown} {
+    return typeof value === "object" && value !== null;
+  }
+
+  private static isConnectionPreset(value: unknown): value is ConnectionPreset {
+    return DefaultConnectionManager.isRecord(value) &&
+      typeof value.id === "string" &&
+      typeof value.connectionString === "string";
+  }
+
+  private static isConnectionParams(value: unknown): value is ConnectionParams {
+    return DefaultConnectionManager.isRecord(value) &&
+      typeof value.connectionString === "string" &&
+      Array.isArray(value.authInfo);
+  }
+
+  private static parseConnection(value: string | null): ConnectionPreset | ConnectionParams | null {
+    if (!value) {
+      return null;
+    }
+
+    try {
+      const parsed: unknown = JSON.parse(value);
+
+      return DefaultConnectionManager.isConnectionPreset(parsed) ||
+        DefaultConnectionManager.isConnectionParams(parsed)
+        ? parsed
+        : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  constructor(private storageService: StorageService) {
   }
 
   // TODO
   observeConnection(): Observable<Maybe<ConnectionPreset | ConnectionParams>> {
     return this.storageService
-      .observe(this.connectionKey)
+      .observe<string>(this.connectionKey)
       .pipe(
-        map((value) => Maybe.maybe(value ? JSON.parse(value) : null))
+        map((value) => Maybe.maybe(DefaultConnectionManager.parseConnection(value)))
       );
   }
 

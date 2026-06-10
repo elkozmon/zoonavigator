@@ -21,9 +21,9 @@ import {Observable} from "rxjs";
 @Injectable()
 export abstract class StorageService {
 
-  abstract set(key: string, value: any): Observable<void>
+  abstract set(key: string, value: string): Observable<void>
 
-  abstract observe(key: string): Observable<any>
+  abstract observe<T extends string = string>(key: string): Observable<T | null>
 
   abstract remove(key: string): Observable<void>
 }
