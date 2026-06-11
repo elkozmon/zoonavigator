@@ -33,7 +33,7 @@ import {environment} from "../../../../environments/environment";
 interface ApiResponseBody<T> {
   success: boolean;
   payload?: T;
-  message?: string;
+  message?: string | null;
 }
 
 @Injectable()
@@ -47,6 +47,7 @@ export class DefaultApiService implements ApiService {
       typeof candidate.success === "boolean" &&
       (
         candidate.message === undefined ||
+        candidate.message === null ||
         typeof candidate.message === "string"
       );
   }
