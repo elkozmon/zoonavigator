@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security report
+    url: mailto:contact@elkozmon.com
+    about: Please report suspected vulnerabilities privately by email.
