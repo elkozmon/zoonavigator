@@ -30,10 +30,33 @@ import {ApiService} from "./api.service";
 import {APP_BASE_HREF} from "@angular/common";
 import {environment} from "../../../../environments/environment";
 
+interface ApiResponseBody<T> {
+  success: boolean;
+  payload?: T;
+  message?: string | null;
+}
+
 @Injectable()
 export class DefaultApiService implements ApiService {
 
-  private static extractResponse<T>(body: any): ApiResponse<T> {
+  private static isApiResponseBody<T>(body: unknown): body is ApiResponseBody<T> {
+    const candidate = body as {success?: unknown, message?: unknown};
+
+    return typeof body === "object" &&
+      body !== null &&
+      typeof candidate.success === "boolean" &&
+      (
+        candidate.message === undefined ||
+        candidate.message === null ||
+        typeof candidate.message === "string"
+      );
+  }
+
+  private static extractResponse<T>(body: unknown): ApiResponse<T> {
+    if (!DefaultApiService.isApiResponseBody<T>(body)) {
+      throw new Error("Malformed API response");
+    }
+
     return new ApiResponse(
       body.success,
       body.payload,
@@ -84,22 +107,20 @@ export class DefaultApiService implements ApiService {
           if (t.headers.has("Content-Type") && t.headers.get("Content-Type").startsWith("application/json")) {
             return DefaultApiService.extractResponse<T>(t.body);
           } else {
-            return { success: t.ok };
+            return new ApiResponse(t.ok);
           }
         }),
         catchError(err => this.handleError(err))
       );
   }
 
-  private handleError<T>(anyError: any): Observable<T> {
+  private handleError<T>(anyError: unknown): Observable<T> {
     let error: Error;
 
     if (typeof anyError === "string" || anyError instanceof String) {
       error = new Error(<string>anyError);
-    } else if (anyError instanceof Error) {
-      error = anyError;
     } else if (anyError instanceof HttpErrorResponse) {
-      if (anyError.error.hasOwnProperty("success")) {
+      if (DefaultApiService.isApiResponseBody<unknown>(anyError.error)) {
         error = new Error(DefaultApiService.extractResponse(anyError.error).message);
       } else {
         error = new Error(anyError.error || "Unable to receive a response");
@@ -123,6 +144,8 @@ export class DefaultApiService implements ApiService {
           )
           .subscribe();
       }
+    } else if (anyError instanceof Error) {
+      error = anyError;
     } else {
       error = new Error("Unknown error occurred. See the console for details");
       console.error(anyError);

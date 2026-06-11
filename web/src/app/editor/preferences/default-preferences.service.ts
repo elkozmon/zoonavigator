@@ -51,7 +51,7 @@ export class DefaultPreferencesService extends PreferencesService {
     const key = DefaultPreferencesService.getModeKey(path, creationId);
 
     return this.storageService
-      .observe(key)
+      .observe<ModeId>(key)
       .pipe(
         map(Maybe.maybe)
       );
