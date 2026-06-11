@@ -95,9 +95,12 @@ jobs:
 
           {
             echo "outputs<<EOF"
-            echo 'type=docker,dest=${{ runner.temp }}/docker-image/image.tar,name=zoonavigator-test:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}'
             if [[ "${{ inputs.publish }}" == "true" ]]; then
+              # The Docker exporter cannot emit attested manifest lists.
+              # Publish-mode e2e tests run the pushed digest instead.
               echo 'type=image,"name=${{ env.DOCKER_IMAGE }}",push-by-digest=true,push=true'
+            else
+              echo 'type=docker,dest=${{ runner.temp }}/docker-image/image.tar,name=zoonavigator-test:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}'
             fi
             echo 'type=local,dest=out'
             echo "EOF"
@@ -136,6 +139,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload Docker image
+        if: inputs.publish != true
         uses: actions/upload-artifact@v7
         with:
           name: docker-image-${{ matrix.architecture }}
@@ -230,7 +234,7 @@ jobs:
     steps:
       # Docker-specific steps
       - name: Download Docker image
-        if: matrix.platform == 'docker'
+        if: matrix.platform == 'docker' && inputs.publish != true
         id: download-docker-image
         uses: actions/download-artifact@v8
         with:
@@ -238,16 +242,34 @@ jobs:
           name: docker-image-${{ matrix.architecture }}
 
       - name: Load ZooNavigator Docker image
-        if: matrix.platform == 'docker'
+        if: matrix.platform == 'docker' && inputs.publish != true
         run: |
           docker load --input "${{ steps.download-docker-image.outputs.download-path }}/image.tar"
+
+      - name: Download Docker digest
+        if: matrix.platform == 'docker' && inputs.publish
+        id: download-docker-digest
+        uses: actions/download-artifact@v8
+        with:
+          path: ${{ runner.temp }}/digests
+          name: digest-${{ matrix.architecture }}
 
       - name: Start ZooNavigator Docker container
         if: matrix.platform == 'docker'
         run: |
           set -euo pipefail
 
-          image="zoonavigator-test:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}"
+          if [[ "${{ inputs.publish }}" == "true" ]]; then
+            digest_file="$(find "${{ steps.download-docker-digest.outputs.download-path }}" -maxdepth 1 -type f -print -quit)"
+            if [[ -z "${digest_file}" ]]; then
+              echo "No Docker digest artifact found" >&2
+              exit 1
+            fi
+            image="${{ env.DOCKER_IMAGE }}@sha256:$(basename "${digest_file}")"
+          else
+            image="zoonavigator-test:${{ needs.setup-env.outputs.app-version }}-${{ matrix.architecture }}"
+          fi
+
           echo "Using image '${image}'"
 
           docker run -d \
