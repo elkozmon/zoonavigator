@@ -62,7 +62,7 @@
     "@angular/cli": "^22.0.3",
     "@angular/compiler-cli": "^22.0.2",
     "@types/jasmine": "^6.0.0",
-    "@types/node": "^25.9.2",
+    "@types/node": "^26.0.0",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
