@@ -86,6 +86,7 @@
     "sockjs": {
       "uuid": "11.1.1"
     },
+    "piscina": "5.2.0",
     "webpack-dev-server": "5.2.5"
   }
 }
