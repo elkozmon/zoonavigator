@@ -85,6 +85,6 @@
     "sockjs": {
       "uuid": "11.1.1"
     },
-    "webpack-dev-server": "5.2.4"
+    "webpack-dev-server": "5.2.5"
   }
 }
