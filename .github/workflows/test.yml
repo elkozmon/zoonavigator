@@ -38,7 +38,7 @@ jobs:
     timeout-minutes: 45
     if: inputs.skip-api != true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -69,7 +69,7 @@ jobs:
     timeout-minutes: 30
     if: inputs.skip-web != true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -106,7 +106,7 @@ jobs:
     timeout-minutes: 15
     if: inputs.skip-e2e != true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -142,7 +142,7 @@ jobs:
     timeout-minutes: 20
     if: inputs.skip-docs != true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Set up Python
         uses: actions/setup-python@v6
