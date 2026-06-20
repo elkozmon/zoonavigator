@@ -83,6 +83,9 @@ updates:
       - dependency-name: "org.scala-lang:scala-library"
         update-types:
           - "version-update:semver-major"
+      - dependency-name: "org.scala-sbt:sbt"
+        update-types:
+          - "version-update:semver-major"
     groups:
       api-sbt-minor-patch:
         patterns:
