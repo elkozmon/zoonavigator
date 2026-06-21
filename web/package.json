@@ -62,7 +62,7 @@
     "@angular/cli": "^22.0.3",
     "@angular/compiler-cli": "^22.0.2",
     "@types/jasmine": "^6.0.0",
-    "@types/node": "^25.9.2",
+    "@types/node": "^26.0.0",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
@@ -82,9 +82,10 @@
     "typescript": "~6.0.3"
   },
   "overrides": {
+    "@babel/core": "7.29.6",
     "sockjs": {
       "uuid": "11.1.1"
     },
-    "webpack-dev-server": "5.2.4"
+    "webpack-dev-server": "5.2.5"
   }
 }
