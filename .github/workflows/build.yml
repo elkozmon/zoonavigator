@@ -67,7 +67,7 @@ jobs:
       - setup-env
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -174,7 +174,7 @@ jobs:
       - build-docker
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download jars
         id: download-jars
@@ -309,7 +309,7 @@ jobs:
 
       # Common steps
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
