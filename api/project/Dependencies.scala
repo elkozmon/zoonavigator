@@ -11,7 +11,7 @@ object Dependencies {
     val shapeless = "2.3.13"
     val monix     = "3.4.1"
     val commonsIo = "2.22.0"
-    val logback   = "1.5.34"
+    val logback   = "1.5.37"
     val jsoup     = "1.22.2"
     val scalaTest = "3.2.20"
     val scalafixOrganizeImports = "0.6.0"
