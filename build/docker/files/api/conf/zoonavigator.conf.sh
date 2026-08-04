@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+hocon_string() {
+  local escaped
+
+  escaped=$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')
+  printf '"%s"' "$escaped"
+}
+
+trim() {
+  local value="$1"
+
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+  printf '%s' "$value"
+}
+
 if [ -n "$REQUEST_TIMEOUT_MILLIS" ]
 then
   cat <<EOF
@@ -17,6 +32,37 @@ play.http.parser.maxMemoryBuffer = ${REQUEST_MAX_SIZE_KB}k
 
 EOF
 
+fi
+
+if [ -n "$CORS_ALLOWED_ORIGINS" ]
+then
+  IFS=',' read -ra CORS_ORIGINS <<< "$CORS_ALLOWED_ORIGINS"
+  CORS_ALLOWED_ORIGINS_HOCON=""
+
+  for CORS_ORIGIN in "${CORS_ORIGINS[@]}"
+  do
+    CORS_ORIGIN=$(trim "$CORS_ORIGIN")
+
+    if [ -n "$CORS_ORIGIN" ]
+    then
+      if [ -n "$CORS_ALLOWED_ORIGINS_HOCON" ]
+      then
+        CORS_ALLOWED_ORIGINS_HOCON="$CORS_ALLOWED_ORIGINS_HOCON, "
+      fi
+
+      CORS_ALLOWED_ORIGINS_HOCON="$CORS_ALLOWED_ORIGINS_HOCON$(hocon_string "$CORS_ORIGIN")"
+    fi
+  done
+
+  if [ -n "$CORS_ALLOWED_ORIGINS_HOCON" ]
+  then
+    cat <<EOF
+# Cross-origin browser access
+play.filters.enabled += "play.filters.cors.CORSFilter"
+play.filters.cors.allowedOrigins = [${CORS_ALLOWED_ORIGINS_HOCON}]
+
+EOF
+  fi
 fi
 
 if [ -n "$AUTO_CONNECT_CONNECTION_ID" ]

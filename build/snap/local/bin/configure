@@ -42,6 +42,14 @@ enclose_quotes() {
   fi
 }
 
+trim() {
+  value="$1"
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+
+  echo "$value"
+}
+
 get_conf() {
   val=$(snapctl get "$1")
 
@@ -62,12 +70,42 @@ get_conf() {
 #################################################
 
 add_appconf "play.application.loader = " "$(enclose_quotes "AppLoader")"
-add_appconf "play.filters.cors.allowedOrigins = " "null"
 add_appconf "play.filters.enabled = " "[]"
 add_appconf "play.filters.enabled += " "$(enclose_quotes "play.filters.headers.SecurityHeadersFilter")"
-add_appconf "play.filters.enabled += " "$(enclose_quotes "play.filters.cors.CORSFilter")"
 add_appconf "play.assets.path = " "$(enclose_quotes "/public")"
 add_appconf "play.assets.urlPrefix = " "$(enclose_quotes "/")"
+
+CORS_ALLOWED_ORIGINS="$(get_conf "zoonavigator.cors.allowed-origins")"
+
+if [ -n "$CORS_ALLOWED_ORIGINS" ]
+then
+  CORS_ALLOWED_ORIGINS_HOCON=""
+  OLD_IFS="$IFS"
+  IFS=","
+
+  for CORS_ORIGIN in $CORS_ALLOWED_ORIGINS
+  do
+    CORS_ORIGIN="$(trim "$CORS_ORIGIN")"
+
+    if [ -n "$CORS_ORIGIN" ]
+    then
+      if [ -n "$CORS_ALLOWED_ORIGINS_HOCON" ]
+      then
+        CORS_ALLOWED_ORIGINS_HOCON="${CORS_ALLOWED_ORIGINS_HOCON}, "
+      fi
+
+      CORS_ALLOWED_ORIGINS_HOCON="${CORS_ALLOWED_ORIGINS_HOCON}$(enclose_quotes "$CORS_ORIGIN")"
+    fi
+  done
+
+  IFS="$OLD_IFS"
+
+  if [ -n "$CORS_ALLOWED_ORIGINS_HOCON" ]
+  then
+    add_appconf "play.filters.enabled += " "$(enclose_quotes "play.filters.cors.CORSFilter")"
+    add_appconf "play.filters.cors.allowedOrigins = " "[$CORS_ALLOWED_ORIGINS_HOCON]"
+  fi
+fi
 
 AUTO_CONNECT_CONNECTION_ID="$(get_conf "zoonavigator.auto-connect.connection-id")"
 
