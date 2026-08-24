@@ -76,8 +76,8 @@
     "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "^5.1.0",
-    "karma-jasmine-html-reporter": "^2.1.0",
-    "sass": "^1.102.0",
+    "karma-jasmine-html-reporter": "^2.3.0",
+    "sass": "^1.103.1",
     "ts-node": "^10.9.2",
     "typescript": "~6.0.3"
   },
