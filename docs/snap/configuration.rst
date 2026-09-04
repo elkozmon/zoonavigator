@@ -62,6 +62,17 @@ If you want ZooNavigator to be available at 'http://www.your-domain.com/zoonavig
   base href must start with '/'
 
 
+zoonavigator.cors.allowed-origins
+---------------------------------
+By default, ZooNavigator does not allow browser requests from other origins.
+
+Set this option to a comma-separated list of origins when ZooNavigator is intentionally served behind a separate frontend origin, for example :code:`https://admin.example.com,https://ops.example.com`.
+
+.. warning::
+
+  Only list origins you trust. ZooNavigator can mutate ZooKeeper data, so cross-origin browser access should be enabled deliberately and usually behind your own authentication proxy.
+
+
 zoonavigator.request.timeout
 ----------------------------
 *default*: :code:`10000`
