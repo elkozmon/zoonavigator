@@ -7,7 +7,7 @@ object Dependencies {
     val curatorTest = "5.9.0"
     val macwire   = "2.5.9"
     val log4j     = "2.22.1"
-    val slf4j     = "2.0.18"
+    val slf4j     = "2.0.19"
     val shapeless = "2.3.13"
     val monix     = "3.5.0"
     val commonsIo = "2.22.0"
