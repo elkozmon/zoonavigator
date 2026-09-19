@@ -18,6 +18,14 @@ At the moment there is no configuration option to enable Basic Auth out-of-the-b
 I suggest placing a proxy which supports Basic Auth in front of ZooNavigator. For example `Traefik <https://docs.traefik.io>`_.
 
 
+How to allow cross-origin browser access?
+-----------------------------------------
+
+ZooNavigator does not allow cross-origin browser requests by default. If you intentionally serve ZooNavigator's frontend and API from different origins, configure the allowed origins explicitly with :code:`CORS_ALLOWED_ORIGINS` for Docker or :code:`zoonavigator.cors.allowed-origins` for Snap.
+
+Only list origins you trust, and prefer placing ZooNavigator behind your own authentication proxy when exposing it outside a private network.
+
+
 I'm getting error that says "Unable to establish connection with ZooKeeper."
 ----------------------------------------------------------------------------
 
