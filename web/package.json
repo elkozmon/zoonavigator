@@ -38,7 +38,7 @@
     "js-beautify": "^2.0.3",
     "material-design-icons-iconfont": "^6.7.0",
     "ngx-ace-wrapper": "^17.0.0",
-    "pako": "^3.0.1",
+    "pako": "^3.0.2",
     "roboto-fontface": "^0.10.0",
     "rxjs": "^7.8.2",
     "spinkit": "^2.0.1",
@@ -46,7 +46,7 @@
     "tslib": "^2.8.1",
     "tsmonad": "^0.8.0",
     "underscore": "^1.12.1",
-    "yaml": "^2.9.0",
+    "yaml": "^2.9.1",
     "zone.js": "~0.16.3"
   },
   "keywords": [
@@ -62,7 +62,7 @@
     "@angular/cli": "^22.1.7",
     "@angular/compiler-cli": "^22.1.5",
     "@types/jasmine": "^6.0.0",
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.1",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
@@ -77,7 +77,7 @@
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.3.0",
-    "sass": "^1.104.0",
+    "sass": "^1.104.1",
     "ts-node": "^10.9.2",
     "typescript": "~6.0.3"
   },
