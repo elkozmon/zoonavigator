@@ -61,7 +61,7 @@
     "@angular-eslint/eslint-plugin": "^22.2.0",
     "@angular/cli": "^22.1.7",
     "@angular/compiler-cli": "^22.1.5",
-    "@types/jasmine": "^6.0.0",
+    "@types/jasmine": "^7.0.0",
     "@types/node": "^26.6.3",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
