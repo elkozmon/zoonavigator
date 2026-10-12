@@ -18,7 +18,6 @@
 import {APP_INITIALIZER, NgModule} from "@angular/core";
 import {APP_BASE_HREF, Location, LocationStrategy, PathLocationStrategy} from "@angular/common";
 import {BrowserModule, Title} from "@angular/platform-browser";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {MAT_ICON_DEFAULT_OPTIONS} from "@angular/material/icon";
@@ -31,7 +30,6 @@ import {EditorModule} from "./editor";
 
 @NgModule({
   imports: [
-    BrowserAnimationsModule,
     ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,

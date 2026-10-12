@@ -16,7 +16,6 @@
  */
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef} from "@angular/core";
-import {animate, state, style, transition, trigger} from "@angular/animations";
 import {MatInput} from "@angular/material/input";
 import {MatSelectChange} from "@angular/material/select";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -48,14 +47,7 @@ interface ConnectionOption {
   standalone: false,
   selector: "zoo-toolbar",
   templateUrl: "toolbar.component.html",
-  styleUrls: ["toolbar.component.scss"],
-  animations: [
-    trigger("rotatedState", [
-      state("default", style({transform: "rotate(0)"})),
-      state("rotated", style({transform: "rotate(360deg)"})),
-      transition("default => rotated", animate("400ms ease-in"))
-    ])
-  ]
+  styleUrls: ["toolbar.component.scss"]
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
@@ -77,7 +69,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   navigationError: string;
 
-  refreshButtonRotatedState = "default";
+  // Alternates between two identical CSS animations so that every click restarts the rotation
+  refreshButtonRotateClass = "";
 
   compareConnections = (c1: ConnectionOption, c2: ConnectionOption): boolean => {
     if (c1.label !== c2.label) {
@@ -222,8 +215,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   onRefreshClick(): void {
-    this.refreshButtonRotatedState = "default";
-    setTimeout(() => this.refreshButtonRotatedState = "rotated", 0);
+    this.refreshButtonRotateClass = this.refreshButtonRotateClass === "rotate-a" ? "rotate-b" : "rotate-a";
 
     this.refresh.emit();
   }

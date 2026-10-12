@@ -50,3 +50,23 @@ mat-form-field:first-of-type {
   padding-bottom: 5px;
   padding-top: 5px;
 }
+
+@keyframes rotate-a {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-b {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-a {
+  animation: rotate-a 400ms ease-in;
+}
+
+.rotate-b {
+  animation: rotate-b 400ms ease-in;
+}

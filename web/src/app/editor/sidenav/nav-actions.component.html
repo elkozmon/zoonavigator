@@ -28,7 +28,7 @@
   mat-icon-button
   matTooltip="Toggle ordering direction"
   matTooltipPosition="below"
-  [@flippedState]="toggleSortButtonFlippedState"
+  [class.flipped]="toggleSortButtonFlipped"
   (click)="onToggleSortClick()">
   <mat-icon class="mat-24">sort</mat-icon>
 </button>
