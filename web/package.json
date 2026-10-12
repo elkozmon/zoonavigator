@@ -59,7 +59,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^22.1.7",
     "@angular-eslint/eslint-plugin": "^22.2.0",
-    "@angular/cli": "^22.1.7",
+    "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.1.5",
     "@types/jasmine": "^6.0.0",
     "@types/node": "^26.6.4",
