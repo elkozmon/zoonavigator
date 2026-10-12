@@ -5,13 +5,13 @@
     "outDir": "./dist/out-tsc",
     "baseUrl": "src",
     "sourceMap": true,
+    "esModuleInterop": true,
     "declaration": false,
     "ignoreDeprecations": "6.0",
     "strict": false,
     "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true,
     "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"

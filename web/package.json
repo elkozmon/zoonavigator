@@ -57,8 +57,8 @@
     "node": "^24.15.0 || ^26.0.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^22.1.7",
     "@angular-eslint/eslint-plugin": "^22.2.0",
+    "@angular/build": "^22.1.7",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.1.5",
     "@types/jasmine": "^6.0.0",
@@ -83,13 +83,6 @@
   },
   "overrides": {
     "@babel/core": "7.29.6",
-    "@angular-devkit/build-angular": {
-      "http-proxy-middleware": "3.0.7"
-    },
-    "sockjs": {
-      "uuid": "11.1.1"
-    },
-    "piscina": "5.2.0",
-    "webpack-dev-server": "5.2.5"
+    "piscina": "5.2.0"
   }
 }
