@@ -9,6 +9,11 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 5
     ignore:
       - dependency-name: "typescript"
         update-types:
@@ -64,6 +69,11 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 5
     ignore:
       - dependency-name: "typescript"
         update-types:
@@ -91,6 +101,11 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 5
     ignore:
       - dependency-name: "org.scala-lang:scala-library"
         update-types:
@@ -120,6 +135,11 @@ updates:
       day: "monday"
       time: "06:00"
       timezone: "Europe/Lisbon"
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 5
     groups:
       docs-python:
         patterns:
@@ -133,6 +153,8 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
     groups:
       docker-images:
         patterns:
@@ -146,6 +168,8 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
     groups:
       docker-compose-images:
         patterns:
@@ -158,6 +182,8 @@ updates:
       day: "monday"
       time: "06:00"
       timezone: "Europe/Lisbon"
+    cooldown:
+      default-days: 7
     groups:
       github-actions:
         patterns:
