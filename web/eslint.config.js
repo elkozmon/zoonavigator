@@ -61,10 +61,10 @@ module.exports = [
     },
   },
   {
-    files: ["src/**/*.spec.ts", "src/test.ts"],
+    files: ["src/**/*.spec.ts"],
     languageOptions: {
       globals: {
-        ...globals.jasmine,
+        ...globals.vitest,
       },
     },
   },

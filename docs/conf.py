@@ -182,3 +182,6 @@ linkcheck_ignore = [
     r'https?://www\.your-domain\.com(?:/.*)?',
 ]
 linkcheck_anchors_ignore = [r'issue-\d+']
+# Retry flaky external sites. Timeouts are only retried when reported as broken.
+linkcheck_retries = 3
+linkcheck_report_timeouts_as_broken = True

@@ -6,14 +6,10 @@
     "target": "ES2022",
     "baseUrl": "",
     "types": [
-      "jasmine",
+      "vitest/globals",
       "node"
     ]
   },
-  "files": [
-    "test.ts",
-    "polyfills.ts"
-  ],
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"

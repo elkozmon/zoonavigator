@@ -78,12 +78,6 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
 
-      - name: Set up Chrome
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v2
-        with:
-          install-dependencies: true
-
       - name: Install dependencies
         working-directory: web
         run: |
@@ -98,8 +92,6 @@ jobs:
         working-directory: web
         run: |
           npm run test:ci
-        env:
-          CHROME_BIN: "${{ steps.setup-chrome.outputs.chrome-path }}"
 
   test-e2e:
     runs-on: ubuntu-latest

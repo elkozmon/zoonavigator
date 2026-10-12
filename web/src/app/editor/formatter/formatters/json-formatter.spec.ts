@@ -21,6 +21,10 @@ import {JsonFormatter} from "./json-formatter";
 describe("JsonFormatter", () => {
   const formatter = new JsonFormatter();
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("formats valid JSON with four-space indentation", async () => {
     const formatted = await firstValueFrom(formatter.format("{\"name\":\"zk\",\"enabled\":true}"));
 
@@ -28,10 +32,10 @@ describe("JsonFormatter", () => {
   });
 
   it("rejects invalid JSON with a helpful error", async () => {
-    spyOn(console, "error");
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
 
-    await expectAsync(firstValueFrom(formatter.format("{"))).toBeRejectedWithError(
-      "Invalid JSON (see console for more info)"
+    await expect(firstValueFrom(formatter.format("{"))).rejects.toThrow(
+      new Error("Invalid JSON (see console for more info)")
     );
   });
 });

@@ -7,7 +7,7 @@ These instructions apply to the whole repository.
 ZooNavigator is a monorepo for a ZooKeeper web UI:
 
 - `api/` contains the Scala 2.13 backend, split into `core` and Play Framework modules.
-- `web/` contains the Angular 7 frontend.
+- `web/` contains the Angular 22 frontend.
 - `e2e/` contains Playwright end-to-end tests and page objects.
 - `docs/` contains the Sphinx documentation site.
 - `build/` contains Docker and Snap packaging assets.
@@ -54,10 +54,14 @@ Default local ports are API `9000`, web `4200`, docs `8000`, and ZooKeeper
   `api:format` or at least `api:format:check` after Scala edits.
 - Scala imports are organized by Scalafmt rewrite rules. Do not hand-sort in a
   different style.
-- Web TypeScript uses the Angular 7/TSLint setup in `web/tslint.json`: double
-  quotes, semicolons, spaces, and the existing `zoo` selector conventions.
-- Web UI code should follow the current Angular Material/Covalent component
-  patterns already present under `web/src/app`.
+- Web TypeScript is linted with ESLint from `web/eslint.config.js`
+  (typescript-eslint and angular-eslint): double quotes, semicolons, spaces,
+  and the existing `zoo` selector conventions.
+- Web UI code should follow the current Angular Material component patterns
+  already present under `web/src/app`.
+- Web unit tests are `*.spec.ts` files run by Vitest through Angular's
+  unit-test builder on jsdom; use Vitest APIs (`vi.fn`, `vi.spyOn`), not
+  Jasmine or Karma.
 - E2E tests should use the existing Playwright fixtures and page objects under
   `e2e/fixtures` and `e2e/pages` instead of duplicating browser setup.
 - Documentation is reStructuredText under `docs/`; build it with warnings as
