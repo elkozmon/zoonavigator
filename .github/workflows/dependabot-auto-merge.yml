@@ -27,6 +27,7 @@ jobs:
       github.event.pull_request.draft == false
     outputs:
       update-type: ${{ steps.dependabot-metadata.outputs.update-type }}
+      package-ecosystem: ${{ steps.dependabot-metadata.outputs.package-ecosystem }}
     steps:
       - name: Dependabot metadata
         id: dependabot-metadata
@@ -40,9 +41,14 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    # Actions are pinned by major tag, so their updates are always semver-major.
     if: |
       needs.metadata.outputs.update-type == 'version-update:semver-minor' ||
-      needs.metadata.outputs.update-type == 'version-update:semver-patch'
+      needs.metadata.outputs.update-type == 'version-update:semver-patch' ||
+      (
+        needs.metadata.outputs.package-ecosystem == 'github_actions' &&
+        needs.metadata.outputs.update-type == 'version-update:semver-major'
+      )
     env:
       HAS_CI_APP: ${{ secrets.CI_APP_CLIENT_ID != '' && secrets.CI_APP_PRIVATE_KEY != '' }}
     steps:
