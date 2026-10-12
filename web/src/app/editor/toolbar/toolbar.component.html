@@ -60,7 +60,7 @@
       mat-icon-button
       matTooltip="Refresh editor and children nodes"
       matTooltipPosition="below"
-      [@rotatedState]="refreshButtonRotatedState"
+      [class]="refreshButtonRotateClass"
       (click)="onRefreshClick()">
       <mat-icon class="mat-24">refresh</mat-icon>
     </button>

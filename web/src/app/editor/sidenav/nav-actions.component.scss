@@ -17,3 +17,7 @@
 mat-icon.active-selected {
   color: #ff3d00;
 }
+
+.flipped {
+  transform: scale(1, -1) translate(0, -2px);
+}

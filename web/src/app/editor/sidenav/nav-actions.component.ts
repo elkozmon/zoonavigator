@@ -17,7 +17,6 @@
 
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
-import {state, style, trigger} from "@angular/animations";
 import {EMPTY, Subscription} from "rxjs";
 import {catchError, mapTo, switchMap} from "rxjs/operators";
 import {
@@ -37,13 +36,7 @@ import {Ordering} from "../ordering";
   standalone: false,
   selector: "zoo-editor-nav-actions",
   templateUrl: "nav-actions.component.html",
-  styleUrls: ["nav-actions.component.scss"],
-  animations: [
-    trigger("flippedState", [
-      state("default", style({transform: "scale(1, 1)"})),
-      state("flipped", style({transform: "scale(1, -1) translate(0, -2px)"}))
-    ])
-  ]
+  styleUrls: ["nav-actions.component.scss"]
 })
 export class NavActionsComponent implements OnInit, OnDestroy {
 
@@ -58,7 +51,7 @@ export class NavActionsComponent implements OnInit, OnDestroy {
   @Input() ordering: Ordering;
   @Output() orderingChange = new EventEmitter<Ordering>();
 
-  toggleSortButtonFlippedState = "flipped";
+  toggleSortButtonFlipped = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -88,10 +81,10 @@ export class NavActionsComponent implements OnInit, OnDestroy {
 
     if (this.ordering === Ordering.Descending) {
       newOrdering = Ordering.Ascending;
-      this.toggleSortButtonFlippedState = "flipped";
+      this.toggleSortButtonFlipped = true;
     } else {
       newOrdering = Ordering.Descending;
-      this.toggleSortButtonFlippedState = "default";
+      this.toggleSortButtonFlipped = false;
     }
 
     this.ordering = newOrdering;
