@@ -17,7 +17,7 @@
 
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {of} from "rxjs";
+import {firstValueFrom, of} from "rxjs";
 import {ConfigService} from "../../../config";
 import {ConnectionManager} from "../../connection/manager";
 import {DialogService} from "../../dialog";
@@ -26,9 +26,9 @@ import {RequestMethods} from "../request/request-methods";
 import {DefaultApiService} from "./default-api.service";
 
 describe("DefaultApiService", () => {
-  it("accepts API responses with null optional fields", (done) => {
+  it("accepts API responses with null optional fields", async () => {
     const httpClient = {
-      request: jasmine.createSpy("request").and.returnValue(of(new HttpResponse({
+      request: vi.fn().mockReturnValue(of(new HttpResponse({
         body: {
           success: true,
           message: null,
@@ -54,13 +54,10 @@ describe("DefaultApiService", () => {
       ""
     );
 
-    service
-      .dispatch(new ApiRequest("/test", RequestMethods.Get))
-      .subscribe(response => {
-        expect(response.success).toBe(true);
-        expect(response.message).toBeNull();
-        expect(response.payload).toBeNull();
-        done();
-      });
+    const response = await firstValueFrom(service.dispatch(new ApiRequest("/test", RequestMethods.Get)));
+
+    expect(response.success).toBe(true);
+    expect(response.message).toBeNull();
+    expect(response.payload).toBeNull();
   });
 });

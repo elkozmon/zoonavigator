@@ -19,6 +19,7 @@
             "browser": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": [
+              "zone.js",
               "src/polyfills.ts"
             ],
             "assets": [
@@ -37,6 +38,9 @@
             "scripts": []
           },
           "configurations": {
+            "test": {
+              "aot": false
+            },
             "production": {
               "optimization": true,
               "outputHashing": "all",
@@ -71,28 +75,10 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "karma.conf.js",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
-            "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
-            "styles": [
-              "node_modules/material-design-icons-iconfont/dist/material-design-icons.css",
-              "src/sass/styles.scss",
-              "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/roboto-fontface/css/roboto/roboto-fontface.css"
-            ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico",
-              "src/favicon-16x16.png",
-              "src/favicon-32x32.png",
-              "src/config.json"
-            ]
+            "buildTarget": "zoonavigator-web:build:test",
+            "tsConfig": "src/tsconfig.spec.json"
           }
         }
       }

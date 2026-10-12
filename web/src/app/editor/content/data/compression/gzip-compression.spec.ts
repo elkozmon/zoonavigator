@@ -26,7 +26,7 @@ describe("GzipCompression", () => {
   it("detects gzip bytes after compression", async () => {
     const compressed = await firstValueFrom(compression.compress(textMode.encodeData("hello zookeeper")));
 
-    expect(compression.isCompressed(compressed)).toBeTrue();
+    expect(compression.isCompressed(compressed)).toBe(true);
   });
 
   it("round-trips compressed bytes", async () => {

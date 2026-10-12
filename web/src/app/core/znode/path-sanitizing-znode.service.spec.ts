@@ -22,7 +22,7 @@ import {PathSanitizingZNodeService} from "./path-sanitizing-znode.service";
 describe("PathSanitizingZNodeService", () => {
   it("strips a trailing slash before reading a node", () => {
     const delegate = {
-      getNode: jasmine.createSpy("getNode").and.returnValue(of(null))
+      getNode: vi.fn().mockReturnValue(of(null))
     };
     const service = new PathSanitizingZNodeService(delegate as unknown as ZNodeService);
 
@@ -33,7 +33,7 @@ describe("PathSanitizingZNodeService", () => {
 
   it("keeps the root path unchanged", () => {
     const delegate = {
-      getNode: jasmine.createSpy("getNode").and.returnValue(of(null))
+      getNode: vi.fn().mockReturnValue(of(null))
     };
     const service = new PathSanitizingZNodeService(delegate as unknown as ZNodeService);
 
@@ -44,7 +44,7 @@ describe("PathSanitizingZNodeService", () => {
 
   it("strips trailing slashes from both duplicate paths", () => {
     const delegate = {
-      duplicateNode: jasmine.createSpy("duplicateNode").and.returnValue(of(null))
+      duplicateNode: vi.fn().mockReturnValue(of(null))
     };
     const service = new PathSanitizingZNodeService(delegate as unknown as ZNodeService);
 
@@ -55,7 +55,7 @@ describe("PathSanitizingZNodeService", () => {
 
   it("strips trailing slashes from exported paths", () => {
     const delegate = {
-      exportNodes: jasmine.createSpy("exportNodes").and.returnValue(of(null))
+      exportNodes: vi.fn().mockReturnValue(of(null))
     };
     const service = new PathSanitizingZNodeService(delegate as unknown as ZNodeService);
 

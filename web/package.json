@@ -15,7 +15,7 @@
     "build:prod": "ng build --configuration production",
     "lint": "eslint \"src/**/*.ts\"",
     "test": "ng test",
-    "test:ci": "ng test --browsers=ChromeHeadlessCI --no-watch --no-progress"
+    "test:ci": "ng test --no-watch --no-progress"
   },
   "private": true,
   "dependencies": {
@@ -61,7 +61,6 @@
     "@angular/build": "^22.1.7",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.1.5",
-    "@types/jasmine": "^6.0.0",
     "@types/node": "^26.6.4",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
@@ -70,16 +69,11 @@
     "eslint": "^10.11.0",
     "globals": "^17.13.0",
     "http-proxy-middleware": "^4.2.0",
-    "jasmine-core": "^6.3.0",
-    "jasmine-spec-reporter": "7.0.0",
-    "karma": "^6.4.4",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "^2.2.1",
-    "karma-jasmine": "^5.1.0",
-    "karma-jasmine-html-reporter": "^2.3.0",
+    "jsdom": "^30.1.2",
     "sass": "^1.105.1",
     "ts-node": "^10.9.2",
-    "typescript": "~6.0.3"
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "@babel/core": "7.29.6",
