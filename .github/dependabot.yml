@@ -9,6 +9,14 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+      - dependency-name: "@types/node"
+        update-types:
+          - "version-update:semver-major"
     groups:
       web-angular-major:
         patterns:
@@ -56,6 +64,10 @@ updates:
       time: "06:00"
       timezone: "Europe/Lisbon"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
     groups:
       e2e-npm-minor-patch:
         patterns:
