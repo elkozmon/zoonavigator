@@ -9,7 +9,7 @@ object Dependencies {
     val log4j     = "2.22.1"
     val slf4j     = "2.0.20"
     val shapeless = "2.3.13"
-    val monix     = "3.5.0"
+    val monix     = "3.5.2"
     val commonsIo = "2.22.0"
     val logback   = "1.6.5"
     val jsoup     = "1.23.2"
