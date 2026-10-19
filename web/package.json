@@ -59,10 +59,10 @@
     "@angular/build": "^22.2.1",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.1",
-    "@types/node": "^26.6.4",
+    "@types/node": "^26.6.5",
     "@types/text-encoding-utf-8": "^1.0.1",
     "@types/underscore": "^1.9.4",
-    "@typescript-eslint/eslint-plugin": "^8.71.1",
+    "@typescript-eslint/eslint-plugin": "^8.71.2",
     "@typescript-eslint/parser": "^8.61.0",
     "eslint": "^10.12.0",
     "globals": "^17.13.0",
@@ -71,7 +71,7 @@
     "sass": "^1.105.1",
     "ts-node": "^10.9.2",
     "typescript": "~6.0.3",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.4"
   },
   "overrides": {
     "@babel/core": "7.29.6",
