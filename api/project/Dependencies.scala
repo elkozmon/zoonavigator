@@ -12,7 +12,7 @@ object Dependencies {
     val monix     = "3.5.2"
     val commonsIo = "2.22.0"
     val logback   = "1.6.6"
-    val jsoup     = "1.23.2"
+    val jsoup     = "1.24.1"
     val scalaTest = "3.2.20"
     val scalafixOrganizeImports = "0.6.0"
   }
